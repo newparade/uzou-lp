@@ -381,6 +381,7 @@ function initHeroTextReveal() {
   /* サブテキスト・バッジ等もフェードイン */
   const heroEls = [
     '.hero__badges',
+    '.hero__target',
     '.hero__subtitle',
     '.hero__cta',
     '.hero__trust'
@@ -453,6 +454,47 @@ function initFlowTimeline() {
 
 
 /* ============================================================
+   13. CTAフォーム — タブ切替
+   ============================================================ */
+function initCtaForm() {
+  const tabs = document.querySelectorAll('.cta-form__tab');
+  const contactRow = document.querySelector('.cta-form__row--contact');
+  const submitText = document.querySelector('.cta-form__submit-text');
+  if (!tabs.length) return;
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('is-active'));
+      tab.classList.add('is-active');
+      const isContact = tab.dataset.tab === 'contact';
+      if (contactRow) contactRow.hidden = !isContact;
+      if (submitText) {
+        submitText.textContent = isContact ? 'お問い合わせを送信' : '無料で資料をダウンロード';
+      }
+    });
+  });
+
+  /* フォーム送信（デモ用: 実際のエンドポイントは別途設定） */
+  const form = document.querySelector('.cta-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('.cta-form__submit');
+      if (btn) {
+        btn.disabled = true;
+        if (submitText) submitText.textContent = '送信中...';
+        setTimeout(() => {
+          if (submitText) submitText.textContent = '送信完了しました';
+          btn.style.background = 'var(--c-primary)';
+          btn.style.color = '#fff';
+        }, 1200);
+      }
+    });
+  }
+}
+
+
+/* ============================================================
    初期化
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -468,4 +510,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroTextReveal();
   initSmoothScroll();
   initFlowTimeline();
+  initCtaForm();
 });
