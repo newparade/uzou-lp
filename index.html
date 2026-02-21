@@ -14,7 +14,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 
@@ -53,6 +53,8 @@
   </script>
 </head>
 <body>
+
+<a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
 
 <!-- ========================================
   00. Header（ガラスモーフィズムナビ）
@@ -94,8 +96,8 @@
   </div>
 
   <!-- モバイルメニュー -->
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true"
-       aria-label="ナビゲーションメニュー">
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true"
+       aria-hidden="true" aria-label="ナビゲーションメニュー">
     <ul class="mobile-menu__links" role="list">
       <li><a href="#about" class="mobile-menu__link">UZOUとは</a></li>
       <li><a href="#features" class="mobile-menu__link">特徴</a></li>
@@ -113,7 +115,25 @@
   <a href="#contact" class="fixed-cta-bar__link">お問い合わせ</a>
 </div>
 
-<main>
+<!-- 接続スパイン: ページ全体を貫く接続線 -->
+<div class="connection-spine" aria-hidden="true">
+  <svg class="connection-spine__svg" preserveAspectRatio="none" viewBox="0 0 2 100">
+    <line class="connection-spine__line" x1="1" y1="0" x2="1" y2="100"
+          stroke="url(#spine-gradient)" stroke-width="0.4"/>
+    <defs>
+      <linearGradient id="spine-gradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(139,192,202,0)" />
+        <stop offset="15%" stop-color="rgba(139,192,202,0.4)" />
+        <stop offset="50%" stop-color="rgba(52,98,111,0.6)" />
+        <stop offset="85%" stop-color="rgba(139,192,202,0.4)" />
+        <stop offset="100%" stop-color="rgba(139,192,202,0)" />
+      </linearGradient>
+    </defs>
+  </svg>
+  <div class="connection-spine__pulse"></div>
+</div>
+
+<main id="main-content">
 
 <!-- ========================================
   01. Hero（最重要セクション）
@@ -206,6 +226,7 @@
       <div class="hero__visual" role="presentation">
         <canvas class="hero__canvas" id="connection-canvas"
                 role="img" aria-label="広告主とメディアの接続を表すインタラクティブ図">
+          <p>広告主（ADV）とUZOUプラットフォーム、500以上のメディアが相互に接続されている図。マウス操作でノードが反応する。</p>
         </canvas>
         <div class="hero__canvas-label">
           <span class="hero__canvas-tag hero__canvas-tag--adv">ADVERTISERS</span>
@@ -230,6 +251,9 @@
   <div class="media-trust__inner">
 
     <p class="media-trust__label">TRUSTED BY 500+ MEDIA</p>
+
+    <!-- スクリーンリーダー用代替テキスト -->
+    <p class="sr-only">導入メディア例: スポニチ Annex、livedoor NEWS、女性自身、文春オンライン、All About、日刊スポーツ、Smart FLASH、TRILL、J-CAST、grape、読売新聞オンライン、週刊女性PRIME、NEWSポストセブン、ORICON NEWS、マイナビニュース、東スポ Web、ニコニコニュース、excite ニュース、Infoseek ニュース、Walkerplus</p>
 
     <!-- マーキー1行目（右方向） -->
     <div class="marquee media-trust__marquee" aria-hidden="true">
@@ -299,7 +323,7 @@
   <div class="container">
 
     <div class="solution__header" data-reveal>
-      <span class="section-label">THE PROBLEM</span>
+      <span class="section-label"><span class="section-label__prefix" aria-hidden="true">//</span> THE PROBLEM</span>
       <h2 class="section-title" id="solution-title">
         広告業界の「見えない」コストを、<br>ご存知ですか。
       </h2>
@@ -319,7 +343,7 @@
 
     <!-- タブパネル: Advertisers -->
     <div class="solution__panel is-active" id="tab-adv" role="tabpanel"
-         aria-labelledby="tab-btn-adv">
+         aria-labelledby="tab-btn-adv" tabindex="0">
       <p class="solution__panel-lead">届くべき人に、届いていない。</p>
       <ol class="solution__list">
         <li class="solution__item" data-reveal data-reveal-delay="0.1">
@@ -347,7 +371,7 @@
 
     <!-- タブパネル: Publishers -->
     <div class="solution__panel" id="tab-pub" role="tabpanel"
-         aria-labelledby="tab-btn-pub" hidden>
+         aria-labelledby="tab-btn-pub" tabindex="0" hidden>
       <p class="solution__panel-lead">収益の天井が、見えない。</p>
       <ol class="solution__list">
         <li class="solution__item" data-reveal data-reveal-delay="0.1">
@@ -400,7 +424,7 @@
   <div class="container">
 
     <div class="results__header" data-reveal>
-      <span class="section-label">THE SCALE</span>
+      <span class="section-label"><span class="section-label__prefix" aria-hidden="true">//</span> THE SCALE</span>
       <h2 class="section-title" id="results-title">数字が語る、接続の規模。</h2>
     </div>
 
@@ -466,7 +490,7 @@
   <div class="container">
 
     <div class="about__header" data-reveal>
-      <span class="section-label section-label--light">WHAT IS UZOU</span>
+      <span class="section-label section-label--light"><span class="section-label__prefix" aria-hidden="true">//</span> WHAT IS UZOU</span>
       <h2 class="section-title section-title--light" id="about-title">
         形あるものと、形なきものをつなぐ。
       </h2>
@@ -621,7 +645,7 @@
   <div class="container">
 
     <div class="features__header" data-reveal>
-      <span class="section-label">HOW IT WORKS</span>
+      <span class="section-label"><span class="section-label__prefix" aria-hidden="true">//</span> HOW IT WORKS</span>
       <h2 class="section-title" id="features-title">接続を、精密に制御する。</h2>
     </div>
 
@@ -638,7 +662,7 @@
             独自AIがCTR・CVR・視認性を総合分析し、機械学習で精度を継続改善する。
           </p>
         </div>
-        <div class="features__barchart" aria-hidden="true" id="feature-barchart">
+        <div class="features__barchart" role="img" aria-label="5つのメディアに対するリアルタイム最適化を示す棒グラフ。メディアBが最も高いスコアで選定されている。" id="feature-barchart">
           <div class="features__bar-group">
             <div class="features__bar-wrap">
               <div class="features__bar" style="--h: 65%"></div>
@@ -773,7 +797,7 @@
   <div class="container">
 
     <div class="testimonials__header" data-reveal>
-      <span class="section-label section-label--light">TRUSTED BY</span>
+      <span class="section-label section-label--light"><span class="section-label__prefix" aria-hidden="true">//</span> TRUSTED BY</span>
       <h2 class="section-title section-title--light" id="testimonials-title">
         500のメディアが、実証している。
       </h2>
@@ -853,9 +877,9 @@
         </a>
       </div>
       <ul class="cta-strip__trust" data-reveal data-reveal-delay="0.26" role="list">
-        <li>完全無料</li>
-        <li>30秒で完了</li>
-        <li>営業電話なし</li>
+        <li>東証上場企業が運営</li>
+        <li>500+メディア接続済</li>
+        <li>最短1週間で開始</li>
       </ul>
     </div>
   </div>
@@ -874,7 +898,7 @@
 
       <!-- 左固定見出し -->
       <div class="flow__header" data-reveal>
-        <span class="section-label">GET STARTED</span>
+        <span class="section-label"><span class="section-label__prefix" aria-hidden="true">//</span> GET STARTED</span>
         <h2 class="section-title" id="flow-title">
           接続は、5つのステップで完成する。
         </h2>

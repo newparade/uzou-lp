@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initMobileMenu();
   initScrollReveal();
+  initConnectionSpine();
   initConnectionVisualizer();
   initSolutionTabs();
   initPlatformDiagram();
@@ -107,6 +108,44 @@ function initMobileMenu() {
   menu.querySelectorAll('.mobile-menu__link, .mobile-menu__cta').forEach(link => {
     link.addEventListener('click', close);
   });
+}
+
+/* =============================================
+   接続スパイン（ページ全体を貫く接続線のスクロール追従）
+   ============================================= */
+function initConnectionSpine() {
+  const spine = document.querySelector('.connection-spine');
+  if (!spine) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const pulse = spine.querySelector('.connection-spine__pulse');
+  if (!pulse) return;
+
+  let ticking = false;
+
+  const update = () => {
+    const scrollY = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? scrollY / docHeight : 0;
+
+    // パルスドットのY位置をスクロール進捗に連動
+    const pulseY = progress * (window.innerHeight - 8);
+    pulse.style.transform = `translateY(${pulseY}px)`;
+
+    // Hero通過後にアクティブ化
+    spine.classList.toggle('is-active', scrollY > 200);
+
+    ticking = false;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  update();
 }
 
 /* =============================================
@@ -416,8 +455,17 @@ function initConnectionVisualizer() {
   // prefers-reduced-motion: 静止画フォールバック
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     resize();
+    updateActiveConnections();
     nodes.forEach(node => drawNode(node, 0));
     drawConnections(0);
+    // リサイズ時にも再描画
+    const roStatic = new ResizeObserver(() => {
+      resize();
+      updateActiveConnections();
+      nodes.forEach(node => drawNode(node, 0));
+      drawConnections(0);
+    });
+    roStatic.observe(canvas);
     return;
   }
 
