@@ -1733,6 +1733,8 @@ body {
 }
 @media (max-width: 768px) {
   .features__flow { justify-content: center; }
+  .features__card-title { text-align: left; }
+  .features__card-desc { text-align: left; max-width: none; }
 }
 
 /* =============================================

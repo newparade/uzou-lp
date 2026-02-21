@@ -275,12 +275,37 @@ function initConnectionVisualizer() {
     }
   }
 
-  // ノード描画
+  // 幾何学形状描画ヘルパー
+  function drawTriangle(x, y, r) {
+    ctx.beginPath();
+    for (let i = 0; i < 3; i++) {
+      const angle = (i * 2 * Math.PI / 3) - Math.PI / 2;
+      const px = x + Math.cos(angle) * r;
+      const py = y + Math.sin(angle) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+  }
+
+  function drawHexagon(x, y, r) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (i * Math.PI / 3) - Math.PI / 6;
+      const px = x + Math.cos(angle) * r;
+      const py = y + Math.sin(angle) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+  }
+
+  // ノード描画（幾何学形状混在: 円/三角形/六角形）
   function drawNode(node, time) {
     const pulseFactor = 1 + Math.sin(time * 0.002 + node.pulsePhase) * 0.15;
 
     if (node.type === 'uzou') {
-      // 外グロー
+      // 外グロー（六角形）
       const outerGlow = ctx.createRadialGradient(
         node.x, node.y, 0,
         node.x, node.y, node.radius * 3
@@ -288,11 +313,10 @@ function initConnectionVisualizer() {
       outerGlow.addColorStop(0, 'rgba(139, 192, 202, 0.15)');
       outerGlow.addColorStop(1, 'rgba(139, 192, 202, 0)');
       ctx.fillStyle = outerGlow;
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
+      drawHexagon(node.x, node.y, node.radius * 3);
       ctx.fill();
 
-      // コア本体
+      // コア本体（六角形）
       const coreGrad = ctx.createRadialGradient(
         node.x - 3, node.y - 3, 0,
         node.x, node.y, node.radius * pulseFactor
@@ -300,34 +324,45 @@ function initConnectionVisualizer() {
       coreGrad.addColorStop(0, 'rgba(139, 192, 202, 0.9)');
       coreGrad.addColorStop(1, 'rgba(52, 98, 111, 0.7)');
       ctx.fillStyle = coreGrad;
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius * pulseFactor, 0, Math.PI * 2);
+      drawHexagon(node.x, node.y, node.radius * pulseFactor);
       ctx.fill();
 
-      // リング
+      // リング（六角形）
       ctx.strokeStyle = 'rgba(139, 192, 202, 0.5)';
       ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius * pulseFactor + 6, 0, Math.PI * 2);
+      drawHexagon(node.x, node.y, node.radius * pulseFactor + 6);
       ctx.stroke();
 
     } else if (node.type === 'adv') {
+      // 広告主ノード: 偶数=三角形、奇数=六角形
+      const idx = parseInt(node.id.split('-')[1], 10);
       ctx.fillStyle = `rgba(52, 98, 111, ${0.6 + Math.sin(time * 0.001 + node.pulsePhase) * 0.2})`;
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      if (idx % 2 === 0) {
+        drawTriangle(node.x, node.y, node.radius);
+      } else {
+        drawHexagon(node.x, node.y, node.radius);
+      }
       ctx.fill();
       ctx.strokeStyle = 'rgba(52, 98, 111, 0.8)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
     } else if (node.type === 'media') {
+      // メディアノード: 0,3=六角形、1,4=三角形、2,5,6=円
+      const idx = parseInt(node.id.split('-')[1], 10);
       if (activeConnections.has(node.id)) {
         ctx.shadowBlur = 12;
         ctx.shadowColor = 'rgba(139, 192, 202, 0.5)';
       }
       ctx.fillStyle = `rgba(139, 192, 202, ${0.5 + Math.sin(time * 0.0015 + node.pulsePhase) * 0.15})`;
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      if (idx % 3 === 0) {
+        drawHexagon(node.x, node.y, node.radius);
+      } else if (idx % 3 === 1) {
+        drawTriangle(node.x, node.y, node.radius);
+      } else {
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      }
       ctx.fill();
       ctx.strokeStyle = 'rgba(139, 192, 202, 0.6)';
       ctx.lineWidth = 1;
@@ -811,8 +846,34 @@ function initFinalCtaParticles() {
     ctx.scale(dpr, dpr);
   }
 
-  // パーティクル初期化
+  // 幾何学形状描画ヘルパー（Final CTA用）
+  function drawParticleTriangle(x, y, r) {
+    ctx.beginPath();
+    for (let i = 0; i < 3; i++) {
+      const a = (i * 2 * Math.PI / 3) - Math.PI / 2;
+      const px = x + Math.cos(a) * r;
+      const py = y + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+  }
+
+  function drawParticleHexagon(x, y, r) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = (i * Math.PI / 3) - Math.PI / 6;
+      const px = x + Math.cos(a) * r;
+      const py = y + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+  }
+
+  // パーティクル初期化（形状混在: circle/triangle/hexagon）
   for (let i = 0; i < 40; i++) {
+    const shapes = ['circle', 'triangle', 'hexagon'];
     particles.push({
       x:     Math.random(),
       y:     Math.random(),
@@ -820,6 +881,7 @@ function initFinalCtaParticles() {
       alpha: 0.1 + Math.random() * 0.3,
       speed: 0.0002 + Math.random() * 0.0003,
       angle: Math.random() * Math.PI * 2,
+      shape: shapes[i % 3],
     });
   }
 
@@ -845,11 +907,21 @@ function initFinalCtaParticles() {
       if (p.y < 0) p.y = 1;
       if (p.y > 1) p.y = 0;
 
-      // 描画
-      ctx.beginPath();
-      ctx.arc(p.x * rect.width, p.y * rect.height, p.size, 0, Math.PI * 2);
+      // 幾何学形状描画
+      const px = p.x * rect.width;
+      const py = p.y * rect.height;
       ctx.fillStyle = `rgba(139, 192, 202, ${p.alpha})`;
-      ctx.fill();
+      if (p.shape === 'triangle') {
+        drawParticleTriangle(px, py, p.size * 1.3);
+        ctx.fill();
+      } else if (p.shape === 'hexagon') {
+        drawParticleHexagon(px, py, p.size * 1.1);
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.arc(px, py, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     });
 
     requestAnimationFrame(loop);
