@@ -27,12 +27,12 @@
   /* ---- テキスト（ダーク背景用） ---- */
   --t1-dark: #e2e8f0;
   --t2-dark: rgba(226, 232, 240, 0.60);
-  --t3-dark: rgba(226, 232, 240, 0.38);
+  --t3-dark: rgba(226, 232, 240, 0.50);
 
   /* ---- テキスト（ライト背景用） ---- */
   --t1-light: #0a1a1f;
   --t2-light: #3d5a63;
-  --t3-light: #6b8a92;
+  --t3-light: #4d7078;
 
   /* ---- タイポグラフィ ---- */
   --font-display: 'Inter', sans-serif;
@@ -203,6 +203,7 @@ body {
    prefers-reduced-motion
    ============================================= */
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -1541,7 +1542,7 @@ body {
 
 .features__bar-label {
   font-family: var(--font-display);
-  font-size: 9px;
+  font-size: 10px;
   color: var(--t3-dark);
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -1551,7 +1552,7 @@ body {
 
 .features__bar-legend {
   font-family: var(--font-display);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.08em;
   color: rgba(var(--c-light-rgb), 0.4);
   text-align: right;
@@ -1740,11 +1741,13 @@ body {
   text-transform: uppercase;
   color: var(--c-primary);
 }
+cite.testimonials__role,
 .testimonials__role {
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 500;
   color: var(--t1-light);
+  font-style: normal;
 }
 .testimonials__position {
   font-family: var(--font-body);
@@ -1859,7 +1862,7 @@ body {
 .cta-strip__trust li {
   font-family: var(--font-display);
   font-size: 12px;
-  color: rgba(255,255,255,0.55);
+  color: rgba(255,255,255,0.65);
   position: relative;
 }
 .cta-strip__trust li:not(:last-child)::after {
@@ -2266,7 +2269,7 @@ details[open] .faq__question { color: var(--c-primary); }
 .final-cta__trust li {
   font-family: var(--font-display);
   font-size: 12px;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.60);
   position: relative;
 }
 .final-cta__trust li:not(:last-child)::after {
@@ -2279,7 +2282,7 @@ details[open] .faq__question { color: var(--c-primary); }
 .final-cta__company {
   font-family: var(--font-display);
   font-size: 11px;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.55);
   letter-spacing: 0.04em;
   margin-top: 8px;
 }

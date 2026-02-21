@@ -94,7 +94,7 @@
   </div>
 
   <!-- モバイルメニュー -->
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true" role="dialog"
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true"
        aria-label="ナビゲーションメニュー">
     <ul class="mobile-menu__links" role="list">
       <li><a href="#about" class="mobile-menu__link">UZOUとは</a></li>
@@ -108,7 +108,7 @@
 </header>
 
 <!-- 固定CTAバー（Hero通過後） -->
-<div class="fixed-cta-bar" role="complementary" aria-label="資料ダウンロード案内">
+<div class="fixed-cta-bar" aria-label="資料ダウンロード案内">
   <a href="#download" class="fixed-cta-bar__btn">資料ダウンロード</a>
   <a href="#contact" class="fixed-cta-bar__link">お問い合わせ</a>
 </div>
@@ -203,7 +203,7 @@
       </div>
 
       <!-- 右カラム: Connection Visualizer Canvas -->
-      <div class="hero__visual" aria-hidden="true">
+      <div class="hero__visual" role="presentation">
         <canvas class="hero__canvas" id="connection-canvas"
                 role="img" aria-label="広告主とメディアの接続を表すインタラクティブ図">
         </canvas>
@@ -784,12 +784,12 @@
       <!-- 左サイドカード -->
       <article class="testimonials__card testimonials__card--side" data-reveal>
         <div class="testimonials__card-metric">収益 <span>4倍</span></div>
-        <blockquote class="testimonials__quote">
+        <blockquote class="testimonials__quote" cite="#testimonials">
           UZOU導入後、ネット広告収益が約4倍に伸長。
           3rd party cookie廃止後も収益が安定しています。
         </blockquote>
         <footer class="testimonials__source">
-          <span class="testimonials__role">大手出版社系Webメディア</span>
+          <cite class="testimonials__role">大手出版社系Webメディア</cite>
           <span class="testimonials__position">広告担当</span>
         </footer>
       </article>
@@ -797,14 +797,14 @@
       <!-- 中央メインカード -->
       <article class="testimonials__card testimonials__card--main" data-reveal data-reveal-delay="0.1">
         <div class="testimonials__card-metric">CPA <span>32%</span> 改善</div>
-        <blockquote class="testimonials__quote testimonials__quote--main">
+        <blockquote class="testimonials__quote testimonials__quote--main" cite="#testimonials">
           oCPC導入後、目標CPAに対して実績CPAが継続的に改善。
           ウォールドガーデン以外のメディア開拓が一括で進み、
           運用コストが大幅に下がりました。
         </blockquote>
         <footer class="testimonials__source">
           <span class="testimonials__category">広告代理店</span>
-          <span class="testimonials__role">メディアプランナー</span>
+          <cite class="testimonials__role">メディアプランナー</cite>
           <span class="testimonials__position">EC・健康食品領域</span>
         </footer>
       </article>
@@ -812,12 +812,12 @@
       <!-- 右サイドカード -->
       <article class="testimonials__card testimonials__card--side" data-reveal data-reveal-delay="0.2">
         <div class="testimonials__card-metric">導入 <span>1週間</span></div>
-        <blockquote class="testimonials__quote">
+        <blockquote class="testimonials__quote" cite="#testimonials">
           タグを設置するだけで配信が始まり、運用の手離れが良い。
           法令遵守の配信姿勢が編集部からの信頼につながっています。
         </blockquote>
         <footer class="testimonials__source">
-          <span class="testimonials__role">地方新聞社</span>
+          <cite class="testimonials__role">地方新聞社</cite>
           <span class="testimonials__position">デジタル事業部</span>
         </footer>
       </article>
@@ -845,7 +845,7 @@
         30分の会話で、あなたのメディア・広告に何が起きるかがわかる。
       </p>
       <div class="cta-strip__actions" data-reveal data-reveal-delay="0.2">
-        <a href="#" class="btn-cta-primary has-pulse">
+        <a href="#download" class="btn-cta-primary has-pulse">
           資料ダウンロード（無料）
         </a>
         <a href="#contact" class="cta-strip__contact-link">
@@ -1146,7 +1146,7 @@
       </p>
 
       <div class="final-cta__actions" data-reveal data-reveal-delay="0.2">
-        <a href="#" class="btn-cta-primary has-pulse">
+        <a href="#download" class="btn-cta-primary has-pulse">
           今すぐ接続を始める
         </a>
         <a href="#contact" class="btn-ghost btn-ghost--white">

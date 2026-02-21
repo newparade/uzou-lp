@@ -89,6 +89,19 @@ function initMobileMenu() {
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && menu.classList.contains('is-open')) close();
+
+    // フォーカストラップ
+    if (e.key === 'Tab' && menu.classList.contains('is-open')) {
+      const focusable = menu.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    }
   });
 
   menu.querySelectorAll('.mobile-menu__link, .mobile-menu__cta').forEach(link => {
@@ -425,36 +438,68 @@ function initSolutionTabs() {
   const panels = document.querySelectorAll('.solution__panel');
   if (!tabs.length) return;
 
-  tabs.forEach((tab, i) => {
-    tab.addEventListener('click', () => {
-      // タブ状態更新
-      tabs.forEach(t => {
-        t.classList.remove('is-active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      panels.forEach(p => {
-        p.classList.remove('is-active');
-        p.setAttribute('hidden', '');
-      });
-
-      tab.classList.add('is-active');
-      tab.setAttribute('aria-selected', 'true');
-      panels[i].classList.add('is-active');
-      panels[i].removeAttribute('hidden');
-
-      // タブ切替時のアイテムリビール
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      panels[i].querySelectorAll('.solution__item').forEach((item, j) => {
-        item.style.opacity = '0';
-        item.style.transform = 'translateX(-20px)';
-        setTimeout(() => {
-          item.style.transition = 'opacity 0.4s, transform 0.4s var(--ease-reveal, cubic-bezier(0.22, 1, 0.36, 1))';
-          item.style.opacity = '1';
-          item.style.transform = 'none';
-        }, j * 60);
-      });
+  function activateTab(index) {
+    tabs.forEach(t => {
+      t.classList.remove('is-active');
+      t.setAttribute('aria-selected', 'false');
+      t.setAttribute('tabindex', '-1');
     });
+    panels.forEach(p => {
+      p.classList.remove('is-active');
+      p.setAttribute('hidden', '');
+    });
+
+    tabs[index].classList.add('is-active');
+    tabs[index].setAttribute('aria-selected', 'true');
+    tabs[index].setAttribute('tabindex', '0');
+    tabs[index].focus();
+    panels[index].classList.add('is-active');
+    panels[index].removeAttribute('hidden');
+
+    // タブ切替時のアイテムリビール
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    panels[index].querySelectorAll('.solution__item').forEach((item, j) => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(-20px)';
+      setTimeout(() => {
+        item.style.transition = 'opacity 0.4s, transform 0.4s var(--ease-reveal, cubic-bezier(0.22, 1, 0.36, 1))';
+        item.style.opacity = '1';
+        item.style.transform = 'none';
+      }, j * 60);
+    });
+  }
+
+  // 初期tabindex設定
+  tabs.forEach((tab, i) => {
+    tab.setAttribute('tabindex', i === 0 ? '0' : '-1');
+    tab.addEventListener('click', () => activateTab(i));
   });
+
+  // 矢印キーナビゲーション（WAI-ARIA Tabs Pattern）
+  const tablist = document.querySelector('.solution__tabs');
+  if (tablist) {
+    tablist.addEventListener('keydown', (e) => {
+      const currentIndex = Array.from(tabs).findIndex(t => t === document.activeElement);
+      if (currentIndex === -1) return;
+
+      let newIndex;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        newIndex = (currentIndex + 1) % tabs.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        newIndex = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        newIndex = tabs.length - 1;
+      }
+
+      if (newIndex !== undefined) activateTab(newIndex);
+    });
+  }
 }
 
 /* =============================================
