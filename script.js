@@ -420,6 +420,24 @@ function initSmoothScroll() {
 
 
 /* ============================================================
+   12. Flowタイムライン — 接続線のアニメーション
+   ============================================================ */
+function initFlowTimeline() {
+  const timeline = document.querySelector('.flow__timeline');
+  if (!timeline || REDUCED) return;
+
+  const observer = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      timeline.classList.add('is-animated');
+      observer.unobserve(timeline);
+    }
+  }, { threshold: 0.2 });
+
+  observer.observe(timeline);
+}
+
+
+/* ============================================================
    初期化
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -434,4 +452,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaq();
   initHeroTextReveal();
   initSmoothScroll();
+  initFlowTimeline();
 });
