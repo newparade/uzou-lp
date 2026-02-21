@@ -1,514 +1,780 @@
-/* ============================================================
-   UZOU LP v9 — Geometric Flow
-   全インタラクション・アニメーション
-   ============================================================ */
-'use strict';
+/**
+ * UZOU LP v10 — script.js
+ * "接続の闇市場" concept by creative-director
+ * 実装: asset-assembler
+ *
+ * 目次:
+ * 1. 初期化エントリポイント
+ * 2. Header（スクロール検知 + モバイルメニュー）
+ * 3. スクロールリビール（IntersectionObserver）
+ * 4. Canvas: Hero Connection Visualizer（新規実装）
+ * 5. Solution タブ切替（新規実装）
+ * 6. About Platform Diagram（スクロール連動ライン描画）
+ * 7. Results カウントアップ + ブラーリビール（新規実装）
+ * 8. Features アニメーション群
+ *    - Feature-01: バーチャート変動（v9継承強化）
+ *    - Feature-02: ノード増殖SVG（新規実装）
+ *    - Feature-03: フローハイライト（新規実装）
+ * 9. Flow アコーディオン（新規実装）
+ * 10. Canvas: Final CTA マウス追従パーティクル（新規実装）
+ */
 
-/* ---- 定数 ---- */
-const EASE = [.16, 1, .3, 1];
-const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* =============================================
+   1. 初期化エントリポイント
+   ============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  initHeader();
+  initMobileMenu();
+  initScrollReveal();
+  initConnectionVisualizer();
+  initSolutionTabs();
+  initPlatformDiagram();
+  initCountUp();
+  initFeaturesAnimations();
+  initFlowAccordion();
+  initFinalCtaParticles();
+});
 
-/* ============================================================
-   1. Canvasパーティクル — 幾何学的ノード&ライン
-   広告主×メディアの接続を暗喩する幾何学ネットワーク
-   ============================================================ */
-function initParticles() {
-  const canvas = document.getElementById('heroCanvas');
-  if (!canvas || REDUCED) return;
+/* =============================================
+   2. Header スクロール検知 + Fixed CTAバー
+   ============================================= */
+function initHeader() {
+  const header = document.getElementById('site-header');
+  const fixedBar = document.querySelector('.fixed-cta-bar');
+  const heroSection = document.getElementById('hero');
+  if (!header) return;
+
+  const scrollHandler = () => {
+    const scrollY = window.scrollY;
+
+    header.classList.toggle('is-scrolled', scrollY > 40);
+
+    if (heroSection && fixedBar) {
+      const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+      fixedBar.classList.toggle('is-visible', scrollY > heroBottom - 100);
+    }
+  };
+
+  window.addEventListener('scroll', scrollHandler, { passive: true });
+  scrollHandler();
+}
+
+/* =============================================
+   モバイルメニュー（ESCキー対応 + フォーカストラップ）
+   ============================================= */
+function initMobileMenu() {
+  const hamburger = document.querySelector('.nav__hamburger');
+  const menu = document.getElementById('mobile-menu');
+  if (!hamburger || !menu) return;
+
+  const open = () => {
+    hamburger.setAttribute('aria-expanded', 'true');
+    menu.classList.add('is-open');
+    menu.removeAttribute('aria-hidden');
+    const focusable = menu.querySelectorAll('a, button');
+    if (focusable.length) focusable[0].focus();
+  };
+
+  const close = () => {
+    hamburger.setAttribute('aria-expanded', 'false');
+    menu.classList.remove('is-open');
+    menu.setAttribute('aria-hidden', 'true');
+    hamburger.focus();
+  };
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
+    isOpen ? close() : open();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.classList.contains('is-open')) close();
+  });
+
+  menu.querySelectorAll('.mobile-menu__link, .mobile-menu__cta').forEach(link => {
+    link.addEventListener('click', close);
+  });
+}
+
+/* =============================================
+   3. スクロールリビール（scroll-reveal.js参照）
+   IntersectionObserver + data-reveal 属性
+   ============================================= */
+function initScrollReveal() {
+  const elements = document.querySelectorAll('[data-reveal]');
+  if (!elements.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const delay = parseFloat(el.dataset.revealDelay || '0');
+        setTimeout(() => {
+          el.classList.add('is-visible');
+        }, delay * 1000);
+        observer.unobserve(el);
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -40px 0px',
+  });
+
+  elements.forEach(el => observer.observe(el));
+}
+
+/* =============================================
+   4. Canvas: Hero Connection Visualizer
+   新規実装
+   - ノード: ADV(7) + UZOU Core(1) + MEDIA(7)
+   - 接続線: bezierCurveTo（直線禁止）
+   - マウスインタラクション: バネ係数0.05
+   - 30fps制限
+   - prefers-reduced-motion 対応
+   ============================================= */
+function initConnectionVisualizer() {
+  const canvas = document.getElementById('connection-canvas');
+  if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
-  let w, h, particles, animId, lastFrameTime = 0;
-  const COUNT = 80;
-  const CONNECT_DIST = 200;
-  const SPEED = 0.45;
-  const FPS_INTERVAL = 1000 / 30; /* 30fpsに制限（パフォーマンス最適化） */
+  let nodes = [];
+  let mouseX = -999, mouseY = -999;
+  let lastTime = 0;
+  const TARGET_FPS = 30;
+  const FRAME_INTERVAL = 1000 / TARGET_FPS;
 
+  let activeConnections = new Set();
+  let lastConnectionUpdate = 0;
+  const CONNECTION_UPDATE_INTERVAL = 3000;
+
+  // Canvasサイズ設定
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const rect = canvas.parentElement.getBoundingClientRect();
-    w = rect.width;
-    h = rect.height;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+    nodes = generateNodes(rect.width, rect.height);
   }
 
-  function createParticles() {
-    particles = [];
-    for (let i = 0; i < COUNT; i++) {
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * SPEED,
-        vy: (Math.random() - 0.5) * SPEED,
-        size: Math.random() * 3.5 + 2.5,
-        /* ティール系の色バリエーション */
-        hue: 190 + Math.random() * 20,
-        alpha: Math.random() * 0.4 + 0.25
+  // ノード生成
+  function generateNodes(w, h) {
+    const arr = [];
+
+    // UZOUコアノード（中央固定）
+    arr.push({
+      id: 'uzou-core', type: 'uzou',
+      x: w * 0.5, y: h * 0.5,
+      radius: 18,
+      vx: 0, vy: 0,
+      baseX: w * 0.5, baseY: h * 0.5,
+      pulsePhase: 0,
+    });
+
+    const isMobile = w < 600;
+    const advCount = isMobile ? 4 : 7;
+    const mediaCount = isMobile ? 4 : 7;
+
+    // 広告主ノード（左1/3エリア）
+    for (let i = 0; i < advCount; i++) {
+      const bx = w * 0.05 + Math.random() * w * 0.28;
+      const by = h * 0.08 + Math.random() * h * 0.84;
+      arr.push({
+        id: `adv-${i}`, type: 'adv',
+        x: bx, y: by,
+        radius: 5 + Math.random() * 5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        baseX: bx, baseY: by,
+        pulsePhase: Math.random() * Math.PI * 2,
       });
     }
+
+    // メディアノード（右1/3エリア）
+    for (let i = 0; i < mediaCount; i++) {
+      const bx = w * 0.65 + Math.random() * w * 0.28;
+      const by = h * 0.08 + Math.random() * h * 0.84;
+      arr.push({
+        id: `media-${i}`, type: 'media',
+        x: bx, y: by,
+        radius: 4 + Math.random() * 5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        baseX: bx, baseY: by,
+        pulsePhase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    return arr;
   }
 
-  function draw(timestamp) {
-    animId = requestAnimationFrame(draw);
-    /* 30fps制限 */
-    if (timestamp && timestamp - lastFrameTime < FPS_INTERVAL) return;
-    lastFrameTime = timestamp || 0;
+  // アクティブ接続更新（3秒ごとにランダム選定）
+  function updateActiveConnections() {
+    activeConnections.clear();
+    const advNodes   = nodes.filter(n => n.type === 'adv');
+    const mediaNodes = nodes.filter(n => n.type === 'media');
 
-    ctx.clearRect(0, 0, w, h);
+    const pickCount = 2 + Math.floor(Math.random() * 2);
+    const allNonCore = [...advNodes, ...mediaNodes];
+    const shuffled = allNonCore.sort(() => Math.random() - 0.5);
 
-    /* ライン描画 */
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CONNECT_DIST) {
-          const opacity = (1 - dist / CONNECT_DIST) * 0.25;
-          ctx.strokeStyle = `rgba(139, 192, 202, ${opacity})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-        }
-      }
+    for (let i = 0; i < Math.min(pickCount, shuffled.length); i++) {
+      activeConnections.add(shuffled[i].id);
     }
+  }
 
-    /* ノード描画 */
-    for (const p of particles) {
-      p.x += p.vx;
-      p.y += p.vy;
+  // ノード描画
+  function drawNode(node, time) {
+    const pulseFactor = 1 + Math.sin(time * 0.002 + node.pulsePhase) * 0.15;
 
-      /* 画面端でバウンス */
-      if (p.x < 0 || p.x > w) p.vx *= -1;
-      if (p.y < 0 || p.y > h) p.vy *= -1;
-
-      ctx.fillStyle = `rgba(139, 192, 202, ${p.alpha})`;
+    if (node.type === 'uzou') {
+      // 外グロー
+      const outerGlow = ctx.createRadialGradient(
+        node.x, node.y, 0,
+        node.x, node.y, node.radius * 3
+      );
+      outerGlow.addColorStop(0, 'rgba(139, 192, 202, 0.15)');
+      outerGlow.addColorStop(1, 'rgba(139, 192, 202, 0)');
+      ctx.fillStyle = outerGlow;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
       ctx.fill();
+
+      // コア本体
+      const coreGrad = ctx.createRadialGradient(
+        node.x - 3, node.y - 3, 0,
+        node.x, node.y, node.radius * pulseFactor
+      );
+      coreGrad.addColorStop(0, 'rgba(139, 192, 202, 0.9)');
+      coreGrad.addColorStop(1, 'rgba(52, 98, 111, 0.7)');
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius * pulseFactor, 0, Math.PI * 2);
+      ctx.fill();
+
+      // リング
+      ctx.strokeStyle = 'rgba(139, 192, 202, 0.5)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius * pulseFactor + 6, 0, Math.PI * 2);
+      ctx.stroke();
+
+    } else if (node.type === 'adv') {
+      ctx.fillStyle = `rgba(52, 98, 111, ${0.6 + Math.sin(time * 0.001 + node.pulsePhase) * 0.2})`;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(52, 98, 111, 0.8)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+    } else if (node.type === 'media') {
+      if (activeConnections.has(node.id)) {
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = 'rgba(139, 192, 202, 0.5)';
+      }
+      ctx.fillStyle = `rgba(139, 192, 202, ${0.5 + Math.sin(time * 0.0015 + node.pulsePhase) * 0.15})`;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(139, 192, 202, 0.6)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
     }
+  }
+
+  // 接続線描画（bezierCurveTo — 直線禁止）
+  function drawConnections(time) {
+    const coreNode = nodes.find(n => n.type === 'uzou');
+    if (!coreNode) return;
+
+    const MAX_DIST = 200;
+
+    nodes.forEach(node => {
+      if (node.type === 'uzou') return;
+
+      const dx = coreNode.x - node.x;
+      const dy = coreNode.y - node.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist > MAX_DIST * 1.5) return;
+
+      const alpha = Math.max(0, 1 - dist / (MAX_DIST * 1.5));
+      const isActive = activeConnections.has(node.id);
+
+      // ベジェ曲線の制御点（中点から法線方向にオフセット）
+      const mx = (node.x + coreNode.x) / 2;
+      const my = (node.y + coreNode.y) / 2;
+      const len = Math.sqrt(dx * dx + dy * dy) || 1;
+      const curveOffset = len * 0.2 * (node.id.includes('adv') ? -0.8 : 0.8);
+      const cpx = mx - (dy / len) * curveOffset;
+      const cpy = my + (dx / len) * curveOffset;
+
+      ctx.beginPath();
+      ctx.moveTo(node.x, node.y);
+      ctx.quadraticCurveTo(cpx, cpy, coreNode.x, coreNode.y);
+
+      if (isActive) {
+        const flowAlpha = 0.6 + Math.sin(time * 0.004) * 0.25;
+        ctx.strokeStyle = `rgba(139, 192, 202, ${alpha * flowAlpha})`;
+        ctx.lineWidth = 1.5;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = 'rgba(139, 192, 202, 0.4)';
+      } else {
+        ctx.strokeStyle = `rgba(43, 73, 84, ${alpha * 0.6})`;
+        ctx.lineWidth = 0.7;
+        ctx.shadowBlur = 0;
+      }
+
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    });
+  }
+
+  // マウス引力（バネ係数0.05 + 復元力）
+  function applyMouseAttractionToNode(node, mx, my) {
+    if (mx < -900) return;
+    const dx = mx - node.x;
+    const dy = my - node.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const RADIUS = 200;
+    const SPRING = 0.05;
+
+    if (dist < RADIUS && dist > 0) {
+      const force = (RADIUS - dist) / RADIUS;
+      node.vx += (dx / dist) * force * SPRING;
+      node.vy += (dy / dist) * force * SPRING;
+    }
+
+    // 元の位置への復元力（深海生物の抵抗）
+    node.vx += (node.baseX - node.x) * 0.02;
+    node.vy += (node.baseY - node.y) * 0.02;
+
+    // 速度減衰（摩擦）
+    node.vx *= 0.92;
+    node.vy *= 0.92;
+    node.x += node.vx;
+    node.y += node.vy;
+  }
+
+  // メインループ（30fps制限）
+  function loop(timestamp) {
+    if (!document.getElementById('connection-canvas')) return;
+
+    const elapsed = timestamp - lastTime;
+    if (elapsed >= FRAME_INTERVAL) {
+      lastTime = timestamp - (elapsed % FRAME_INTERVAL);
+
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      if (timestamp - lastConnectionUpdate > CONNECTION_UPDATE_INTERVAL) {
+        updateActiveConnections();
+        lastConnectionUpdate = timestamp;
+      }
+
+      nodes.forEach(node => {
+        if (node.type !== 'uzou') {
+          applyMouseAttractionToNode(node, mouseX, mouseY);
+        }
+        drawNode(node, timestamp);
+      });
+
+      drawConnections(timestamp);
+    }
+
+    requestAnimationFrame(loop);
+  }
+
+  // マウスイベント
+  const heroVisual = canvas.closest('.hero__visual');
+  if (heroVisual) {
+    heroVisual.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = e.clientX - rect.left;
+      mouseY = e.clientY - rect.top;
+    });
+    heroVisual.addEventListener('mouseleave', () => {
+      mouseX = -999; mouseY = -999;
+    });
+  }
+
+  // prefers-reduced-motion: 静止画フォールバック
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    resize();
+    nodes.forEach(node => drawNode(node, 0));
+    drawConnections(0);
+    return;
   }
 
   resize();
-  createParticles();
-  animId = requestAnimationFrame(draw);
+  updateActiveConnections();
+  requestAnimationFrame(loop);
 
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      resize();
-      createParticles();
-    }, 200);
-  });
-
-  /* ヒーローが見えなくなったら描画を止める */
-  const heroObserver = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      if (!animId) animId = requestAnimationFrame(draw);
-    } else {
-      cancelAnimationFrame(animId);
-      animId = null;
-    }
-  }, { threshold: 0 });
-  heroObserver.observe(canvas.parentElement);
+  const ro = new ResizeObserver(() => resize());
+  ro.observe(canvas);
 }
 
+/* =============================================
+   5. Solution タブ切替
+   新規実装 + ARIA属性更新
+   ============================================= */
+function initSolutionTabs() {
+  const tabs   = document.querySelectorAll('.solution__tab');
+  const panels = document.querySelectorAll('.solution__panel');
+  if (!tabs.length) return;
 
-/* ============================================================
-   2. スクロールアニメーション（IntersectionObserver）
-   .reveal 要素のフェードイン + スタッガー
-   ============================================================ */
-function initReveal() {
-  if (REDUCED) {
-    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => {
+      // タブ状態更新
+      tabs.forEach(t => {
+        t.classList.remove('is-active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      panels.forEach(p => {
+        p.classList.remove('is-active');
+        p.setAttribute('hidden', '');
+      });
+
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected', 'true');
+      panels[i].classList.add('is-active');
+      panels[i].removeAttribute('hidden');
+
+      // タブ切替時のアイテムリビール
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      panels[i].querySelectorAll('.solution__item').forEach((item, j) => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(-20px)';
+        setTimeout(() => {
+          item.style.transition = 'opacity 0.4s, transform 0.4s var(--ease-reveal, cubic-bezier(0.22, 1, 0.36, 1))';
+          item.style.opacity = '1';
+          item.style.transform = 'none';
+        }, j * 60);
+      });
+    });
+  });
+}
+
+/* =============================================
+   6. About Platform Diagram スクロール連動
+   IntersectionObserver で stroke-dashoffset → 0
+   ============================================= */
+function initPlatformDiagram() {
+  const diagram = document.querySelector('.about__diagram');
+  if (!diagram) return;
+
+  const lines = diagram.querySelectorAll('.platform-line');
+  lines.forEach((line, i) => {
+    line.style.transitionDelay = `${i * 150}ms`;
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-animated');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(diagram);
+}
+
+/* =============================================
+   7. Results カウントアップ + ブラーリビール
+   新規実装（counter-up.js参照）
+   ============================================= */
+function initCountUp() {
+  const counters = document.querySelectorAll('.results__count[data-count]');
+  if (!counters.length) return;
+
+  // prefers-reduced-motion: そのまま表示
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    counters.forEach(el => {
+      const prefix  = el.dataset.countPrefix || '';
+      const suffix  = el.dataset.countSuffix || '';
+      const target  = parseFloat(el.dataset.count);
+      const decimal = parseInt(el.dataset.countDecimal || '0', 10);
+      el.textContent = prefix + target.toFixed(decimal) + suffix;
+    });
     return;
   }
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-}
-
-
-/* ============================================================
-   3. カウントアップ（Results数値）
-   ============================================================ */
-function initCountUp() {
-  const els = document.querySelectorAll('[data-count]');
-  if (!els.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const target = parseFloat(el.dataset.count);
-      const decimal = parseInt(el.dataset.decimal || '0', 10);
-      if (!isFinite(target) || isNaN(decimal)) return;
-      const duration = 2200;
-      const start = performance.now();
+      const el       = entry.target;
+      const target   = parseFloat(el.dataset.count);
+      const suffix   = el.dataset.countSuffix || '';
+      const prefix   = el.dataset.countPrefix || '';
+      const duration = parseFloat(el.dataset.countDuration || '1.5') * 1000;
+      const decimal  = parseInt(el.dataset.countDecimal || '0', 10);
 
-      function update(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        /* easeOutExpo */
-        const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-        el.textContent = (target * eased).toFixed(decimal);
-        if (progress < 1) requestAnimationFrame(update);
-      }
+      const startTime = performance.now();
 
-      if (!REDUCED) {
-        requestAnimationFrame(update);
-      } else {
-        el.textContent = target.toFixed(decimal);
-      }
+      const tick = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = target * eased;
+        el.textContent = prefix + current.toFixed(decimal) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
       observer.unobserve(el);
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.5 });
 
-  els.forEach(el => observer.observe(el));
+  counters.forEach(counter => observer.observe(counter));
 }
 
-
-/* ============================================================
-   4. ヘッダー — スクロール時の背景変化
-   ============================================================ */
-function initHeader() {
-  const header = document.getElementById('header');
-  if (!header) return;
-
-  let ticking = false;
-  function onScroll() {
-    if (!ticking) {
-      requestAnimationFrame(() => {
-        header.classList.toggle('is-scrolled', window.scrollY > 50);
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+/* =============================================
+   8. Features アニメーション群
+   ============================================= */
+function initFeaturesAnimations() {
+  initBarChart();
+  initNodeGrowth();
+  initFlowHighlight();
 }
 
-
-/* ============================================================
-   5. ハンバーガーメニュー
-   ============================================================ */
-function initBurger() {
-  const burger = document.getElementById('headerBurger');
-  const nav = document.getElementById('headerNav');
-  if (!burger || !nav) return;
-
-  burger.addEventListener('click', () => {
-    const isOpen = nav.classList.toggle('is-open');
-    burger.classList.toggle('is-active', isOpen);
-    burger.setAttribute('aria-expanded', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-  });
-
-  /* ナビリンクをクリックしたらメニューを閉じる */
-  nav.querySelectorAll('.header__nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      nav.classList.remove('is-open');
-      burger.classList.remove('is-active');
-      burger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    });
-  });
-
-  /* ESCキーでメニューを閉じる */
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.classList.contains('is-open')) {
-      nav.classList.remove('is-open');
-      burger.classList.remove('is-active');
-      burger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-      burger.focus();
-    }
-  });
-}
-
-
-/* ============================================================
-   6. 固定CTAバー — Hero通過後に表示
-   ============================================================ */
-function initStickyCta() {
-  const bar = document.getElementById('stickyCta');
-  const hero = document.getElementById('hero');
-  if (!bar || !hero) return;
-
-  const observer = new IntersectionObserver(([entry]) => {
-    bar.classList.toggle('is-visible', !entry.isIntersecting);
-  }, { threshold: 0 });
-
-  observer.observe(hero);
-}
-
-
-/* ============================================================
-   7. マグネティックボタン
-   CTA ボタンがマウスに吸い付くインタラクション
-   ============================================================ */
-function initMagnetic() {
-  if (REDUCED || 'ontouchstart' in window) return;
-
-  document.querySelectorAll('.btn--primary, .btn--white').forEach(btn => {
-    btn.addEventListener('mousemove', (e) => {
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-      btn.style.transition = 'transform 0.1s ease-out';
-    });
-
-    btn.addEventListener('mouseleave', () => {
-      btn.style.transform = '';
-      btn.style.transition = 'transform 0.45s cubic-bezier(.16,1,.3,1)';
-    });
-  });
-}
-
-
-/* ============================================================
-   8. バーチャートアニメーション
-   Feature03のバーが画面内に入ったら成長
-   ============================================================ */
+// Feature-01: バーチャート変動（setInterval / v9継承強化）
 function initBarChart() {
-  const bars = document.querySelectorAll('.feature__bar');
+  const bars = document.querySelectorAll('.features__bar');
   if (!bars.length) return;
 
-  const chart = bars[0].closest('.feature__bar-chart');
+  const baseHeights = Array.from(bars).map(b =>
+    parseFloat(b.style.getPropertyValue('--h'))
+  );
+
+  const randomize = () => {
+    bars.forEach((bar, i) => {
+      const variation = (Math.random() - 0.5) * 30;
+      const newH = Math.max(20, Math.min(95, baseHeights[i] + variation));
+      bar.style.setProperty('--h', newH + '%');
+    });
+
+    // 最大バーをアクティブに
+    const heights = Array.from(bars).map(b =>
+      parseFloat(b.style.getPropertyValue('--h'))
+    );
+    const maxIdx = heights.indexOf(Math.max(...heights));
+    bars.forEach((b, i) => {
+      b.classList.toggle('features__bar--active', i === maxIdx);
+    });
+  };
+
+  const chart = document.getElementById('feature-barchart');
   if (!chart) return;
 
-  const observer = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      bars.forEach(bar => bar.classList.add('animate'));
-      observer.unobserve(chart);
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      setInterval(randomize, 1800);
+      obs.unobserve(chart);
     }
-  }, { threshold: 0.3 });
-
-  observer.observe(chart);
+  }, { threshold: 0.5 });
+  obs.observe(chart);
 }
 
+// Feature-02: ノード増殖SVG（新規実装）
+function initNodeGrowth() {
+  const svg     = document.getElementById('node-growth-svg');
+  const counter = document.getElementById('node-count-display');
+  if (!svg || !counter) return;
 
-/* ============================================================
-   9. FAQアコーディオン — アニメーション付き
-   <details> のネイティブ動作にCSS transitionを補助
-   ============================================================ */
-function initFaq() {
-  document.querySelectorAll('.faq__item').forEach(item => {
-    const summary = item.querySelector('.faq__question');
-    const answer = item.querySelector('.faq__answer');
-    if (!summary || !answer) return;
+  const cx = 120, cy = 90;
+  const maxNodes = 12;
+  let count = 1;
 
-    let isAnimating = false;
+  const addNode = () => {
+    if (count >= maxNodes) return;
 
-    summary.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (isAnimating) return;
-      isAnimating = true;
+    const angle  = Math.random() * Math.PI * 2;
+    const radius = 30 + Math.random() * 60;
+    const nx = cx + Math.cos(angle) * radius;
+    const ny = cy + Math.sin(angle) * radius;
 
-      if (item.open) {
-        answer.style.maxHeight = answer.scrollHeight + 'px';
-        requestAnimationFrame(() => {
-          answer.style.maxHeight = '0';
-          answer.style.opacity = '0';
-        });
-        answer.addEventListener('transitionend', () => {
-          item.open = false;
-          answer.style.maxHeight = '';
-          answer.style.opacity = '';
-          isAnimating = false;
-        }, { once: true });
+    // 接続線
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+    line.setAttribute('x2', nx); line.setAttribute('y2', ny);
+    line.setAttribute('stroke', 'rgba(52,98,111,0.25)');
+    line.setAttribute('stroke-width', '0.8');
+    svg.insertBefore(line, svg.firstChild);
+
+    // ノード
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    const r = 5 + Math.random() * 8;
+    circle.setAttribute('cx', nx); circle.setAttribute('cy', ny);
+    circle.setAttribute('r', r);
+    circle.setAttribute('fill', 'rgba(139,192,202,0.08)');
+    circle.setAttribute('stroke', 'rgba(139,192,202,0.4)');
+    circle.setAttribute('stroke-width', '1');
+    circle.style.opacity = '0';
+    circle.style.transition = 'opacity 0.4s';
+    svg.appendChild(circle);
+    setTimeout(() => { circle.style.opacity = '1'; }, 50);
+
+    count++;
+    counter.textContent = count;
+  };
+
+  const visual = document.querySelector('.features__node-visual');
+  if (!visual) return;
+
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        counter.textContent = maxNodes;
+        return;
+      }
+      const timer = setInterval(() => {
+        addNode();
+        if (count >= maxNodes) clearInterval(timer);
+      }, 400);
+      obs.unobserve(visual);
+    }
+  }, { threshold: 0.4 });
+  obs.observe(visual);
+}
+
+// Feature-03: フローハイライト（新規実装）
+function initFlowHighlight() {
+  const flow = document.getElementById('feature-flow');
+  if (!flow) return;
+
+  const steps = flow.querySelectorAll('.features__flow-step');
+  let currentStep = 0;
+
+  const highlight = () => {
+    steps.forEach(s => s.classList.remove('is-active'));
+    steps[currentStep].classList.add('is-active');
+    currentStep = (currentStep + 1) % steps.length;
+  };
+
+  const obs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        steps[0].classList.add('is-active');
+        return;
+      }
+      highlight();
+      setInterval(highlight, 1200);
+      obs.unobserve(flow);
+    }
+  }, { threshold: 0.4 });
+  obs.observe(flow);
+}
+
+/* =============================================
+   9. Flow アコーディオン
+   新規実装（aria-expanded 更新対応）
+   ============================================= */
+function initFlowAccordion() {
+  const headers = document.querySelectorAll('.flow__step-header');
+
+  headers.forEach(header => {
+    header.addEventListener('click', () => {
+      const isExpanded = header.getAttribute('aria-expanded') === 'true';
+      const detailId   = header.getAttribute('aria-controls');
+      const detail     = document.getElementById(detailId);
+      if (!detail) return;
+
+      header.setAttribute('aria-expanded', String(!isExpanded));
+      if (isExpanded) {
+        detail.setAttribute('hidden', '');
       } else {
-        item.open = true;
-        const h = answer.scrollHeight;
-        answer.style.maxHeight = '0';
-        answer.style.opacity = '0';
-        answer.style.overflow = 'hidden';
-        answer.style.transition = 'max-height .4s cubic-bezier(.16,1,.3,1), opacity .3s ease';
-        requestAnimationFrame(() => {
-          answer.style.maxHeight = h + 'px';
-          answer.style.opacity = '1';
-        });
-        answer.addEventListener('transitionend', () => {
-          answer.style.maxHeight = '';
-          answer.style.overflow = '';
-          answer.style.transition = '';
-          isAnimating = false;
-        }, { once: true });
+        detail.removeAttribute('hidden');
       }
     });
   });
 }
 
+/* =============================================
+   10. Canvas: Final CTA マウス追従パーティクル
+   新規実装
+   - 40パーティクル
+   - マウス引力 + 自律回転移動
+   - prefers-reduced-motion 対応
+   ============================================= */
+function initFinalCtaParticles() {
+  const canvas = document.getElementById('final-cta-canvas');
+  if (!canvas) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-/* ============================================================
-   10. テキストスタガー — ヒーロータイトルの1行ずつ表示
-   ============================================================ */
-function initHeroTextReveal() {
-  if (REDUCED) return;
+  const ctx = canvas.getContext('2d');
+  const particles = [];
+  let mouseX = 0.5, mouseY = 0.5;
 
-  const lines = document.querySelectorAll('.hero__title-line');
-  lines.forEach((line, i) => {
-    line.style.opacity = '0';
-    line.style.transform = 'translateY(24px)';
-    line.style.transition = `opacity .7s cubic-bezier(.16,1,.3,1) ${i * 0.18 + 0.3}s, transform .7s cubic-bezier(.16,1,.3,1) ${i * 0.18 + 0.3}s`;
-  });
+  function resize() {
+    const dpr  = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = canvas.getBoundingClientRect();
+    canvas.width  = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.scale(dpr, dpr);
+  }
 
-  /* ページ読み込み完了後にアニメーション開始 */
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      lines.forEach(line => {
-        line.style.opacity = '1';
-        line.style.transform = 'translateY(0)';
-      });
-    });
-  });
-
-  /* サブテキスト・バッジ等もフェードイン */
-  const heroEls = [
-    '.hero__badges',
-    '.hero__target',
-    '.hero__subtitle',
-    '.hero__cta',
-    '.hero__trust'
-  ];
-  heroEls.forEach((sel, i) => {
-    const el = document.querySelector(sel);
-    if (!el) return;
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(16px)';
-    el.style.transition = `opacity .6s cubic-bezier(.16,1,.3,1) ${0.6 + i * 0.12}s, transform .6s cubic-bezier(.16,1,.3,1) ${0.6 + i * 0.12}s`;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      });
-    });
-  });
-
-  /* ダッシュボードモック */
-  const dash = document.querySelector('.hero__dashboard');
-  if (dash) {
-    dash.style.opacity = '0';
-    dash.style.transform = 'perspective(900px) rotateY(-3deg) rotateX(1.5deg) translateY(20px)';
-    dash.style.transition = 'opacity .9s cubic-bezier(.16,1,.3,1) .4s, transform .9s cubic-bezier(.16,1,.3,1) .4s';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        dash.style.opacity = '1';
-        dash.style.transform = 'perspective(900px) rotateY(-3deg) rotateX(1.5deg) translateY(0)';
-      });
+  // パーティクル初期化
+  for (let i = 0; i < 40; i++) {
+    particles.push({
+      x:     Math.random(),
+      y:     Math.random(),
+      size:  1 + Math.random() * 2,
+      alpha: 0.1 + Math.random() * 0.3,
+      speed: 0.0002 + Math.random() * 0.0003,
+      angle: Math.random() * Math.PI * 2,
     });
   }
-}
 
+  function loop() {
+    const rect = canvas.getBoundingClientRect();
+    ctx.clearRect(0, 0, rect.width, rect.height);
 
-/* ============================================================
-   11. スムーズスクロール — アンカーリンク
-   ============================================================ */
-function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      if (!href || !/^#[a-zA-Z0-9_-]+$/.test(href)) return;
-      const target = document.getElementById(href.slice(1));
-      if (!target) return;
-      e.preventDefault();
-      const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--hh'), 10);
-      const top = target.getBoundingClientRect().top + window.scrollY - headerHeight;
-      window.scrollTo({ top, behavior: 'smooth' });
+    particles.forEach(p => {
+      // マウスへの引力
+      const dx = mouseX - p.x;
+      const dy = mouseY - p.y;
+      p.x += dx * 0.0008;
+      p.y += dy * 0.0008;
+
+      // 自律移動（緩やかな回転）
+      p.angle += 0.02;
+      p.x += Math.cos(p.angle) * p.speed;
+      p.y += Math.sin(p.angle) * p.speed;
+
+      // 境界折り返し
+      if (p.x < 0) p.x = 1;
+      if (p.x > 1) p.x = 0;
+      if (p.y < 0) p.y = 1;
+      if (p.y > 1) p.y = 0;
+
+      // 描画
+      ctx.beginPath();
+      ctx.arc(p.x * rect.width, p.y * rect.height, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(139, 192, 202, ${p.alpha})`;
+      ctx.fill();
     });
-  });
-}
 
+    requestAnimationFrame(loop);
+  }
 
-/* ============================================================
-   12. Flowタイムライン — 接続線のアニメーション
-   ============================================================ */
-function initFlowTimeline() {
-  const timeline = document.querySelector('.flow__timeline');
-  if (!timeline || REDUCED) return;
-
-  const observer = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      timeline.classList.add('is-animated');
-      observer.unobserve(timeline);
-    }
-  }, { threshold: 0.2 });
-
-  observer.observe(timeline);
-}
-
-
-/* ============================================================
-   13. CTAフォーム — タブ切替
-   ============================================================ */
-function initCtaForm() {
-  const tabs = document.querySelectorAll('.cta-form__tab');
-  const contactRow = document.querySelector('.cta-form__row--contact');
-  const submitText = document.querySelector('.cta-form__submit-text');
-  if (!tabs.length) return;
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('is-active'));
-      tab.classList.add('is-active');
-      const isContact = tab.dataset.tab === 'contact';
-      if (contactRow) contactRow.hidden = !isContact;
-      if (submitText) {
-        submitText.textContent = isContact ? 'お問い合わせを送信' : '無料で資料をダウンロード';
-      }
-    });
-  });
-
-  /* フォーム送信（デモ用: 実際のエンドポイントは別途設定） */
-  const form = document.querySelector('.cta-form');
-  if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const btn = form.querySelector('.cta-form__submit');
-      if (btn) {
-        btn.disabled = true;
-        if (submitText) submitText.textContent = '送信中...';
-        setTimeout(() => {
-          if (submitText) submitText.textContent = '送信完了しました';
-          btn.style.background = 'var(--c-primary)';
-          btn.style.color = '#fff';
-        }, 1200);
-      }
+  // マウスイベント
+  const section = canvas.closest('.final-cta');
+  if (section) {
+    section.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = (e.clientX - rect.left) / rect.width;
+      mouseY = (e.clientY - rect.top)  / rect.height;
     });
   }
+
+  resize();
+  requestAnimationFrame(loop);
+
+  const ro = new ResizeObserver(resize);
+  ro.observe(canvas);
 }
-
-
-/* ============================================================
-   初期化
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  initParticles();
-  initReveal();
-  initCountUp();
-  initHeader();
-  initBurger();
-  initStickyCta();
-  initMagnetic();
-  initBarChart();
-  initFaq();
-  initHeroTextReveal();
-  initSmoothScroll();
-  initFlowTimeline();
-  initCtaForm();
-});
