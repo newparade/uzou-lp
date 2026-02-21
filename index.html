@@ -8,6 +8,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- OGP -->
+  <meta property="og:title" content="UZOU｜メディア広告をもっとスマートに">
+  <meta property="og:description" content="AIによる最適化配信で広告成果とメディア収益を最大化する次世代広告プラットフォーム">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="UZOU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="UZOU｜メディア広告をもっとスマートに">
+  <meta name="twitter:description" content="AIによる最適化配信で広告成果とメディア収益を最大化する次世代広告プラットフォーム">
+  <!-- FAQPage構造化データ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type": "Question", "name": "UZOUの導入にはどのくらい時間がかかりますか？", "acceptedAnswer": {"@type": "Answer", "text": "最短で1週間程度で導入が完了します。タグの設置とアカウント設定を行うだけで、すぐにAI最適化による配信をスタートできます。"}},
+      {"@type": "Question", "name": "最低出稿金額はありますか？", "acceptedAnswer": {"@type": "Answer", "text": "お客様の予算やニーズに合わせて柔軟に対応しております。まずはお気軽にご相談ください。"}},
+      {"@type": "Question", "name": "どのような業種に対応していますか？", "acceptedAnswer": {"@type": "Answer", "text": "EC、金融、不動産、人材、教育など幅広い業種に対応しています。200以上のメディアネットワークを活用し、各業種に最適な配信先を自動で選定します。"}},
+      {"@type": "Question", "name": "レポートはどのくらいの頻度で共有されますか？", "acceptedAnswer": {"@type": "Answer", "text": "リアルタイムダッシュボードでいつでも最新の配信状況をご確認いただけます。加えて、月次の詳細レポートと改善提案を専任担当者からお送りいたします。"}},
+      {"@type": "Question", "name": "既存の広告運用と併用できますか？", "acceptedAnswer": {"@type": "Answer", "text": "もちろん可能です。既存の広告運用を継続しながら、UZOUを追加の配信チャネルとしてご活用いただけます。"}}
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -41,6 +63,8 @@
       </button>
     </div>
   </header>
+
+  <main>
 
   <!-- ========== Hero ========== -->
   <section class="hero" id="hero">
@@ -130,6 +154,21 @@
     </div>
   </section>
 
+  <!-- ========== 導入企業ロゴバンド ========== -->
+  <div class="logo-band">
+    <div class="container">
+      <p class="logo-band__label">200+ のメディア・広告主が導入</p>
+      <div class="logo-band__grid">
+        <span class="logo-band__item">Media Corp.</span>
+        <span class="logo-band__item">AdTech Inc.</span>
+        <span class="logo-band__item">NewsPortal</span>
+        <span class="logo-band__item">Digital Agency</span>
+        <span class="logo-band__item">MediaGrowth</span>
+        <span class="logo-band__item">WebMedia Co.</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ========== About ========== -->
   <section class="about section" id="about">
     <div class="container">
@@ -181,7 +220,7 @@
         その課題、UZOUが<strong>解決</strong>します
       </h2>
       <div class="solution__grid">
-        <div class="solution__column reveal">
+        <div class="solution__column reveal reveal--left">
           <div class="solution__column-header">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <h3>広告主の方</h3>
@@ -210,7 +249,7 @@
             </li>
           </ul>
         </div>
-        <div class="solution__column reveal">
+        <div class="solution__column reveal reveal--right">
           <div class="solution__column-header">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             <h3>媒体主の方</h3>
@@ -284,7 +323,7 @@
       <div class="section__label reveal">Features</div>
       <h2 class="section__title reveal">UZOUの<strong>3つの強み</strong></h2>
 
-      <div class="feature reveal">
+      <div class="feature reveal reveal--left">
         <div class="feature__content">
           <span class="feature__num">01</span>
           <h3 class="feature__title">AI最適化<br>配信エンジン</h3>
@@ -312,7 +351,7 @@
         </div>
       </div>
 
-      <div class="feature feature--reverse reveal">
+      <div class="feature feature--reverse reveal reveal--right">
         <div class="feature__content">
           <span class="feature__num">02</span>
           <h3 class="feature__title">高収益メディア<br>ネットワーク</h3>
@@ -339,7 +378,7 @@
         </div>
       </div>
 
-      <div class="feature reveal">
+      <div class="feature reveal reveal--left">
         <div class="feature__content">
           <span class="feature__num">03</span>
           <h3 class="feature__title">ワンストップ<br>ソリューション</h3>
@@ -372,22 +411,26 @@
       <div class="section__label reveal">Results</div>
       <h2 class="section__title reveal">数字で見る<strong>UZOU</strong></h2>
       <div class="results__grid">
-        <div class="results__card reveal">
+        <div class="results__card reveal reveal--scale">
+          <svg class="results__sparkline" viewBox="0 0 60 20" aria-hidden="true"><polyline points="0,18 10,15 20,16 30,12 40,9 50,6 60,3" fill="none" stroke="var(--c-light)" stroke-width="1.5"/></svg>
           <span class="results__value" data-count="200">0</span>
           <span class="results__suffix">+</span>
           <span class="results__label">導入メディア数</span>
         </div>
-        <div class="results__card reveal">
+        <div class="results__card reveal reveal--scale">
+          <svg class="results__sparkline" viewBox="0 0 60 20" aria-hidden="true"><polyline points="0,16 10,14 20,12 30,13 40,8 50,5 60,2" fill="none" stroke="var(--c-light)" stroke-width="1.5"/></svg>
           <span class="results__value" data-count="3.5" data-decimal="1">0</span>
           <span class="results__suffix">億+</span>
           <span class="results__label">月間インプレッション</span>
         </div>
-        <div class="results__card reveal">
+        <div class="results__card reveal reveal--scale">
+          <svg class="results__sparkline" viewBox="0 0 60 20" aria-hidden="true"><polyline points="0,17 10,15 20,13 30,14 40,10 50,7 60,4" fill="none" stroke="var(--c-light)" stroke-width="1.5"/></svg>
           <span class="results__value" data-count="50">0</span>
           <span class="results__suffix">億+</span>
           <span class="results__label">月間広告リクエスト</span>
         </div>
-        <div class="results__card results__card--featured reveal">
+        <div class="results__card results__card--featured reveal reveal--scale">
+          <svg class="results__sparkline" viewBox="0 0 60 20" aria-hidden="true"><polyline points="0,18 10,14 20,16 30,10 40,8 50,4 60,2" fill="none" stroke="var(--c-light)" stroke-width="1.5" opacity=".5"/></svg>
           <span class="results__prefix">+</span>
           <span class="results__value" data-count="34.8" data-decimal="1">0</span>
           <span class="results__suffix">%</span>
@@ -497,28 +540,28 @@
       <div class="section__label reveal">Why UZOU</div>
       <h2 class="section__title reveal">UZOUが<strong>選ばれる理由</strong></h2>
       <div class="reasons__grid">
-        <div class="reasons__card reveal">
+        <div class="reasons__card reveal reveal--blur">
           <div class="reasons__icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M16 4v24M4 16h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="2"/></svg>
           </div>
           <h3 class="reasons__title">独自の商流基盤</h3>
           <p class="reasons__desc">広告主とメディアを直接つなぐ独自のネットワークで、中間コストを削減し双方の利益を最大化します。</p>
         </div>
-        <div class="reasons__card reveal">
+        <div class="reasons__card reveal reveal--blur">
           <div class="reasons__icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M8 24l4-8 4 4 4-12 4 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="24" height="24" rx="4" stroke="currentColor" stroke-width="2"/></svg>
           </div>
           <h3 class="reasons__title">AI技術の活用</h3>
           <p class="reasons__desc">機械学習による配信最適化で、常に最良のパフォーマンスを自動で追求し続けます。</p>
         </div>
-        <div class="reasons__card reveal">
+        <div class="reasons__card reveal reveal--blur">
           <div class="reasons__icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="2"/><path d="M12 16l3 3 5-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
           <h3 class="reasons__title">透明性の高い運用</h3>
           <p class="reasons__desc">リアルタイムダッシュボードと詳細レポートで、広告運用の全体像を可視化します。</p>
         </div>
-        <div class="reasons__card reveal">
+        <div class="reasons__card reveal reveal--blur">
           <div class="reasons__icon">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="10" r="6" stroke="currentColor" stroke-width="2"/><path d="M6 28c0-5.5 4.5-10 10-10s10 4.5 10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </div>
@@ -614,6 +657,8 @@
       </div>
     </div>
   </section>
+
+  </main>
 
   <!-- ========== Footer ========== -->
   <footer class="footer">

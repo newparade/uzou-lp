@@ -17,10 +17,11 @@ function initParticles() {
   if (!canvas || REDUCED) return;
 
   const ctx = canvas.getContext('2d');
-  let w, h, particles, animId;
-  const COUNT = 60;
-  const CONNECT_DIST = 140;
-  const SPEED = 0.35;
+  let w, h, particles, animId, lastFrameTime = 0;
+  const COUNT = 80;
+  const CONNECT_DIST = 200;
+  const SPEED = 0.45;
+  const FPS_INTERVAL = 1000 / 30; /* 30fpsに制限（パフォーマンス最適化） */
 
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -42,15 +43,20 @@ function initParticles() {
         y: Math.random() * h,
         vx: (Math.random() - 0.5) * SPEED,
         vy: (Math.random() - 0.5) * SPEED,
-        size: Math.random() * 2.5 + 1.5,
+        size: Math.random() * 3.5 + 2.5,
         /* ティール系の色バリエーション */
         hue: 190 + Math.random() * 20,
-        alpha: Math.random() * 0.3 + 0.15
+        alpha: Math.random() * 0.4 + 0.25
       });
     }
   }
 
-  function draw() {
+  function draw(timestamp) {
+    animId = requestAnimationFrame(draw);
+    /* 30fps制限 */
+    if (timestamp && timestamp - lastFrameTime < FPS_INTERVAL) return;
+    lastFrameTime = timestamp || 0;
+
     ctx.clearRect(0, 0, w, h);
 
     /* ライン描画 */
@@ -60,8 +66,8 @@ function initParticles() {
         const dy = particles[i].y - particles[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < CONNECT_DIST) {
-          const opacity = (1 - dist / CONNECT_DIST) * 0.12;
-          ctx.strokeStyle = `rgba(52, 98, 111, ${opacity})`;
+          const opacity = (1 - dist / CONNECT_DIST) * 0.25;
+          ctx.strokeStyle = `rgba(139, 192, 202, ${opacity})`;
           ctx.lineWidth = 1;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
@@ -80,18 +86,16 @@ function initParticles() {
       if (p.x < 0 || p.x > w) p.vx *= -1;
       if (p.y < 0 || p.y > h) p.vy *= -1;
 
-      ctx.fillStyle = `hsla(${p.hue}, 35%, 45%, ${p.alpha})`;
+      ctx.fillStyle = `rgba(139, 192, 202, ${p.alpha})`;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
       ctx.fill();
     }
-
-    animId = requestAnimationFrame(draw);
   }
 
   resize();
   createParticles();
-  draw();
+  animId = requestAnimationFrame(draw);
 
   let resizeTimer;
   window.addEventListener('resize', () => {
@@ -105,7 +109,7 @@ function initParticles() {
   /* ヒーローが見えなくなったら描画を止める */
   const heroObserver = new IntersectionObserver(([entry]) => {
     if (entry.isIntersecting) {
-      if (!animId) draw();
+      if (!animId) animId = requestAnimationFrame(draw);
     } else {
       cancelAnimationFrame(animId);
       animId = null;
@@ -223,6 +227,17 @@ function initBurger() {
       document.body.style.overflow = '';
     });
   });
+
+  /* ESCキーでメニューを閉じる */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+      nav.classList.remove('is-open');
+      burger.classList.remove('is-active');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      burger.focus();
+    }
+  });
 }
 
 
@@ -254,7 +269,7 @@ function initMagnetic() {
       const rect = btn.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
-      btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+      btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
       btn.style.transition = 'transform 0.1s ease-out';
     });
 
