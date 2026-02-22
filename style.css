@@ -27,7 +27,7 @@
   /* ---- テキスト（ダーク背景用 — Hero/Footer等） ---- */
   --t1-dark: #e2e8f0;
   --t2-dark: rgba(226, 232, 240, 0.60);
-  --t3-dark: rgba(226, 232, 240, 0.38);
+  --t3-dark: rgba(226, 232, 240, 0.55);
 
   /* ---- テキスト（ライト背景用） ---- */
   --t1-light: #0a1a1f;
@@ -35,8 +35,8 @@
   --t3-light: #6b8a92;
 
   /* ---- タイポグラフィ ---- */
-  --font-display: 'Inter', sans-serif;
-  --font-body:    'Noto Sans JP', sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body:    'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
 
   --fs-display:  clamp(52px, 6vw, 88px);
   --fs-h1:       clamp(38px, 4.5vw, 60px);
@@ -60,7 +60,7 @@
   --ls-caption: 0.12em;
 
   /* ---- ラインハイト ---- */
-  --lh-display: 1.0;
+  --lh-display: 1.1;
   --lh-heading: 1.2;
   --lh-body:    1.9;
 
@@ -1236,7 +1236,7 @@ body {
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
-  color: rgba(var(--c-primary-rgb), 0.4);
+  color: rgba(var(--c-primary-rgb), 0.65);
   flex-shrink: 0;
   padding-top: 3px;
   min-width: 24px;
@@ -1647,8 +1647,8 @@ body {
 
 .features__bar-label {
   font-family: var(--font-display);
-  font-size: 10px;
-  color: var(--t3-light);
+  font-size: 11px;
+  color: var(--t2-light);
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -1898,7 +1898,7 @@ cite.testimonials__role,
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.85);
 }
 
 .cta-strip__title {
@@ -1914,7 +1914,7 @@ cite.testimonials__role,
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.8;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.82);
 }
 
 .cta-strip__actions {
@@ -2075,10 +2075,10 @@ cite.testimonials__role,
 
 .flow__step-num {
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.12em;
-  color: rgba(var(--c-primary-rgb), 0.55);
+  color: rgba(var(--c-primary-rgb), 0.80);
   flex-shrink: 0;
 }
 
@@ -2319,7 +2319,7 @@ details[open] .faq__question { color: var(--c-primary); }
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(var(--c-light-rgb), 0.65);
+  color: rgba(var(--c-light-rgb), 0.88);
 }
 
 .final-cta__title {
@@ -2335,7 +2335,7 @@ details[open] .faq__question { color: var(--c-primary); }
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.85;
-  color: rgba(255,255,255,0.65);
+  color: rgba(255,255,255,0.82);
 }
 
 .final-cta__actions {

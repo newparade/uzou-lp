@@ -703,13 +703,16 @@ function initBarChart() {
   const chart = document.getElementById('feature-barchart');
   if (!chart) return;
 
+  let barInterval = null;
   const obs = new IntersectionObserver(entries => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     if (entries[0].isIntersecting) {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      setInterval(randomize, 1800);
-      obs.unobserve(chart);
+      if (!barInterval) barInterval = setInterval(randomize, 1800);
+    } else {
+      clearInterval(barInterval);
+      barInterval = null;
     }
-  }, { threshold: 0.5 });
+  }, { threshold: 0.3 });
   obs.observe(chart);
 }
 
@@ -789,15 +792,20 @@ function initFlowHighlight() {
     currentStep = (currentStep + 1) % steps.length;
   };
 
+  let flowInterval = null;
   const obs = new IntersectionObserver(entries => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      steps[0].classList.add('is-active');
+      return;
+    }
     if (entries[0].isIntersecting) {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        steps[0].classList.add('is-active');
-        return;
+      if (!flowInterval) {
+        highlight();
+        flowInterval = setInterval(highlight, 1200);
       }
-      highlight();
-      setInterval(highlight, 1200);
-      obs.unobserve(flow);
+    } else {
+      clearInterval(flowInterval);
+      flowInterval = null;
     }
   }, { threshold: 0.4 });
   obs.observe(flow);

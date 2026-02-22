@@ -113,10 +113,10 @@
 </header>
 
 <!-- 固定CTAバー（Hero通過後） -->
-<div class="fixed-cta-bar" aria-label="資料ダウンロード案内">
+<nav class="fixed-cta-bar" aria-label="資料ダウンロード案内">
   <a href="#download" class="fixed-cta-bar__btn">資料ダウンロード</a>
   <a href="#contact" class="fixed-cta-bar__link">お問い合わせ</a>
-</div>
+</nav>
 
 <!-- 接続スパイン: ページ全体を貫く接続線 -->
 <div class="connection-spine" aria-hidden="true">
@@ -837,7 +837,7 @@
       <!-- 左サイドカード -->
       <article class="testimonials__card testimonials__card--side" data-reveal>
         <div class="testimonials__card-metric">収益 <span>4倍</span></div>
-        <blockquote class="testimonials__quote" cite="#testimonials">
+        <blockquote class="testimonials__quote" >
           UZOU導入後、ネット広告収益が約4倍に伸長。
           3rd party cookie廃止後も収益が安定しています。
         </blockquote>
@@ -850,7 +850,7 @@
       <!-- 中央メインカード -->
       <article class="testimonials__card testimonials__card--main" data-reveal data-reveal-delay="0.1">
         <div class="testimonials__card-metric">CPA <span>32%</span> 改善</div>
-        <blockquote class="testimonials__quote testimonials__quote--main" cite="#testimonials">
+        <blockquote class="testimonials__quote testimonials__quote--main" >
           oCPC導入後、目標CPAに対して実績CPAが継続的に改善。
           ウォールドガーデン以外のメディア開拓が一括で進み、
           運用コストが大幅に下がりました。
@@ -865,7 +865,7 @@
       <!-- 右サイドカード -->
       <article class="testimonials__card testimonials__card--side" data-reveal data-reveal-delay="0.2">
         <div class="testimonials__card-metric">導入 <span>1週間</span></div>
-        <blockquote class="testimonials__quote" cite="#testimonials">
+        <blockquote class="testimonials__quote" >
           タグを設置するだけで配信が始まり、運用の手離れが良い。
           法令遵守の配信姿勢が編集部からの信頼につながっています。
         </blockquote>
@@ -1229,6 +1229,7 @@
 ======================================== -->
 <footer class="site-footer" id="contact" role="contentinfo">
   <div class="container">
+    <h2 class="sr-only">サイト情報</h2>
     <div class="footer__inner">
 
       <div class="footer__brand">
