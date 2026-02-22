@@ -11,14 +11,14 @@
 :root {
   /* ---- ブランドカラー ---- */
   --c-abyss:    #040404;
-  --c-base:     #ffffff;
+  --c-base:     #0a1215;
   --c-dark:     #1F353E;
   --c-deep:     #2B4954;
   --c-primary:  #34626F;
   --c-light:    #8BC0CA;
 
   /* ---- 拡張背景色 ---- */
-  --bg-surface: #f8fafb;
+  --bg-surface: #111c21;
   --bg-white:   #ffffff;
   --bg-tint:    #F0F7F8;
   --bg-tint2:   #E8F2F4;
@@ -27,12 +27,12 @@
   /* ---- テキスト（ダーク背景用 — Hero/Footer等） ---- */
   --t1-dark: #e2e8f0;
   --t2-dark: rgba(226, 232, 240, 0.60);
-  --t3-dark: rgba(226, 232, 240, 0.50);
+  --t3-dark: rgba(226, 232, 240, 0.38);
 
-  /* ---- テキスト（ライト背景用 — メイン） ---- */
+  /* ---- テキスト（ライト背景用） ---- */
   --t1-light: #0a1a1f;
   --t2-light: #3d5a63;
-  --t3-light: #607d86;
+  --t3-light: #6b8a92;
 
   /* ---- タイポグラフィ ---- */
   --font-display: 'Inter', sans-serif;
@@ -121,7 +121,7 @@ html {
 
 body {
   background: var(--c-base);
-  color: var(--t1-light);
+  color: var(--t1-dark);
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
@@ -131,13 +131,13 @@ body {
 
 ::selection {
   background: rgba(var(--c-light-rgb), 0.3);
-  color: var(--t1-light);
+  color: var(--t1-dark);
 }
 
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #f0f0f0; }
-::-webkit-scrollbar-thumb { background: #c0c0c0; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+::-webkit-scrollbar-track { background: var(--c-abyss); }
+::-webkit-scrollbar-thumb { background: var(--c-dark); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--c-deep); }
 
 :focus-visible {
   outline: 2px solid var(--c-light);
@@ -191,24 +191,24 @@ body {
    ============================================= */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(32px);
   transition:
-    opacity var(--dur-reveal) var(--ease-reveal),
-    transform var(--dur-reveal) var(--ease-reveal);
+    opacity var(--dur-slow) var(--ease-reveal),
+    transform var(--dur-slow) var(--ease-reveal);
 }
 [data-reveal="left"] {
-  transform: translateX(-60px);
+  transform: translateX(-48px);
 }
 [data-reveal="right"] {
-  transform: translateX(60px);
+  transform: translateX(48px);
 }
 [data-reveal="scale"] {
-  transform: scale(0.92);
+  transform: scale(0.95);
 }
 [data-reveal="blur"] {
   opacity: 0;
-  filter: blur(16px);
-  transform: translateY(20px);
+  filter: blur(12px);
+  transform: translateY(16px);
   transition:
     opacity var(--dur-reveal) var(--ease-reveal),
     transform var(--dur-reveal) var(--ease-reveal),
