@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initFeaturesAnimations();
   initFlowAccordion();
   initFinalCtaParticles();
+  initMagneticButtons();
+  initCardGlowFollow();
+  initSectionParallax();
+  initHeroTextSplit();
+  initSmoothAnchor();
 });
 
 /* =============================================
@@ -942,4 +947,165 @@ function initFinalCtaParticles() {
 
   const ro = new ResizeObserver(resize);
   ro.observe(canvas);
+}
+
+/* =============================================
+   11. マグネティックボタン
+   マウスに吸いつくようにボタンが微動する
+   ============================================= */
+function initMagneticButtons() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if ('ontouchstart' in window) return;
+
+  const buttons = document.querySelectorAll('.btn-primary, .btn-cta-primary, .btn-nav-primary');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+      btn.style.transition = 'transform 0.4s var(--ease-reveal, cubic-bezier(0.22, 1, 0.36, 1))';
+      setTimeout(() => { btn.style.transition = ''; }, 400);
+    });
+  });
+}
+
+/* =============================================
+   12. カードホバーグロー追従
+   マウス位置に合わせてグロー光が追従する
+   ============================================= */
+function initCardGlowFollow() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const cards = document.querySelectorAll('.features__card');
+
+  cards.forEach(card => {
+    // グローエレメント生成
+    const glow = document.createElement('div');
+    glow.className = 'features__card-glow';
+    card.appendChild(glow);
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      glow.style.left = x + 'px';
+      glow.style.top = y + 'px';
+    });
+  });
+
+  // Testimonials カードにもチルト効果
+  const tCards = document.querySelectorAll('.testimonials__card');
+  tCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = `translateY(-8px) scale(1.01) perspective(600px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'transform 0.5s var(--ease-reveal, cubic-bezier(0.22, 1, 0.36, 1)), box-shadow 0.4s';
+      setTimeout(() => { card.style.transition = ''; }, 500);
+    });
+  });
+}
+
+/* =============================================
+   13. セクションパララックス
+   背景装飾をスクロールに連動して微妙にずらす
+   ============================================= */
+function initSectionParallax() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const parallaxEls = [
+    { el: document.querySelector('.hero__glow-tl'), speed: 0.03 },
+    { el: document.querySelector('.hero__glow-br'), speed: -0.02 },
+    { el: document.querySelector('.solution__glow'), speed: 0.04 },
+    { el: document.querySelector('.results__flow-svg'), speed: 0.02 },
+  ].filter(p => p.el);
+
+  if (!parallaxEls.length) return;
+
+  let ticking = false;
+
+  const update = () => {
+    const scrollY = window.scrollY;
+    parallaxEls.forEach(({ el, speed }) => {
+      el.style.transform = `translateY(${scrollY * speed}px)`;
+    });
+    ticking = false;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+}
+
+/* =============================================
+   14. Heroテキスト文字分割アニメーション
+   H1の各文字を個別にフェードイン
+   ============================================= */
+function initHeroTextSplit() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const title = document.getElementById('hero-title');
+  if (!title) return;
+
+  // HTMLのbrを保持しつつ文字分割
+  const html = title.innerHTML;
+  const fragments = html.split(/(<br\s*\/?>)/);
+
+  let charIndex = 0;
+  const newHTML = fragments.map(frag => {
+    if (frag.match(/<br\s*\/?>/)) return frag;
+    return frag.split('').map(char => {
+      if (char === ' ') return ' ';
+      const span = `<span class="hero-char" style="opacity:0;display:inline-block;transform:translateY(20px);transition:opacity 0.5s ${charIndex * 0.03}s,transform 0.5s ${charIndex * 0.03}s var(--ease-reveal,cubic-bezier(0.22,1,0.36,1))">${char}</span>`;
+      charIndex++;
+      return span;
+    }).join('');
+  }).join('');
+
+  title.innerHTML = newHTML;
+
+  // data-reveal の代わりに独自のリビールを使用
+  title.closest('[data-reveal]')?.classList.add('is-visible');
+  title.style.opacity = '1';
+  title.style.transform = 'none';
+
+  // 少し遅延して文字をアニメーション
+  setTimeout(() => {
+    title.querySelectorAll('.hero-char').forEach(span => {
+      span.style.opacity = '1';
+      span.style.transform = 'none';
+    });
+  }, 300);
+}
+
+/* =============================================
+   15. スムースアンカースクロール
+   ネイティブのscroll-behaviorに加えてoffset調整
+   ============================================= */
+function initSmoothAnchor() {
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href === '#') return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      const headerH = 64;
+      const top = target.getBoundingClientRect().top + window.scrollY - headerH;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
 }
