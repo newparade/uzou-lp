@@ -30,26 +30,17 @@
       {
         "@type": "Question",
         "name": "UZOUの導入にはどのくらい時間がかかりますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "最短1週間。タグ設置とアカウント設定のみで完了します。専任担当者が全工程をサポートします。"
-        }
+        "acceptedAnswer": { "@type": "Answer", "text": "最短1週間。タグ設置とアカウント設定のみで完了します。専任担当者が全工程をサポートします。" }
       },
       {
         "@type": "Question",
         "name": "最低出稿金額はありますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "予算やニーズに合わせて柔軟に対応しています。まずはご相談ください。"
-        }
+        "acceptedAnswer": { "@type": "Answer", "text": "予算やニーズに合わせて柔軟に対応しています。まずはご相談ください。" }
       },
       {
         "@type": "Question",
         "name": "どのような業種に対応していますか？",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "EC、金融、不動産、人材、教育など幅広い業種に対応。500以上のメディアネットワークから各業種に最適な配信先を自動選定します。"
-        }
+        "acceptedAnswer": { "@type": "Answer", "text": "EC、金融、不動産、人材、教育など幅広い業種に対応。500以上のメディアネットワークから各業種に最適な配信先を自動選定します。" }
       }
     ]
   }
@@ -57,13 +48,22 @@
 </head>
 <body>
 
+<!-- カスタムカーソル -->
+<div class="cursor" aria-hidden="true">
+  <div class="cursor__dot"></div>
+  <div class="cursor__ring"></div>
+</div>
+
 <a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
 
 <!-- スクロール進捗バー -->
 <div class="scroll-progress" aria-hidden="true"></div>
 
+<!-- グローバル背景Canvas -->
+<canvas class="global-canvas" id="global-canvas" aria-hidden="true"></canvas>
+
 <!-- ========================================
-  Header — frosted glass
+  Header
 ======================================== -->
 <header class="header" id="header" role="banner">
   <div class="header__inner">
@@ -115,8 +115,8 @@
 <main id="main-content">
 
 <!-- ========================================
-  01. Hero — 結晶の覚醒
-  Crystal cluster画像 + Canvas結晶パーティクル
+  01. Hero — Crystal Immersion
+  フルスクリーン / 浮遊クリスタル装飾 / Canvas
 ======================================== -->
 <section class="hero" id="hero" aria-labelledby="hero-title">
   <!-- 背景レイヤー -->
@@ -127,6 +127,36 @@
 
   <!-- 結晶パーティクル Canvas -->
   <canvas class="hero__particles" id="crystal-particles" aria-hidden="true"></canvas>
+
+  <!-- 浮遊クリスタル装飾（8個） -->
+  <div class="hero__floats" aria-hidden="true">
+    <svg class="hero__float hero__float--1" viewBox="0 0 80 80" fill="none">
+      <polygon points="40,4 76,24 76,60 40,80 4,60 4,24" stroke="rgba(139,192,202,0.25)" stroke-width="1" fill="rgba(139,192,202,0.03)"/>
+      <polygon points="40,18 62,30 62,54 40,66 18,54 18,30" stroke="rgba(139,192,202,0.12)" stroke-width="0.5" fill="none"/>
+    </svg>
+    <svg class="hero__float hero__float--2" viewBox="0 0 60 90" fill="none">
+      <polygon points="30,0 60,30 45,90 15,90 0,30" stroke="rgba(52,98,111,0.2)" stroke-width="0.8" fill="rgba(52,98,111,0.02)"/>
+    </svg>
+    <svg class="hero__float hero__float--3" viewBox="0 0 50 50" fill="none">
+      <polygon points="25,2 48,18 48,38 25,50 2,38 2,18" stroke="rgba(139,192,202,0.3)" stroke-width="1.2" fill="rgba(139,192,202,0.04)"/>
+    </svg>
+    <svg class="hero__float hero__float--4" viewBox="0 0 40 60" fill="none">
+      <polygon points="20,0 40,20 35,60 5,60 0,20" stroke="rgba(52,98,111,0.15)" stroke-width="0.6" fill="rgba(52,98,111,0.02)"/>
+    </svg>
+    <svg class="hero__float hero__float--5" viewBox="0 0 70 70" fill="none">
+      <polygon points="35,3 67,21 67,53 35,70 3,53 3,21" stroke="rgba(139,192,202,0.18)" stroke-width="0.8" fill="rgba(139,192,202,0.02)"/>
+      <polygon points="35,15 55,26 55,48 35,58 15,48 15,26" stroke="rgba(139,192,202,0.1)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="hero__float hero__float--6" viewBox="0 0 30 45" fill="none">
+      <polygon points="15,0 30,15 25,45 5,45 0,15" stroke="rgba(52,98,111,0.22)" stroke-width="0.7" fill="rgba(52,98,111,0.03)"/>
+    </svg>
+    <svg class="hero__float hero__float--7" viewBox="0 0 55 55" fill="none">
+      <polygon points="28,2 53,16 53,42 28,55 3,42 3,16" stroke="rgba(139,192,202,0.2)" stroke-width="0.9" fill="rgba(139,192,202,0.02)"/>
+    </svg>
+    <svg class="hero__float hero__float--8" viewBox="0 0 35 50" fill="none">
+      <polygon points="18,0 35,18 28,50 7,50 0,18" stroke="rgba(52,98,111,0.18)" stroke-width="0.6" fill="rgba(52,98,111,0.02)"/>
+    </svg>
+  </div>
 
   <div class="hero__container">
     <div class="hero__content">
@@ -151,7 +181,7 @@
       </p>
 
       <div class="hero__cta" data-reveal data-delay="900">
-        <a href="#download" class="btn btn--primary btn--shimmer">
+        <a href="#download" class="btn btn--primary btn--shimmer btn--magnetic">
           <span>資料をダウンロード</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"
@@ -191,7 +221,19 @@
       <img src="assets/crystal-cluster.png" alt="" class="hero__crystal"
            loading="eager" width="720" height="480">
       <div class="hero__crystal-glow"></div>
+      <!-- 結晶周囲の装飾リング -->
+      <svg class="hero__crystal-ring" viewBox="0 0 500 500" fill="none">
+        <circle cx="250" cy="250" r="220" stroke="rgba(139,192,202,0.08)" stroke-width="1" stroke-dasharray="8 12"/>
+        <circle cx="250" cy="250" r="180" stroke="rgba(52,98,111,0.06)" stroke-width="0.5" stroke-dasharray="4 16"/>
+        <circle cx="250" cy="250" r="240" stroke="rgba(139,192,202,0.04)" stroke-width="0.5" stroke-dasharray="2 20"/>
+      </svg>
     </div>
+  </div>
+
+  <!-- スクロールインジケーター -->
+  <div class="hero__scroll-hint" data-reveal data-delay="1200" aria-hidden="true">
+    <div class="hero__scroll-line"></div>
+    <span>SCROLL</span>
   </div>
 </section>
 
@@ -199,6 +241,15 @@
   02. Media Trust — 結晶の証明
 ======================================== -->
 <section class="trust" id="media-trust" aria-label="導入メディア実績">
+  <!-- 装飾SVG -->
+  <svg class="trust__deco trust__deco--left" aria-hidden="true" viewBox="0 0 120 120" fill="none">
+    <polygon points="60,5 115,35 115,90 60,120 5,90 5,35" stroke="rgba(139,192,202,0.12)" stroke-width="0.6" fill="none"/>
+    <polygon points="60,25 90,42 90,78 60,95 30,78 30,42" stroke="rgba(139,192,202,0.06)" stroke-width="0.3" fill="none"/>
+  </svg>
+  <svg class="trust__deco trust__deco--right" aria-hidden="true" viewBox="0 0 80 120" fill="none">
+    <polygon points="40,0 80,25 70,120 10,120 0,25" stroke="rgba(52,98,111,0.1)" stroke-width="0.5" fill="none"/>
+  </svg>
+
   <div class="trust__inner">
     <p class="trust__label">TRUSTED BY <span>500+</span> MEDIA</p>
 
@@ -235,13 +286,50 @@
   03. Problem — 結晶化前の混沌（ダーク）
 ======================================== -->
 <section class="problem" id="solution" aria-labelledby="problem-title">
-  <!-- SVGポリゴン装飾 -->
-  <svg class="problem__deco problem__deco--tl" aria-hidden="true" viewBox="0 0 200 200" fill="none">
-    <polygon points="100,10 190,60 190,140 100,190 10,140 10,60" stroke="rgba(139,192,202,0.15)" stroke-width="0.5" fill="none"/>
-    <polygon points="100,40 160,70 160,130 100,160 40,130 40,70" stroke="rgba(139,192,202,0.08)" stroke-width="0.3" fill="none"/>
-  </svg>
-  <svg class="problem__deco problem__deco--br" aria-hidden="true" viewBox="0 0 160 160" fill="none">
-    <polygon points="80,5 155,45 155,115 80,155 5,115 5,45" stroke="rgba(139,192,202,0.12)" stroke-width="0.4" fill="none"/>
+  <!-- 混沌Canvasアニメーション -->
+  <canvas class="problem__canvas" id="chaos-canvas" aria-hidden="true"></canvas>
+
+  <!-- SVGポリゴン装飾（多数） -->
+  <div class="problem__decos" aria-hidden="true">
+    <svg class="problem__deco problem__deco--1" viewBox="0 0 200 200" fill="none">
+      <polygon points="100,10 190,60 190,140 100,190 10,140 10,60" stroke="rgba(139,192,202,0.15)" stroke-width="0.5" fill="none"/>
+      <polygon points="100,40 160,70 160,130 100,160 40,130 40,70" stroke="rgba(139,192,202,0.08)" stroke-width="0.3" fill="none"/>
+    </svg>
+    <svg class="problem__deco problem__deco--2" viewBox="0 0 160 160" fill="none">
+      <polygon points="80,5 155,45 155,115 80,155 5,115 5,45" stroke="rgba(139,192,202,0.12)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="problem__deco problem__deco--3" viewBox="0 0 100 150" fill="none">
+      <polygon points="50,0 100,40 85,150 15,150 0,40" stroke="rgba(139,192,202,0.1)" stroke-width="0.5" fill="rgba(139,192,202,0.02)"/>
+    </svg>
+    <svg class="problem__deco problem__deco--4" viewBox="0 0 120 120" fill="none">
+      <polygon points="60,5 115,35 115,90 60,120 5,90 5,35" stroke="rgba(52,98,111,0.15)" stroke-width="0.6" fill="none"/>
+    </svg>
+    <svg class="problem__deco problem__deco--5" viewBox="0 0 80 80" fill="none">
+      <polygon points="40,3 77,22 77,62 40,80 3,62 3,22" stroke="rgba(139,192,202,0.08)" stroke-width="0.4" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- 混沌SVGイラスト -->
+  <svg class="problem__chaos-illust" aria-hidden="true" viewBox="0 0 600 400" fill="none">
+    <!-- 散乱するデータ破片 -->
+    <g class="problem__frags">
+      <polygon points="80,50 120,30 130,70 90,80" stroke="rgba(139,192,202,0.3)" stroke-width="0.5" fill="rgba(139,192,202,0.05)"/>
+      <polygon points="200,100 240,80 250,130 210,140" stroke="rgba(139,192,202,0.2)" stroke-width="0.4" fill="rgba(139,192,202,0.03)"/>
+      <polygon points="350,60 380,40 400,80 370,95" stroke="rgba(52,98,111,0.25)" stroke-width="0.5" fill="rgba(52,98,111,0.04)"/>
+      <polygon points="480,120 510,90 530,130 500,150" stroke="rgba(139,192,202,0.2)" stroke-width="0.4" fill="rgba(139,192,202,0.03)"/>
+      <polygon points="150,250 180,230 200,270 160,280" stroke="rgba(52,98,111,0.2)" stroke-width="0.4" fill="rgba(52,98,111,0.03)"/>
+      <polygon points="300,200 340,180 350,230 310,240" stroke="rgba(139,192,202,0.15)" stroke-width="0.3" fill="rgba(139,192,202,0.02)"/>
+      <polygon points="450,280 480,260 500,300 470,310" stroke="rgba(52,98,111,0.2)" stroke-width="0.4" fill="rgba(52,98,111,0.03)"/>
+      <polygon points="100,320 130,300 150,340 110,350" stroke="rgba(139,192,202,0.18)" stroke-width="0.4" fill="rgba(139,192,202,0.02)"/>
+    </g>
+    <!-- 壊れた接続線 -->
+    <g class="problem__broken-lines">
+      <line x1="120" y1="60" x2="200" y2="110" stroke="rgba(139,192,202,0.1)" stroke-width="0.5" stroke-dasharray="4 8"/>
+      <line x1="250" y1="120" x2="350" y2="70" stroke="rgba(139,192,202,0.08)" stroke-width="0.4" stroke-dasharray="3 10"/>
+      <line x1="390" y1="80" x2="480" y2="130" stroke="rgba(52,98,111,0.1)" stroke-width="0.5" stroke-dasharray="5 12"/>
+      <line x1="180" y1="250" x2="300" y2="210" stroke="rgba(139,192,202,0.08)" stroke-width="0.3" stroke-dasharray="4 8"/>
+      <line x1="340" y1="220" x2="450" y2="280" stroke="rgba(52,98,111,0.08)" stroke-width="0.4" stroke-dasharray="3 10"/>
+    </g>
   </svg>
 
   <div class="container">
@@ -293,7 +381,21 @@
   <svg class="scale__flow" aria-hidden="true" viewBox="0 0 1200 300" fill="none" preserveAspectRatio="none">
     <path d="M0 150 Q300 50 600 150 Q900 250 1200 150" stroke="rgba(139,192,202,0.08)" stroke-width="1"/>
     <path d="M0 200 Q400 100 800 200 Q1000 250 1200 180" stroke="rgba(52,98,111,0.06)" stroke-width="0.8" stroke-dasharray="6 10"/>
+    <path d="M0 100 Q200 180 500 80 Q800 10 1200 120" stroke="rgba(139,192,202,0.04)" stroke-width="0.6" stroke-dasharray="4 12"/>
   </svg>
+
+  <!-- 浮遊装飾 -->
+  <div class="scale__decos" aria-hidden="true">
+    <svg class="scale__deco scale__deco--1" viewBox="0 0 60 60" fill="none">
+      <polygon points="30,3 57,18 57,45 30,60 3,45 3,18" stroke="rgba(139,192,202,0.12)" stroke-width="0.5" fill="none"/>
+    </svg>
+    <svg class="scale__deco scale__deco--2" viewBox="0 0 40 60" fill="none">
+      <polygon points="20,0 40,18 35,60 5,60 0,18" stroke="rgba(52,98,111,0.1)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="scale__deco scale__deco--3" viewBox="0 0 50 50" fill="none">
+      <polygon points="25,2 48,16 48,38 25,50 2,38 2,16" stroke="rgba(139,192,202,0.08)" stroke-width="0.4" fill="none"/>
+    </svg>
+  </div>
 
   <div class="container">
     <div class="scale__header" data-reveal>
@@ -306,21 +408,38 @@
         <span class="scale__number" data-count="50" data-suffix="億+">50億+</span>
         <span class="scale__unit">AD REQUESTS / MONTH</span>
         <span class="scale__label">月間広告リクエスト</span>
+        <!-- ミニトレンドライン -->
+        <svg class="scale__trend" viewBox="0 0 80 30" fill="none" aria-hidden="true">
+          <path d="M0 25 Q20 20 30 15 Q50 5 80 2" stroke="rgba(139,192,202,0.4)" stroke-width="1.5" stroke-linecap="round" class="scale__trend-line"/>
+          <path d="M0 25 Q20 20 30 15 Q50 5 80 2 L80 30 L0 30Z" fill="rgba(139,192,202,0.06)"/>
+        </svg>
       </div>
       <div class="scale__item">
         <span class="scale__number" data-count="500" data-suffix="+">500+</span>
         <span class="scale__unit">MEDIA NETWORKS</span>
         <span class="scale__label">導入メディア数</span>
+        <svg class="scale__trend" viewBox="0 0 80 30" fill="none" aria-hidden="true">
+          <path d="M0 28 Q15 22 25 18 Q45 10 65 6 Q75 4 80 3" stroke="rgba(139,192,202,0.4)" stroke-width="1.5" stroke-linecap="round" class="scale__trend-line"/>
+          <path d="M0 28 Q15 22 25 18 Q45 10 65 6 Q75 4 80 3 L80 30 L0 30Z" fill="rgba(139,192,202,0.06)"/>
+        </svg>
       </div>
       <div class="scale__item">
         <span class="scale__number" data-count="3.5" data-suffix="億+" data-decimal="1">3.5億+</span>
         <span class="scale__unit">MONTHLY IMPRESSIONS</span>
         <span class="scale__label">月間インプレッション</span>
+        <svg class="scale__trend" viewBox="0 0 80 30" fill="none" aria-hidden="true">
+          <path d="M0 22 Q20 18 35 12 Q55 8 80 5" stroke="rgba(139,192,202,0.4)" stroke-width="1.5" stroke-linecap="round" class="scale__trend-line"/>
+          <path d="M0 22 Q20 18 35 12 Q55 8 80 5 L80 30 L0 30Z" fill="rgba(139,192,202,0.06)"/>
+        </svg>
       </div>
       <div class="scale__item">
         <span class="scale__number scale__number--accent" data-count="34.8" data-prefix="+" data-suffix="%" data-decimal="1">+34.8%</span>
         <span class="scale__unit">AVG REVENUE LIFT</span>
         <span class="scale__label">平均収益向上率</span>
+        <svg class="scale__trend" viewBox="0 0 80 30" fill="none" aria-hidden="true">
+          <path d="M0 26 Q10 24 20 20 Q40 10 60 6 Q72 4 80 3" stroke="rgba(26,155,95,0.4)" stroke-width="1.5" stroke-linecap="round" class="scale__trend-line"/>
+          <path d="M0 26 Q10 24 20 20 Q40 10 60 6 Q72 4 80 3 L80 30 L0 30Z" fill="rgba(26,155,95,0.06)"/>
+        </svg>
       </div>
     </div>
   </div>
@@ -333,6 +452,16 @@
   <!-- 結晶フラグメント装飾 -->
   <div class="about__crystal-frag" aria-hidden="true">
     <img src="assets/crystal-cluster.png" alt="" loading="lazy">
+  </div>
+
+  <!-- 浮遊装飾 -->
+  <div class="about__decos" aria-hidden="true">
+    <svg class="about__deco about__deco--1" viewBox="0 0 100 100" fill="none">
+      <polygon points="50,5 95,30 95,75 50,100 5,75 5,30" stroke="rgba(52,98,111,0.08)" stroke-width="0.5" fill="none"/>
+    </svg>
+    <svg class="about__deco about__deco--2" viewBox="0 0 60 90" fill="none">
+      <polygon points="30,0 60,30 50,90 10,90 0,30" stroke="rgba(139,192,202,0.06)" stroke-width="0.4" fill="none"/>
+    </svg>
   </div>
 
   <div class="container">
@@ -350,7 +479,7 @@
         <p>デジタル広告市場において、広告主とメディアは直接出会えない。調整コスト、情報の非対称性、プラットフォーム依存。UZOUはその空白に独自の商流基盤を築いた。500以上のメディアとの直接接続。AIによるリアルタイムマッチング。これが、広告主の成果とメディアの収益を同時に動かす理由だ。</p>
       </div>
 
-      <!-- プラットフォーム接続図 -->
+      <!-- プラットフォーム接続図（強化版） -->
       <div class="about__diagram" data-reveal data-delay="300">
         <svg class="about__svg" viewBox="0 0 500 320" fill="none"
              role="img" aria-label="広告主・UZOU・メディアの接続図">
@@ -360,7 +489,14 @@
               <stop offset="50%" stop-color="#8BC0CA" stop-opacity="0.8"/>
               <stop offset="100%" stop-color="#34626F" stop-opacity="0.3"/>
             </linearGradient>
+            <radialGradient id="node-glow">
+              <stop offset="0%" stop-color="rgba(139,192,202,0.2)"/>
+              <stop offset="100%" stop-color="rgba(139,192,202,0)"/>
+            </radialGradient>
           </defs>
+
+          <!-- 背景パルスリング -->
+          <circle cx="250" cy="160" r="80" fill="url(#node-glow)" class="about__pulse-ring"/>
 
           <!-- 広告主ノード -->
           <g class="about__node" data-node="adv">
@@ -386,6 +522,13 @@
             <path class="about__line" d="M 265 155 Q 350 130 430 85" stroke="url(#line-grad)" stroke-width="1.2" stroke-dasharray="180" stroke-dashoffset="180"/>
             <path class="about__line" d="M 265 170 Q 350 175 440 190" stroke="url(#line-grad)" stroke-width="1" stroke-dasharray="160" stroke-dashoffset="160"/>
             <path class="about__line" d="M 265 180 Q 340 230 425 270" stroke="url(#line-grad)" stroke-width="0.8" stroke-dasharray="140" stroke-dashoffset="140" opacity="0.6"/>
+          </g>
+
+          <!-- データパーティクル（接続線上を移動する小さな点） -->
+          <g class="about__data-particles">
+            <circle r="2" fill="rgba(139,192,202,0.6)" class="about__data-dot about__data-dot--1"/>
+            <circle r="2" fill="rgba(139,192,202,0.5)" class="about__data-dot about__data-dot--2"/>
+            <circle r="1.5" fill="rgba(139,192,202,0.4)" class="about__data-dot about__data-dot--3"/>
           </g>
 
           <!-- UZOUコア -->
@@ -421,13 +564,22 @@
 
 <!-- ========================================
   06. Features — 結晶の構造
+  リッチSVGイラスト付きベントグリッド
 ======================================== -->
 <section class="features" id="features" aria-labelledby="features-title">
-  <!-- 背景装飾 -->
-  <svg class="features__deco" aria-hidden="true" viewBox="0 0 200 200" fill="none">
-    <polygon points="100,10 190,60 190,140 100,190 10,140 10,60" stroke="rgba(52,98,111,0.06)" stroke-width="0.5" fill="none"/>
-    <polygon points="100,35 165,65 165,135 100,165 35,135 35,65" stroke="rgba(52,98,111,0.04)" stroke-width="0.3" fill="none"/>
-  </svg>
+  <!-- 浮遊装飾 -->
+  <div class="features__decos" aria-hidden="true">
+    <svg class="features__deco features__deco--1" viewBox="0 0 200 200" fill="none">
+      <polygon points="100,10 190,60 190,140 100,190 10,140 10,60" stroke="rgba(52,98,111,0.06)" stroke-width="0.5" fill="none"/>
+      <polygon points="100,35 165,65 165,135 100,165 35,135 35,65" stroke="rgba(52,98,111,0.04)" stroke-width="0.3" fill="none"/>
+    </svg>
+    <svg class="features__deco features__deco--2" viewBox="0 0 100 150" fill="none">
+      <polygon points="50,0 100,40 85,150 15,150 0,40" stroke="rgba(139,192,202,0.05)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="features__deco features__deco--3" viewBox="0 0 80 80" fill="none">
+      <polygon points="40,4 76,24 76,60 40,80 4,60 4,24" stroke="rgba(52,98,111,0.06)" stroke-width="0.4" fill="none"/>
+    </svg>
+  </div>
 
   <div class="container">
     <div class="features__header" data-reveal>
@@ -436,27 +588,73 @@
     </div>
 
     <div class="features__grid">
-      <!-- Feature 01: 大カード -->
+      <!-- Feature 01: AI最適化 — 大カード with SVGイラスト -->
       <article class="features__card features__card--lg glass-card" data-reveal="slide-left">
         <div class="features__card-inner">
           <span class="features__num" aria-hidden="true">01</span>
           <h3 class="features__card-title">最適解は、毎秒更新される。</h3>
           <p class="features__card-desc">リアルタイムAIが配信先を選定。CTRではなく、「接続の質」を最大化する。独自AIがCTR・CVR・視認性を総合分析し、機械学習で精度を継続改善する。</p>
         </div>
-        <div class="features__visual features__visual--chart" id="feature-chart" role="img"
-             aria-label="5つのメディアに対するリアルタイム最適化を示す棒グラフ">
-          <div class="features__bars">
-            <div class="features__bar" style="--h:65%"><span>メディアA</span></div>
-            <div class="features__bar features__bar--active" style="--h:88%"><span>メディアB</span></div>
-            <div class="features__bar" style="--h:42%"><span>メディアC</span></div>
-            <div class="features__bar" style="--h:76%"><span>メディアD</span></div>
-            <div class="features__bar" style="--h:55%"><span>メディアE</span></div>
-          </div>
-          <p class="features__visual-label">REALTIME OPTIMIZATION</p>
+        <!-- AI最適化SVGイラスト -->
+        <div class="features__visual features__visual--ai" id="feature-ai-visual" role="img"
+             aria-label="AIによるリアルタイム最適化">
+          <svg viewBox="0 0 300 200" fill="none" class="features__ai-svg">
+            <!-- ニューラルネットワーク風イラスト -->
+            <g class="features__ai-nodes">
+              <!-- 入力レイヤー -->
+              <circle cx="40" cy="40" r="8" fill="rgba(139,192,202,0.15)" stroke="rgba(139,192,202,0.5)" stroke-width="1"/>
+              <circle cx="40" cy="80" r="8" fill="rgba(139,192,202,0.15)" stroke="rgba(139,192,202,0.5)" stroke-width="1"/>
+              <circle cx="40" cy="120" r="8" fill="rgba(139,192,202,0.15)" stroke="rgba(139,192,202,0.5)" stroke-width="1"/>
+              <circle cx="40" cy="160" r="8" fill="rgba(139,192,202,0.15)" stroke="rgba(139,192,202,0.5)" stroke-width="1"/>
+              <!-- 中間レイヤー1 -->
+              <circle cx="120" cy="50" r="10" fill="rgba(52,98,111,0.12)" stroke="rgba(52,98,111,0.4)" stroke-width="1.2"/>
+              <circle cx="120" cy="100" r="10" fill="rgba(52,98,111,0.12)" stroke="rgba(52,98,111,0.4)" stroke-width="1.2"/>
+              <circle cx="120" cy="150" r="10" fill="rgba(52,98,111,0.12)" stroke="rgba(52,98,111,0.4)" stroke-width="1.2"/>
+              <!-- 中間レイヤー2 -->
+              <circle cx="200" cy="60" r="10" fill="rgba(52,98,111,0.15)" stroke="rgba(52,98,111,0.5)" stroke-width="1.2"/>
+              <circle cx="200" cy="110" r="10" fill="rgba(52,98,111,0.15)" stroke="rgba(52,98,111,0.5)" stroke-width="1.2"/>
+              <circle cx="200" cy="150" r="10" fill="rgba(52,98,111,0.15)" stroke="rgba(52,98,111,0.5)" stroke-width="1.2"/>
+              <!-- 出力レイヤー -->
+              <circle cx="270" cy="80" r="12" fill="rgba(139,192,202,0.2)" stroke="rgba(139,192,202,0.6)" stroke-width="1.5"/>
+              <circle cx="270" cy="130" r="12" fill="rgba(139,192,202,0.2)" stroke="rgba(139,192,202,0.6)" stroke-width="1.5"/>
+            </g>
+            <!-- 接続線 -->
+            <g class="features__ai-connections" opacity="0.3">
+              <!-- 入力→中間1 -->
+              <line x1="48" y1="40" x2="110" y2="50" stroke="rgba(139,192,202,0.6)" stroke-width="0.5"/>
+              <line x1="48" y1="40" x2="110" y2="100" stroke="rgba(139,192,202,0.3)" stroke-width="0.3"/>
+              <line x1="48" y1="80" x2="110" y2="50" stroke="rgba(139,192,202,0.4)" stroke-width="0.4"/>
+              <line x1="48" y1="80" x2="110" y2="100" stroke="rgba(139,192,202,0.6)" stroke-width="0.5"/>
+              <line x1="48" y1="80" x2="110" y2="150" stroke="rgba(139,192,202,0.3)" stroke-width="0.3"/>
+              <line x1="48" y1="120" x2="110" y2="100" stroke="rgba(139,192,202,0.5)" stroke-width="0.4"/>
+              <line x1="48" y1="120" x2="110" y2="150" stroke="rgba(139,192,202,0.6)" stroke-width="0.5"/>
+              <line x1="48" y1="160" x2="110" y2="150" stroke="rgba(139,192,202,0.6)" stroke-width="0.5"/>
+              <line x1="48" y1="160" x2="110" y2="100" stroke="rgba(139,192,202,0.3)" stroke-width="0.3"/>
+              <!-- 中間1→中間2 -->
+              <line x1="130" y1="50" x2="190" y2="60" stroke="rgba(52,98,111,0.6)" stroke-width="0.5"/>
+              <line x1="130" y1="50" x2="190" y2="110" stroke="rgba(52,98,111,0.3)" stroke-width="0.3"/>
+              <line x1="130" y1="100" x2="190" y2="60" stroke="rgba(52,98,111,0.4)" stroke-width="0.4"/>
+              <line x1="130" y1="100" x2="190" y2="110" stroke="rgba(52,98,111,0.6)" stroke-width="0.5"/>
+              <line x1="130" y1="100" x2="190" y2="150" stroke="rgba(52,98,111,0.4)" stroke-width="0.4"/>
+              <line x1="130" y1="150" x2="190" y2="110" stroke="rgba(52,98,111,0.4)" stroke-width="0.4"/>
+              <line x1="130" y1="150" x2="190" y2="150" stroke="rgba(52,98,111,0.6)" stroke-width="0.5"/>
+              <!-- 中間2→出力 -->
+              <line x1="210" y1="60" x2="258" y2="80" stroke="rgba(139,192,202,0.6)" stroke-width="0.6"/>
+              <line x1="210" y1="60" x2="258" y2="130" stroke="rgba(139,192,202,0.3)" stroke-width="0.3"/>
+              <line x1="210" y1="110" x2="258" y2="80" stroke="rgba(139,192,202,0.5)" stroke-width="0.5"/>
+              <line x1="210" y1="110" x2="258" y2="130" stroke="rgba(139,192,202,0.5)" stroke-width="0.5"/>
+              <line x1="210" y1="150" x2="258" y2="130" stroke="rgba(139,192,202,0.6)" stroke-width="0.6"/>
+            </g>
+            <!-- ラベル -->
+            <text x="40" y="185" text-anchor="middle" fill="rgba(52,98,111,0.5)" font-size="7" font-family="Inter" font-weight="500">INPUT</text>
+            <text x="150" y="185" text-anchor="middle" fill="rgba(52,98,111,0.5)" font-size="7" font-family="Inter" font-weight="500">PROCESSING</text>
+            <text x="270" y="165" text-anchor="middle" fill="rgba(52,98,111,0.5)" font-size="7" font-family="Inter" font-weight="500">OUTPUT</text>
+          </svg>
+          <p class="features__visual-label">NEURAL OPTIMIZATION ENGINE</p>
         </div>
       </article>
 
-      <!-- Feature 02: 小カード -->
+      <!-- Feature 02: ネットワーク — SVGイラスト -->
       <article class="features__card glass-card" data-reveal="slide-right" data-delay="100">
         <div class="features__card-inner">
           <span class="features__num" aria-hidden="true">02</span>
@@ -464,46 +662,77 @@
           <p class="features__card-desc">厳選された優良メディアとの直接取引。中間コストを削り、価値を届ける。</p>
         </div>
         <div class="features__visual features__visual--network" aria-hidden="true">
-          <svg viewBox="0 0 200 140" fill="none" id="node-svg">
-            <circle cx="100" cy="70" r="10" fill="rgba(139,192,202,0.2)" stroke="rgba(139,192,202,0.8)" stroke-width="1.5"/>
-            <text x="100" y="74" text-anchor="middle" fill="rgba(139,192,202,0.9)" font-size="7" font-family="Inter" font-weight="700">U</text>
+          <svg viewBox="0 0 200 200" fill="none" id="node-svg" class="features__network-svg">
+            <!-- 中央ノード -->
+            <circle cx="100" cy="100" r="14" fill="rgba(139,192,202,0.15)" stroke="rgba(139,192,202,0.6)" stroke-width="1.5"/>
+            <text x="100" y="104" text-anchor="middle" fill="rgba(139,192,202,0.9)" font-size="8" font-family="Inter" font-weight="700">U</text>
+            <!-- 初期ノード（アニメーションで増殖） -->
+            <circle cx="55" cy="50" r="6" fill="rgba(139,192,202,0.08)" stroke="rgba(139,192,202,0.35)" stroke-width="0.8" class="features__static-node"/>
+            <circle cx="150" cy="45" r="5" fill="rgba(139,192,202,0.06)" stroke="rgba(139,192,202,0.3)" stroke-width="0.6" class="features__static-node"/>
+            <circle cx="160" cy="130" r="7" fill="rgba(139,192,202,0.08)" stroke="rgba(139,192,202,0.35)" stroke-width="0.8" class="features__static-node"/>
+            <circle cx="40" cy="140" r="5" fill="rgba(139,192,202,0.06)" stroke="rgba(139,192,202,0.3)" stroke-width="0.6" class="features__static-node"/>
+            <circle cx="100" cy="170" r="6" fill="rgba(139,192,202,0.08)" stroke="rgba(139,192,202,0.35)" stroke-width="0.8" class="features__static-node"/>
+            <!-- 初期接続線 -->
+            <line x1="90" y1="90" x2="60" y2="55" stroke="rgba(139,192,202,0.2)" stroke-width="0.5" class="features__static-line"/>
+            <line x1="112" y1="92" x2="147" y2="50" stroke="rgba(139,192,202,0.15)" stroke-width="0.4" class="features__static-line"/>
+            <line x1="112" y1="108" x2="155" y2="126" stroke="rgba(139,192,202,0.2)" stroke-width="0.5" class="features__static-line"/>
+            <line x1="88" y1="110" x2="44" y2="136" stroke="rgba(139,192,202,0.15)" stroke-width="0.4" class="features__static-line"/>
+            <line x1="100" y1="114" x2="100" y2="164" stroke="rgba(139,192,202,0.2)" stroke-width="0.5" class="features__static-line"/>
           </svg>
-          <span class="features__node-count"><span id="node-count">1</span> / 500+ MEDIA</span>
+          <span class="features__node-count"><span id="node-count">5</span> / 500+ MEDIA</span>
         </div>
       </article>
 
-      <!-- Feature 03: フルカード -->
+      <!-- Feature 03: フルスタック — SVGイラスト -->
       <article class="features__card features__card--full glass-card" data-reveal data-delay="200">
         <div class="features__card-inner">
           <span class="features__num" aria-hidden="true">03</span>
           <h3 class="features__card-title">入口から出口まで、UZOUが設計する。</h3>
           <p class="features__card-desc">企画・配信・分析・改善。全工程を一つのプラットフォームで完結させる。専任担当者の伴走サポート + リアルタイムダッシュボード。</p>
         </div>
-        <div class="features__flow" aria-hidden="true" id="feature-flow">
-          <div class="features__flow-step" data-step="0">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>企画</span>
-          </div>
-          <div class="features__flow-arrow" aria-hidden="true">→</div>
-          <div class="features__flow-step" data-step="1">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 10h6M10 7v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span>設定</span>
-          </div>
-          <div class="features__flow-arrow" aria-hidden="true">→</div>
-          <div class="features__flow-step" data-step="2">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 14l4-4 3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>配信</span>
-          </div>
-          <div class="features__flow-arrow" aria-hidden="true">→</div>
-          <div class="features__flow-step" data-step="3">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span>分析</span>
-          </div>
-          <div class="features__flow-arrow" aria-hidden="true">→</div>
-          <div class="features__flow-step" data-step="4">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v3M10 14v3M3 10h3M14 10h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
-            <span>改善</span>
-          </div>
+        <!-- ワークフローSVGイラスト -->
+        <div class="features__visual features__visual--workflow" aria-hidden="true" id="feature-flow">
+          <svg viewBox="0 0 700 100" fill="none" class="features__workflow-svg">
+            <!-- ステップノード -->
+            <g class="features__wf-step" data-step="0">
+              <polygon points="50,20 80,35 80,65 50,80 20,65 20,35" fill="rgba(139,192,202,0.1)" stroke="rgba(139,192,202,0.4)" stroke-width="1.2"/>
+              <text x="50" y="54" text-anchor="middle" fill="rgba(52,98,111,0.8)" font-size="8" font-family="'Noto Sans JP'" font-weight="600">企画</text>
+            </g>
+            <!-- 接続矢印 -->
+            <path d="M85 50 L155 50" stroke="rgba(139,192,202,0.3)" stroke-width="1" stroke-dasharray="4 4" class="features__wf-arrow"/>
+            <polygon points="155,45 165,50 155,55" fill="rgba(139,192,202,0.4)" class="features__wf-arrowhead"/>
+
+            <g class="features__wf-step" data-step="1">
+              <polygon points="190,20 220,35 220,65 190,80 160,65 160,35" fill="rgba(52,98,111,0.08)" stroke="rgba(52,98,111,0.35)" stroke-width="1.2"/>
+              <text x="190" y="54" text-anchor="middle" fill="rgba(52,98,111,0.8)" font-size="8" font-family="'Noto Sans JP'" font-weight="600">設定</text>
+            </g>
+            <path d="M225 50 L295 50" stroke="rgba(139,192,202,0.3)" stroke-width="1" stroke-dasharray="4 4" class="features__wf-arrow"/>
+            <polygon points="295,45 305,50 295,55" fill="rgba(139,192,202,0.4)" class="features__wf-arrowhead"/>
+
+            <g class="features__wf-step" data-step="2">
+              <polygon points="330,20 360,35 360,65 330,80 300,65 300,35" fill="rgba(139,192,202,0.12)" stroke="rgba(139,192,202,0.5)" stroke-width="1.2"/>
+              <text x="330" y="54" text-anchor="middle" fill="rgba(52,98,111,0.8)" font-size="8" font-family="'Noto Sans JP'" font-weight="600">配信</text>
+            </g>
+            <path d="M365 50 L435 50" stroke="rgba(139,192,202,0.3)" stroke-width="1" stroke-dasharray="4 4" class="features__wf-arrow"/>
+            <polygon points="435,45 445,50 435,55" fill="rgba(139,192,202,0.4)" class="features__wf-arrowhead"/>
+
+            <g class="features__wf-step" data-step="3">
+              <polygon points="470,20 500,35 500,65 470,80 440,65 440,35" fill="rgba(52,98,111,0.1)" stroke="rgba(52,98,111,0.4)" stroke-width="1.2"/>
+              <text x="470" y="54" text-anchor="middle" fill="rgba(52,98,111,0.8)" font-size="8" font-family="'Noto Sans JP'" font-weight="600">分析</text>
+            </g>
+            <path d="M505 50 L575 50" stroke="rgba(139,192,202,0.3)" stroke-width="1" stroke-dasharray="4 4" class="features__wf-arrow"/>
+            <polygon points="575,45 585,50 575,55" fill="rgba(139,192,202,0.4)" class="features__wf-arrowhead"/>
+
+            <g class="features__wf-step" data-step="4">
+              <polygon points="610,20 640,35 640,65 610,80 580,65 580,35" fill="rgba(139,192,202,0.15)" stroke="rgba(139,192,202,0.6)" stroke-width="1.5"/>
+              <text x="610" y="54" text-anchor="middle" fill="rgba(52,98,111,0.8)" font-size="8" font-family="'Noto Sans JP'" font-weight="600">改善</text>
+            </g>
+
+            <!-- 改善→企画のフィードバックループ -->
+            <path d="M610 82 Q610 95 500 95 Q300 95 50 95 Q30 95 30 82" stroke="rgba(139,192,202,0.15)" stroke-width="0.8" stroke-dasharray="6 6" fill="none" class="features__wf-loop"/>
+            <polygon points="25,82 30,72 35,82" fill="rgba(139,192,202,0.3)"/>
+            <text x="330" y="92" text-anchor="middle" fill="rgba(139,192,202,0.4)" font-size="6" font-family="Inter">CONTINUOUS IMPROVEMENT CYCLE</text>
+          </svg>
         </div>
       </article>
     </div>
@@ -514,6 +743,16 @@
   07. Testimonials — 結晶の反響
 ======================================== -->
 <section class="voices" id="testimonials" aria-labelledby="voices-title">
+  <!-- 浮遊装飾 -->
+  <div class="voices__decos" aria-hidden="true">
+    <svg class="voices__deco voices__deco--1" viewBox="0 0 70 70" fill="none">
+      <polygon points="35,3 67,20 67,52 35,70 3,52 3,20" stroke="rgba(52,98,111,0.06)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="voices__deco voices__deco--2" viewBox="0 0 50 75" fill="none">
+      <polygon points="25,0 50,20 42,75 8,75 0,20" stroke="rgba(139,192,202,0.05)" stroke-width="0.3" fill="none"/>
+    </svg>
+  </div>
+
   <div class="container">
     <div class="voices__header" data-reveal>
       <span class="section-tag"><span aria-hidden="true">//</span> TRUSTED BY</span>
@@ -580,6 +819,19 @@
 <section class="cta-mid" id="download" aria-labelledby="cta-mid-title">
   <canvas class="cta-mid__canvas" id="cta-canvas" aria-hidden="true"></canvas>
 
+  <!-- 浮遊装飾 -->
+  <div class="cta-mid__decos" aria-hidden="true">
+    <svg class="cta-mid__deco cta-mid__deco--1" viewBox="0 0 120 120" fill="none">
+      <polygon points="60,5 115,35 115,90 60,120 5,90 5,35" stroke="rgba(139,192,202,0.1)" stroke-width="0.5" fill="none"/>
+    </svg>
+    <svg class="cta-mid__deco cta-mid__deco--2" viewBox="0 0 80 120" fill="none">
+      <polygon points="40,0 80,30 70,120 10,120 0,30" stroke="rgba(139,192,202,0.08)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="cta-mid__deco cta-mid__deco--3" viewBox="0 0 60 60" fill="none">
+      <polygon points="30,3 57,18 57,45 30,60 3,45 3,18" stroke="rgba(139,192,202,0.12)" stroke-width="0.5" fill="none"/>
+    </svg>
+  </div>
+
   <div class="container">
     <div class="cta-mid__inner">
       <p class="cta-mid__eyebrow" data-reveal>まず、接続してみることから始まる。</p>
@@ -590,7 +842,7 @@
         30分の会話で、あなたのメディア・広告に何が起きるかがわかる。
       </p>
       <div class="cta-mid__actions" data-reveal data-delay="240">
-        <a href="#download" class="btn btn--primary btn--shimmer btn--lg">資料ダウンロード（無料）</a>
+        <a href="#download" class="btn btn--primary btn--shimmer btn--magnetic btn--lg">資料ダウンロード（無料）</a>
         <a href="#contact" class="btn btn--ghost btn--ghost-light">担当者に相談する →</a>
       </div>
       <ul class="cta-mid__trust" data-reveal data-delay="320" role="list">
@@ -604,8 +856,19 @@
 
 <!-- ========================================
   09. Flow — 結晶の成長
+  各ステップにSVGイラスト付き
 ======================================== -->
 <section class="flow" id="flow" aria-labelledby="flow-title">
+  <!-- 浮遊装飾 -->
+  <div class="flow__decos" aria-hidden="true">
+    <svg class="flow__deco flow__deco--1" viewBox="0 0 90 90" fill="none">
+      <polygon points="45,4 86,26 86,68 45,90 4,68 4,26" stroke="rgba(52,98,111,0.06)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="flow__deco flow__deco--2" viewBox="0 0 50 75" fill="none">
+      <polygon points="25,0 50,20 42,75 8,75 0,20" stroke="rgba(139,192,202,0.05)" stroke-width="0.3" fill="none"/>
+    </svg>
+  </div>
+
   <div class="container">
     <div class="flow__layout">
       <div class="flow__header" data-reveal>
@@ -616,11 +879,19 @@
 
       <ol class="flow__timeline" aria-label="導入ステップ一覧">
         <li class="flow__step" data-reveal>
-          <div class="flow__indicator" aria-hidden="true"><div class="flow__dot"></div><div class="flow__line"></div></div>
+          <div class="flow__indicator" aria-hidden="true">
+            <div class="flow__dot"></div>
+            <div class="flow__line"></div>
+          </div>
           <div class="flow__body">
             <button class="flow__toggle" aria-expanded="false" aria-controls="flow-1">
               <span class="flow__step-num">STEP 01</span>
               <span class="flow__step-title">接続の診断</span>
+              <!-- ステップアイコンSVG -->
+              <svg class="flow__step-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <polygon points="16,2 30,10 30,22 16,30 2,22 2,10" stroke="rgba(139,192,202,0.4)" stroke-width="1" fill="rgba(139,192,202,0.06)"/>
+                <path d="M12 16l3 3 5-5" stroke="rgba(139,192,202,0.8)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
               <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
             <div class="flow__detail" id="flow-1" hidden>現在の広告配信・収益構造の「見えない部分」をヒアリング。課題と目標を丁寧にお伺いします。</div>
@@ -632,6 +903,11 @@
             <button class="flow__toggle" aria-expanded="false" aria-controls="flow-2">
               <span class="flow__step-num">STEP 02</span>
               <span class="flow__step-title">接続の設計</span>
+              <svg class="flow__step-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <polygon points="16,2 30,10 30,22 16,30 2,22 2,10" stroke="rgba(52,98,111,0.4)" stroke-width="1" fill="rgba(52,98,111,0.06)"/>
+                <rect x="10" y="11" width="12" height="10" rx="1.5" stroke="rgba(52,98,111,0.8)" stroke-width="1.2"/>
+                <path d="M13 15h6M13 18h4" stroke="rgba(52,98,111,0.6)" stroke-width="0.8" stroke-linecap="round"/>
+              </svg>
               <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
             <div class="flow__detail" id="flow-2" hidden>あなたに最適なメディア・広告主のネットワークを提案。ヒアリング内容をもとに最適な配信プランとメディア構成をご提示します。</div>
@@ -643,6 +919,10 @@
             <button class="flow__toggle" aria-expanded="false" aria-controls="flow-3">
               <span class="flow__step-num">STEP 03</span>
               <span class="flow__step-title">接続の実装</span>
+              <svg class="flow__step-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <polygon points="16,2 30,10 30,22 16,30 2,22 2,10" stroke="rgba(139,192,202,0.4)" stroke-width="1" fill="rgba(139,192,202,0.06)"/>
+                <path d="M11 14l-3 2 3 2M21 14l3 2-3 2M17 11l-2 10" stroke="rgba(139,192,202,0.8)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
               <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
             <div class="flow__detail" id="flow-3" hidden>タグ設置とアカウント設定。最短1週間で完了。専任担当者が全工程をサポートするため、技術的な負担は最小限です。</div>
@@ -654,6 +934,10 @@
             <button class="flow__toggle" aria-expanded="false" aria-controls="flow-4">
               <span class="flow__step-num">STEP 04</span>
               <span class="flow__step-title">接続の開始</span>
+              <svg class="flow__step-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <polygon points="16,2 30,10 30,22 16,30 2,22 2,10" stroke="rgba(52,98,111,0.4)" stroke-width="1" fill="rgba(52,98,111,0.06)"/>
+                <path d="M12 11l8 5-8 5z" fill="rgba(52,98,111,0.3)" stroke="rgba(52,98,111,0.8)" stroke-width="1.2" stroke-linejoin="round"/>
+              </svg>
               <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
             <div class="flow__detail" id="flow-4" hidden>AIが毎秒最適化。配信開始と同時に学習が始まる。開始直後から成果の改善が始まります。</div>
@@ -665,6 +949,10 @@
             <button class="flow__toggle" aria-expanded="false" aria-controls="flow-5">
               <span class="flow__step-num">STEP 05</span>
               <span class="flow__step-title">接続の深化</span>
+              <svg class="flow__step-icon" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <polygon points="16,2 30,10 30,22 16,30 2,22 2,10" stroke="rgba(139,192,202,0.5)" stroke-width="1.2" fill="rgba(139,192,202,0.08)"/>
+                <path d="M10 18l4-4 3 3 5-5" stroke="rgba(139,192,202,0.8)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
               <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
             <div class="flow__detail" id="flow-5" hidden>定期レポートと改善提案。接続はさらに精密になっていく。専任担当者が月次でレポートと改善提案を伴走します。</div>
@@ -679,6 +967,16 @@
   10. FAQ — 結晶の断面
 ======================================== -->
 <section class="faq" id="faq" aria-labelledby="faq-title">
+  <!-- 装飾 -->
+  <div class="faq__decos" aria-hidden="true">
+    <svg class="faq__deco faq__deco--1" viewBox="0 0 100 100" fill="none">
+      <polygon points="50,5 95,30 95,75 50,100 5,75 5,30" stroke="rgba(52,98,111,0.05)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="faq__deco faq__deco--2" viewBox="0 0 60 90" fill="none">
+      <polygon points="30,0 60,25 50,90 10,90 0,25" stroke="rgba(139,192,202,0.04)" stroke-width="0.3" fill="none"/>
+    </svg>
+  </div>
+
   <div class="container">
     <div class="faq__layout">
       <div class="faq__sidebar" data-reveal>
@@ -739,6 +1037,23 @@
 <section class="final-cta" id="final-cta" aria-labelledby="final-cta-title">
   <canvas class="final-cta__canvas" id="final-canvas" aria-hidden="true"></canvas>
 
+  <!-- 浮遊装飾 -->
+  <div class="final-cta__decos" aria-hidden="true">
+    <svg class="final-cta__deco final-cta__deco--1" viewBox="0 0 100 100" fill="none">
+      <polygon points="50,3 97,28 97,75 50,100 3,75 3,28" stroke="rgba(139,192,202,0.1)" stroke-width="0.5" fill="none"/>
+      <polygon points="50,20 80,35 80,68 50,82 20,68 20,35" stroke="rgba(139,192,202,0.05)" stroke-width="0.3" fill="none"/>
+    </svg>
+    <svg class="final-cta__deco final-cta__deco--2" viewBox="0 0 70 105" fill="none">
+      <polygon points="35,0 70,28 60,105 10,105 0,28" stroke="rgba(139,192,202,0.08)" stroke-width="0.4" fill="none"/>
+    </svg>
+    <svg class="final-cta__deco final-cta__deco--3" viewBox="0 0 50 50" fill="none">
+      <polygon points="25,2 48,15 48,38 25,50 2,38 2,15" stroke="rgba(139,192,202,0.12)" stroke-width="0.5" fill="none"/>
+    </svg>
+    <svg class="final-cta__deco final-cta__deco--4" viewBox="0 0 40 60" fill="none">
+      <polygon points="20,0 40,15 35,60 5,60 0,15" stroke="rgba(52,98,111,0.1)" stroke-width="0.4" fill="none"/>
+    </svg>
+  </div>
+
   <div class="container">
     <div class="final-cta__inner">
       <p class="final-cta__eyebrow" data-reveal>500社が証明した、広告の新しい選択肢</p>
@@ -747,7 +1062,7 @@
         あなたのメディア・広告が、次の接続を待っている。<br>まずはお気軽にご連絡ください。
       </p>
       <div class="final-cta__actions" data-reveal data-delay="240">
-        <a href="#download" class="btn btn--primary btn--shimmer btn--lg">今すぐ接続を始める</a>
+        <a href="#download" class="btn btn--primary btn--shimmer btn--magnetic btn--lg">今すぐ接続を始める</a>
         <a href="#contact" class="btn btn--ghost btn--ghost-light">お問い合わせ</a>
       </div>
       <ul class="final-cta__trust" data-reveal data-delay="320" role="list">
@@ -801,7 +1116,7 @@
       </nav>
     </div>
     <div class="footer__bottom">
-      <p>© 2026 Speee, Inc. All rights reserved.</p>
+      <p>&copy; 2026 Speee, Inc. All rights reserved.</p>
     </div>
   </div>
 </footer>
