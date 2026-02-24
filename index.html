@@ -59,46 +59,40 @@
 
 <a href="#main-content" class="skip-link">メインコンテンツへスキップ</a>
 
-<!-- ========================================
-  00. Header（ガラスモーフィズムナビ）
-  実装: 新規実装 + glass-card.css参照（backdrop-filter）+ glow-button.css参照
-======================================== -->
-<header class="site-header" id="site-header" role="banner">
-  <div class="container">
-    <nav class="nav" aria-label="メインナビゲーション">
+<!-- スクロール進捗バー -->
+<div class="scroll-progress" aria-hidden="true"></div>
 
-      <!-- ロゴ -->
-      <a href="#hero" class="nav__logo" aria-label="UZOUトップへ">
-        <span class="nav__logo-mark" aria-hidden="true">U</span>
-        <span class="nav__logo-text">UZOU</span>
+<!-- ========================================
+  Header — frosted glass
+======================================== -->
+<header class="header" id="header" role="banner">
+  <div class="header__inner">
+    <nav class="header__nav" aria-label="メインナビゲーション">
+      <a href="#hero" class="header__logo" aria-label="UZOUトップへ">
+        <span class="header__logo-mark" aria-hidden="true">U</span>
+        <span class="header__logo-text">UZOU</span>
       </a>
 
-      <!-- デスクトップリンク -->
-      <ul class="nav__links" role="list">
-        <li><a href="#about" class="nav__link">UZOUとは</a></li>
-        <li><a href="#features" class="nav__link">特徴</a></li>
-        <li><a href="#results" class="nav__link">実績</a></li>
-        <li><a href="#flow" class="nav__link">導入の流れ</a></li>
-        <li><a href="#faq" class="nav__link">FAQ</a></li>
+      <ul class="header__links" role="list">
+        <li><a href="#about" class="header__link">UZOUとは</a></li>
+        <li><a href="#features" class="header__link">特徴</a></li>
+        <li><a href="#results" class="header__link">実績</a></li>
+        <li><a href="#flow" class="header__link">導入の流れ</a></li>
+        <li><a href="#faq" class="header__link">FAQ</a></li>
       </ul>
 
-      <!-- CTA群 -->
-      <div class="nav__actions">
-        <a href="#contact" class="nav__contact-link">お問い合わせ</a>
-        <a href="#download" class="nav__cta btn-nav-primary">資料ダウンロード</a>
+      <div class="header__actions">
+        <a href="#contact" class="header__contact">お問い合わせ</a>
+        <a href="#download" class="header__cta">資料ダウンロード</a>
       </div>
 
-      <!-- ハンバーガー（モバイル） -->
-      <button class="nav__hamburger" aria-expanded="false" aria-controls="mobile-menu"
+      <button class="header__hamburger" aria-expanded="false" aria-controls="mobile-menu"
               aria-label="メニューを開く" type="button">
-        <span class="nav__hamburger-line"></span>
-        <span class="nav__hamburger-line"></span>
-        <span class="nav__hamburger-line"></span>
+        <span></span><span></span><span></span>
       </button>
     </nav>
   </div>
 
-  <!-- モバイルメニュー -->
   <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true"
        aria-hidden="true" aria-label="ナビゲーションメニュー">
     <ul class="mobile-menu__links" role="list">
@@ -112,854 +106,494 @@
   </div>
 </header>
 
-<!-- 固定CTAバー（Hero通過後） -->
-<nav class="fixed-cta-bar" aria-label="資料ダウンロード案内">
-  <a href="#download" class="fixed-cta-bar__btn">資料ダウンロード</a>
-  <a href="#contact" class="fixed-cta-bar__link">お問い合わせ</a>
+<!-- 固定CTAバー -->
+<nav class="sticky-cta" aria-label="資料ダウンロード案内">
+  <a href="#download" class="sticky-cta__btn">資料ダウンロード</a>
+  <a href="#contact" class="sticky-cta__link">お問い合わせ</a>
 </nav>
-
-<!-- 接続スパイン: ページ全体を貫く接続線 -->
-<div class="connection-spine" aria-hidden="true">
-  <svg class="connection-spine__svg" preserveAspectRatio="none" viewBox="0 0 2 100">
-    <line class="connection-spine__line" x1="1" y1="0" x2="1" y2="100"
-          stroke="url(#spine-gradient)" stroke-width="0.4"/>
-    <defs>
-      <linearGradient id="spine-gradient" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(52,98,111,0)" />
-        <stop offset="15%" stop-color="rgba(52,98,111,0.3)" />
-        <stop offset="50%" stop-color="rgba(52,98,111,0.5)" />
-        <stop offset="85%" stop-color="rgba(52,98,111,0.3)" />
-        <stop offset="100%" stop-color="rgba(52,98,111,0)" />
-      </linearGradient>
-    </defs>
-  </svg>
-  <div class="connection-spine__pulse"></div>
-</div>
 
 <main id="main-content">
 
 <!-- ========================================
-  01. Hero（最重要セクション）
-  実装: 新規実装 + grid-lines.css参照 + ambient-glow.css参照
-        + split-hero.css参照 + glow-button.css参照
-        Canvas Connection Visualizer: 新規実装
+  01. Hero — 結晶の覚醒
+  Crystal cluster画像 + Canvas結晶パーティクル
 ======================================== -->
-<section class="hero" id="hero" data-section="hero" aria-labelledby="hero-title">
-
+<section class="hero" id="hero" aria-labelledby="hero-title">
   <!-- 背景レイヤー -->
   <div class="hero__bg" aria-hidden="true">
     <div class="hero__grid"></div>
-    <div class="hero__glow-tl"></div>
-    <div class="hero__glow-br"></div>
-    <div class="hero__glow-tr" aria-hidden="true"></div>
-    <div class="hero__noise"></div>
+    <div class="hero__mouse-glow"></div>
   </div>
 
-  <div class="container">
-    <div class="hero__inner">
+  <!-- 結晶パーティクル Canvas -->
+  <canvas class="hero__particles" id="crystal-particles" aria-hidden="true"></canvas>
 
-      <!-- 左カラム: テキスト -->
-      <div class="hero__content">
-
-        <!-- バッジ行 -->
-        <div class="hero__badges" data-reveal data-reveal-delay="0">
-          <span class="hero__badge">
-            <span class="hero__badge-dot" aria-hidden="true"></span>
-            IT Review LEADER 2025
-          </span>
-          <span class="hero__badge hero__badge--plain">
-            東証スタンダード Speee
-          </span>
-        </div>
-
-        <!-- ターゲット文 -->
-        <p class="hero__target" data-reveal data-reveal-delay="0.05">
-          広告代理店・Webメディアの方へ
-        </p>
-
-        <!-- H1 -->
-        <h1 class="hero__title" id="hero-title" data-reveal data-reveal-delay="0.1">
-          広告が、<br>メディアを救う。
-        </h1>
-
-        <!-- サブコピー -->
-        <p class="hero__sub" data-reveal data-reveal-delay="0.18">
-          500を超えるメディアが選んだ、接続の力。<br>
-          広告主の成果と、メディアの収益を、同時に育てる。
-        </p>
-
-        <!-- CTA群 -->
-        <div class="hero__cta" data-reveal data-reveal-delay="0.26">
-          <a href="#download" class="btn-primary has-pulse" id="hero-cta-primary">
-            <span>資料をダウンロード</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"
-                    stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-          <a href="#contact" class="btn-ghost">お問い合わせ</a>
-        </div>
-
-        <!-- 安心3点 -->
-        <ul class="hero__trust" data-reveal data-reveal-delay="0.32" role="list">
-          <li class="hero__trust-item">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5"
-                    stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            完全無料
-          </li>
-          <li class="hero__trust-item">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5"
-                    stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            30秒で完了
-          </li>
-          <li class="hero__trust-item">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5"
-                    stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            営業電話なし
-          </li>
-        </ul>
+  <div class="hero__container">
+    <div class="hero__content">
+      <!-- バッジ -->
+      <div class="hero__badges" data-reveal data-delay="200">
+        <span class="hero__badge">
+          <span class="hero__badge-dot" aria-hidden="true"></span>
+          IT Review LEADER 2025
+        </span>
+        <span class="hero__badge hero__badge--outline">東証スタンダード Speee</span>
       </div>
 
-      <!-- 右カラム: Connection Visualizer Canvas -->
-      <div class="hero__visual" role="presentation">
-        <canvas class="hero__canvas" id="connection-canvas"
-                role="img" aria-label="広告主とメディアの接続を表すインタラクティブ図">
-          <p>広告主（ADV）とUZOUプラットフォーム、500以上のメディアが相互に接続されている図。マウス操作でノードが反応する。</p>
-        </canvas>
-        <div class="hero__canvas-label">
-          <span class="hero__canvas-tag hero__canvas-tag--adv">ADVERTISERS</span>
-          <span class="hero__canvas-tag hero__canvas-tag--uzou">UZOU</span>
-          <span class="hero__canvas-tag hero__canvas-tag--media">MEDIA</span>
-        </div>
+      <p class="hero__target" data-reveal data-delay="300">広告代理店・Webメディアの方へ</p>
+
+      <h1 class="hero__title" id="hero-title" data-reveal="split" data-delay="400">
+        広告が、<br>メディアを救う。
+      </h1>
+
+      <p class="hero__sub" data-reveal data-delay="700">
+        500を超えるメディアが選んだ、接続の力。<br>
+        広告主の成果と、メディアの収益を、同時に育てる。
+      </p>
+
+      <div class="hero__cta" data-reveal data-delay="900">
+        <a href="#download" class="btn btn--primary btn--shimmer">
+          <span>資料をダウンロード</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#contact" class="btn btn--ghost">お問い合わせ</a>
       </div>
 
+      <ul class="hero__trust" data-reveal data-delay="1000" role="list">
+        <li>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          完全無料
+        </li>
+        <li>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          30秒で完了
+        </li>
+        <li>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7l3.5 3.5L12 3" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          営業電話なし
+        </li>
+      </ul>
+    </div>
+
+    <!-- 結晶ビジュアル -->
+    <div class="hero__visual" aria-hidden="true">
+      <img src="assets/crystal-cluster.png" alt="" class="hero__crystal"
+           loading="eager" width="720" height="480">
+      <div class="hero__crystal-glow"></div>
     </div>
   </div>
-
-  <!-- 下部グラデーション溶解 -->
-  <div class="hero__dissolve" aria-hidden="true"></div>
 </section>
 
 <!-- ========================================
-  02. Media Trust（2行マーキー）
-  実装: marquee.css（ベース）+ UZOUカラー上書き
+  02. Media Trust — 結晶の証明
 ======================================== -->
-<section class="media-trust section-fade-top" id="media-trust" data-section="media-trust"
-         aria-label="導入メディア実績">
+<section class="trust" id="media-trust" aria-label="導入メディア実績">
+  <div class="trust__inner">
+    <p class="trust__label">TRUSTED BY <span>500+</span> MEDIA</p>
 
-  <div class="media-trust__inner">
-
-    <p class="media-trust__label">TRUSTED BY 500+ MEDIA</p>
-
-    <!-- スクリーンリーダー用代替テキスト -->
     <p class="sr-only">導入メディア例: スポニチ Annex、livedoor NEWS、女性自身、文春オンライン、All About、日刊スポーツ、Smart FLASH、TRILL、J-CAST、grape、読売新聞オンライン、週刊女性PRIME、NEWSポストセブン、ORICON NEWS、マイナビニュース、東スポ Web、ニコニコニュース、excite ニュース、Infoseek ニュース、Walkerplus</p>
 
-    <!-- マーキー1行目（右方向） -->
-    <div class="marquee media-trust__marquee" aria-hidden="true">
-      <div class="marquee__track">
-        <span class="marquee__item">スポニチ Annex</span>
-        <span class="marquee__item">livedoor NEWS</span>
-        <span class="marquee__item">女性自身</span>
-        <span class="marquee__item">文春オンライン</span>
-        <span class="marquee__item">All About</span>
-        <span class="marquee__item">日刊スポーツ</span>
-        <span class="marquee__item">Smart FLASH</span>
-        <span class="marquee__item">TRILL</span>
-        <span class="marquee__item">J-CAST</span>
-        <span class="marquee__item">grape</span>
-        <span class="marquee__item">スポニチ Annex</span>
-        <span class="marquee__item">livedoor NEWS</span>
-        <span class="marquee__item">女性自身</span>
-        <span class="marquee__item">文春オンライン</span>
-        <span class="marquee__item">All About</span>
-        <span class="marquee__item">日刊スポーツ</span>
-        <span class="marquee__item">Smart FLASH</span>
-        <span class="marquee__item">TRILL</span>
-        <span class="marquee__item">J-CAST</span>
-        <span class="marquee__item">grape</span>
+    <div class="trust__marquee" aria-hidden="true">
+      <div class="trust__track">
+        <span>スポニチ Annex</span><span>livedoor NEWS</span><span>女性自身</span>
+        <span>文春オンライン</span><span>All About</span><span>日刊スポーツ</span>
+        <span>Smart FLASH</span><span>TRILL</span><span>J-CAST</span><span>grape</span>
+        <span>スポニチ Annex</span><span>livedoor NEWS</span><span>女性自身</span>
+        <span>文春オンライン</span><span>All About</span><span>日刊スポーツ</span>
+        <span>Smart FLASH</span><span>TRILL</span><span>J-CAST</span><span>grape</span>
+      </div>
+    </div>
+    <div class="trust__marquee trust__marquee--reverse" aria-hidden="true">
+      <div class="trust__track">
+        <span>読売新聞オンライン</span><span>週刊女性PRIME</span><span>NEWSポストセブン</span>
+        <span>ORICON NEWS</span><span>マイナビニュース</span><span>東スポ Web</span>
+        <span>ニコニコニュース</span><span>excite ニュース</span><span>Infoseek ニュース</span>
+        <span>Walkerplus</span>
+        <span>読売新聞オンライン</span><span>週刊女性PRIME</span><span>NEWSポストセブン</span>
+        <span>ORICON NEWS</span><span>マイナビニュース</span><span>東スポ Web</span>
+        <span>ニコニコニュース</span><span>excite ニュース</span><span>Infoseek ニュース</span>
+        <span>Walkerplus</span>
       </div>
     </div>
 
-    <!-- マーキー2行目（左方向） -->
-    <div class="marquee marquee--reverse media-trust__marquee" aria-hidden="true">
-      <div class="marquee__track">
-        <span class="marquee__item">読売新聞オンライン</span>
-        <span class="marquee__item">週刊女性PRIME</span>
-        <span class="marquee__item">NEWSポストセブン</span>
-        <span class="marquee__item">ORICON NEWS</span>
-        <span class="marquee__item">マイナビニュース</span>
-        <span class="marquee__item">東スポ Web</span>
-        <span class="marquee__item">ニコニコニュース</span>
-        <span class="marquee__item">excite ニュース</span>
-        <span class="marquee__item">Infoseek ニュース</span>
-        <span class="marquee__item">Walkerplus</span>
-        <span class="marquee__item">読売新聞オンライン</span>
-        <span class="marquee__item">週刊女性PRIME</span>
-        <span class="marquee__item">NEWSポストセブン</span>
-        <span class="marquee__item">ORICON NEWS</span>
-        <span class="marquee__item">マイナビニュース</span>
-        <span class="marquee__item">東スポ Web</span>
-        <span class="marquee__item">ニコニコニュース</span>
-        <span class="marquee__item">excite ニュース</span>
-        <span class="marquee__item">Infoseek ニュース</span>
-        <span class="marquee__item">Walkerplus</span>
-      </div>
-    </div>
-
-    <p class="media-trust__caption">日本の優良メディアがUZOUを選ぶ理由がある。</p>
+    <p class="trust__caption">日本の優良メディアがUZOUを選ぶ理由がある。</p>
   </div>
 </section>
 
 <!-- ========================================
-  03. Solution（タブ切替: Advertisers / Publishers）
-  実装: noise-texture.css（bg-noise）+ タブUI新規実装
+  03. Problem — 結晶化前の混沌（ダーク）
 ======================================== -->
-<section class="solution bg-noise section-fade-top section-fade-top--dark" id="solution" data-section="solution"
-         aria-labelledby="solution-title">
-
-  <div class="solution__glow" aria-hidden="true"></div>
-
-  <!-- L1: 左下六角形（ブランド指定） -->
-  <svg class="solution__deco" aria-hidden="true" viewBox="0 0 200 200" fill="none"
-       style="position:absolute;bottom:10%;left:-60px;width:220px;height:220px;opacity:0.08;pointer-events:none">
-    <polygon points="100,10 190,60 190,140 100,190 10,140 10,60" stroke="rgba(139,192,202,0.6)" stroke-width="0.8" fill="none"/>
-    <polygon points="100,40 160,70 160,130 100,160 40,130 40,70" stroke="rgba(139,192,202,0.4)" stroke-width="0.5" fill="none"/>
+<section class="problem" id="solution" aria-labelledby="problem-title">
+  <!-- SVGポリゴン装飾 -->
+  <svg class="problem__deco problem__deco--tl" aria-hidden="true" viewBox="0 0 200 200" fill="none">
+    <polygon points="100,10 190,60 190,140 100,190 10,140 10,60" stroke="rgba(139,192,202,0.15)" stroke-width="0.5" fill="none"/>
+    <polygon points="100,40 160,70 160,130 100,160 40,130 40,70" stroke="rgba(139,192,202,0.08)" stroke-width="0.3" fill="none"/>
   </svg>
-  <!-- L1: 右上同心円（ブランド指定） -->
-  <svg aria-hidden="true" viewBox="0 0 200 200" fill="none"
-       style="position:absolute;top:8%;right:-40px;width:160px;height:160px;opacity:0.06;pointer-events:none">
-    <circle cx="100" cy="100" r="80" stroke="rgba(139,192,202,0.5)" stroke-width="0.6" fill="none"/>
-    <circle cx="100" cy="100" r="50" stroke="rgba(139,192,202,0.4)" stroke-width="0.4" fill="none" stroke-dasharray="6 10"/>
-    <circle cx="100" cy="100" r="20" stroke="rgba(139,192,202,0.3)" stroke-width="0.3" fill="none"/>
+  <svg class="problem__deco problem__deco--br" aria-hidden="true" viewBox="0 0 160 160" fill="none">
+    <polygon points="80,5 155,45 155,115 80,155 5,115 5,45" stroke="rgba(139,192,202,0.12)" stroke-width="0.4" fill="none"/>
   </svg>
 
   <div class="container">
-
-    <div class="solution__header" data-reveal>
-      <span class="section-label section-label--light"><span class="section-label__prefix" aria-hidden="true">//</span> THE PROBLEM</span>
-      <h2 class="section-title" id="solution-title">
+    <div class="problem__header" data-reveal>
+      <span class="section-tag"><span aria-hidden="true">//</span> THE PROBLEM</span>
+      <h2 class="section-heading section-heading--light" id="problem-title">
         広告業界の「見えない」コストを、<br>ご存知ですか。
       </h2>
     </div>
 
-    <!-- タブUI -->
-    <div class="solution__tabs" role="tablist" aria-label="ターゲット選択">
-      <button class="solution__tab is-active" role="tab" aria-selected="true"
-              aria-controls="tab-adv" id="tab-btn-adv">
-        広告代理店・広告主の方
-      </button>
-      <button class="solution__tab" role="tab" aria-selected="false"
-              aria-controls="tab-pub" id="tab-btn-pub">
-        メディア運営者の方
-      </button>
+    <div class="problem__tabs" role="tablist" aria-label="ターゲット選択">
+      <button class="problem__tab is-active" role="tab" aria-selected="true"
+              aria-controls="tab-adv" id="tab-btn-adv">広告代理店・広告主の方</button>
+      <button class="problem__tab" role="tab" aria-selected="false"
+              aria-controls="tab-pub" id="tab-btn-pub">メディア運営者の方</button>
     </div>
 
-    <!-- タブパネル: Advertisers -->
-    <div class="solution__panel is-active" id="tab-adv" role="tabpanel"
+    <div class="problem__panel is-active" id="tab-adv" role="tabpanel"
          aria-labelledby="tab-btn-adv" tabindex="0">
-      <p class="solution__panel-lead">届くべき人に、届いていない。</p>
-      <ol class="solution__list">
-        <li class="solution__item" data-reveal data-reveal-delay="0.1">
-          <span class="solution__item-num" aria-hidden="true">01</span>
-          <div class="solution__item-body">新規メディア開拓に時間と調整コストがかかりすぎる</div>
-        </li>
-        <li class="solution__item" data-reveal data-reveal-delay="0.18">
-          <span class="solution__item-num" aria-hidden="true">02</span>
-          <div class="solution__item-body">特定媒体への集中から抜け出せず、成果改善の打ち手が尽きている</div>
-        </li>
-        <li class="solution__item" data-reveal data-reveal-delay="0.26">
-          <span class="solution__item-num" aria-hidden="true">03</span>
-          <div class="solution__item-body">配信ロジックの説明責任を果たせず、クライアントへの報告が苦しい</div>
-        </li>
-        <li class="solution__item" data-reveal data-reveal-delay="0.34">
-          <span class="solution__item-num" aria-hidden="true">04</span>
-          <div class="solution__item-body">他社との差別化になる媒体提案ができていない</div>
-        </li>
-        <li class="solution__item" data-reveal data-reveal-delay="0.42">
-          <span class="solution__item-num" aria-hidden="true">05</span>
-          <div class="solution__item-body">CPAは守れてもスケールさせる方法論が見つからない</div>
-        </li>
+      <p class="problem__lead">届くべき人に、届いていない。</p>
+      <ol class="problem__list" data-reveal="stagger">
+        <li><span aria-hidden="true">01</span><div>新規メディア開拓に時間と調整コストがかかりすぎる</div></li>
+        <li><span aria-hidden="true">02</span><div>特定媒体への集中から抜け出せず、成果改善の打ち手が尽きている</div></li>
+        <li><span aria-hidden="true">03</span><div>配信ロジックの説明責任を果たせず、クライアントへの報告が苦しい</div></li>
+        <li><span aria-hidden="true">04</span><div>他社との差別化になる媒体提案ができていない</div></li>
+        <li><span aria-hidden="true">05</span><div>CPAは守れてもスケールさせる方法論が見つからない</div></li>
       </ol>
     </div>
 
-    <!-- タブパネル: Publishers -->
-    <div class="solution__panel" id="tab-pub" role="tabpanel"
+    <div class="problem__panel" id="tab-pub" role="tabpanel"
          aria-labelledby="tab-btn-pub" tabindex="0" hidden>
-      <p class="solution__panel-lead">収益の天井が、見えない。</p>
-      <ol class="solution__list">
-        <li class="solution__item" data-reveal data-reveal-delay="0.1">
-          <span class="solution__item-num" aria-hidden="true">01</span>
-          <div class="solution__item-body">広告収益が頭打ち。次の成長策が見えない</div>
-        </li>
-        <li class="solution__item" data-reveal data-reveal-delay="0.18">
-          <span class="solution__item-num" aria-hidden="true">02</span>
-          <div class="solution__item-body">サードパーティCookie廃止後の収益構造が不安定になっている</div>
-        </li>
-        <li class="solution__item" data-reveal data-reveal-delay="0.26">
-          <span class="solution__item-num" aria-hidden="true">03</span>
-          <div class="solution__item-body">新施策を試したいが、検証できるリソースがない</div>
-        </li>
-        <li class="solution__item" data-reveal data-reveal-delay="0.34">
-          <span class="solution__item-num" aria-hidden="true">04</span>
-          <div class="solution__item-body">特定プラットフォームへの依存度を下げられない</div>
-        </li>
-        <li class="solution__item" data-reveal data-reveal-delay="0.42">
-          <span class="solution__item-num" aria-hidden="true">05</span>
-          <div class="solution__item-body">持っているデータを収益につなげる方法がわからない</div>
-        </li>
+      <p class="problem__lead">収益の天井が、見えない。</p>
+      <ol class="problem__list" data-reveal="stagger">
+        <li><span aria-hidden="true">01</span><div>広告収益が頭打ち。次の成長策が見えない</div></li>
+        <li><span aria-hidden="true">02</span><div>サードパーティCookie廃止後の収益構造が不安定になっている</div></li>
+        <li><span aria-hidden="true">03</span><div>新施策を試したいが、検証できるリソースがない</div></li>
+        <li><span aria-hidden="true">04</span><div>特定プラットフォームへの依存度を下げられない</div></li>
+        <li><span aria-hidden="true">05</span><div>持っているデータを収益につなげる方法がわからない</div></li>
       </ol>
     </div>
-
   </div>
 </section>
 
 <!-- ========================================
-  04. Results（非対称レイアウト）
-  実装: text-gradient.css参照 + 非対称数値レイアウト新規実装
-        カウントアップ: 新規JS実装
+  04. Scale — 結晶の規模
 ======================================== -->
-<section class="results section-fade-top" id="results" data-section="results" aria-labelledby="results-title">
-
-  <!-- L1: 左上ラジアルグラデーション（ブランド指定） -->
-  <div style="position:absolute;top:0;left:0;width:50%;height:60%;background:radial-gradient(circle at 10% 20%, rgba(139,192,202,0.10), transparent 60%);pointer-events:none;z-index:0" aria-hidden="true"></div>
-
+<section class="scale" id="results" aria-labelledby="scale-title">
   <!-- SVGデータフロー装飾 -->
-  <svg class="results__flow-svg" aria-hidden="true" viewBox="0 0 1200 500"
-       fill="none" preserveAspectRatio="xMidYMid slice">
-    <path d="M1200 0 Q900 150 600 200 Q300 250 0 400"
-          stroke="rgba(139,192,202,0.12)" stroke-width="1.5"/>
-    <path d="M1200 100 Q850 220 550 260 Q250 300 0 500"
-          stroke="rgba(139,192,202,0.08)" stroke-width="1"/>
-    <path d="M1200 200 Q800 280 500 300 Q200 320 0 350"
-          stroke="rgba(52,98,111,0.14)" stroke-width="1.5"/>
-    <path d="M0 50 Q400 120 700 100 Q1000 80 1200 180"
-          stroke="rgba(52,98,111,0.06)" stroke-width="1" stroke-dasharray="8 12"/>
-    <circle cx="600" cy="200" r="4" fill="rgba(139,192,202,0.35)"/>
-    <circle cx="350" cy="300" r="3" fill="rgba(139,192,202,0.25)"/>
-    <circle cx="850" cy="180" r="3.5" fill="rgba(139,192,202,0.25)"/>
-    <circle cx="200" cy="120" r="2" fill="rgba(52,98,111,0.2)"/>
-    <circle cx="1000" cy="350" r="2.5" fill="rgba(52,98,111,0.15)"/>
-    <!-- v11: 5本目のデータフローライン -->
-    <path d="M0 200 Q300 180 600 250 Q900 320 1200 280"
-          stroke="rgba(139,192,202,0.10)" stroke-width="1"
-          stroke-dasharray="6 10"/>
-    <circle cx="450" cy="240" r="2.5" fill="rgba(139,192,202,0.20)"/>
-    <circle cx="750" cy="260" r="2" fill="rgba(52,98,111,0.15)"/>
+  <svg class="scale__flow" aria-hidden="true" viewBox="0 0 1200 300" fill="none" preserveAspectRatio="none">
+    <path d="M0 150 Q300 50 600 150 Q900 250 1200 150" stroke="rgba(139,192,202,0.08)" stroke-width="1"/>
+    <path d="M0 200 Q400 100 800 200 Q1000 250 1200 180" stroke="rgba(52,98,111,0.06)" stroke-width="0.8" stroke-dasharray="6 10"/>
   </svg>
 
   <div class="container">
-
-    <div class="results__header" data-reveal>
-      <span class="section-label section-label--light"><span class="section-label__prefix" aria-hidden="true">//</span> THE SCALE</span>
-      <h2 class="section-title" id="results-title">数字が語る、接続の規模。</h2>
+    <div class="scale__header" data-reveal>
+      <span class="section-tag"><span aria-hidden="true">//</span> THE SCALE</span>
+      <h2 class="section-heading" id="scale-title">数字が語る、接続の規模。</h2>
     </div>
 
-    <div class="results__grid">
-
-      <!-- 主KPI（左・大） -->
-      <div class="results__kpi-main" data-reveal="blur">
-        <span class="results__kpi-value results__kpi-value--display">
-          <span data-count="50" data-count-suffix="億+" data-count-duration="1.8"
-                class="results__count">50億+</span>
-        </span>
-        <span class="results__kpi-label">月間、50億の接続。</span>
-        <span class="results__kpi-unit">AD REQUESTS / MONTH</span>
-        <p class="results__kpi-desc">
-          国内最大級の配信規模が、精度の高い最適化を可能にする
-        </p>
+    <div class="scale__grid" data-reveal="stagger">
+      <div class="scale__item scale__item--hero">
+        <span class="scale__number" data-count="50" data-suffix="億+">50億+</span>
+        <span class="scale__unit">AD REQUESTS / MONTH</span>
+        <span class="scale__label">月間広告リクエスト</span>
       </div>
-
-      <!-- サブKPI群（右・縦積み） -->
-      <div class="results__kpi-sub-group">
-        <div class="results__kpi-sub" data-reveal data-reveal-delay="0.1">
-          <span class="results__kpi-value">
-            <span data-count="500" data-count-suffix="+"
-                  data-count-duration="1.4" class="results__count">500+</span>
-          </span>
-          <span class="results__kpi-unit">MEDIA NETWORKS</span>
-          <span class="results__kpi-subdesc">導入メディア数</span>
-        </div>
-
-        <div class="results__kpi-sub results__kpi-sub--divider"
-             data-reveal data-reveal-delay="0.18">
-          <span class="results__kpi-value">
-            <span data-count="3.5" data-count-suffix="億+"
-                  data-count-decimal="1" data-count-duration="1.6"
-                  class="results__count">3.5億+</span>
-          </span>
-          <span class="results__kpi-unit">MONTHLY IMPRESSIONS</span>
-          <span class="results__kpi-subdesc">月間インプレッション</span>
-        </div>
-
-        <div class="results__kpi-sub results__kpi-sub--divider"
-             data-reveal data-reveal-delay="0.26">
-          <span class="results__kpi-value results__kpi-value--accent">
-            <span data-count="34.8" data-count-prefix="+"
-                  data-count-suffix="%" data-count-decimal="1"
-                  data-count-duration="1.8" class="results__count">+34.8%</span>
-          </span>
-          <span class="results__kpi-unit">AVG REVENUE LIFT</span>
-          <span class="results__kpi-subdesc">平均収益向上率</span>
-        </div>
+      <div class="scale__item">
+        <span class="scale__number" data-count="500" data-suffix="+">500+</span>
+        <span class="scale__unit">MEDIA NETWORKS</span>
+        <span class="scale__label">導入メディア数</span>
       </div>
-
+      <div class="scale__item">
+        <span class="scale__number" data-count="3.5" data-suffix="億+" data-decimal="1">3.5億+</span>
+        <span class="scale__unit">MONTHLY IMPRESSIONS</span>
+        <span class="scale__label">月間インプレッション</span>
+      </div>
+      <div class="scale__item">
+        <span class="scale__number scale__number--accent" data-count="34.8" data-prefix="+" data-suffix="%" data-decimal="1">+34.8%</span>
+        <span class="scale__unit">AVG REVENUE LIFT</span>
+        <span class="scale__label">平均収益向上率</span>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ========================================
-  05. About（フルワイドPlatform Diagram SVG）
-  実装: text-gradient.css参照 + Platform Diagram SVG新規実装
-        スクロール連動ライン: stroke-dashoffset アニメーション
+  05. About — 結晶の起源
 ======================================== -->
-<section class="about section-fade-top" id="about" data-section="about" aria-labelledby="about-title">
+<section class="about" id="about" aria-labelledby="about-title">
+  <!-- 結晶フラグメント装飾 -->
+  <div class="about__crystal-frag" aria-hidden="true">
+    <img src="assets/crystal-cluster.png" alt="" loading="lazy">
+  </div>
 
-  <!-- L1: 右上グリッドライン装飾（ブランド指定 — 40px格子） -->
-  <div style="position:absolute;top:0;right:0;width:40%;height:50%;background-image:linear-gradient(rgba(52,98,111,0.04) 1px, transparent 1px),linear-gradient(90deg, rgba(52,98,111,0.04) 1px, transparent 1px);background-size:40px 40px;-webkit-mask-image:radial-gradient(ellipse 80% 70% at 80% 20%, black 30%, transparent 70%);mask-image:radial-gradient(ellipse 80% 70% at 80% 20%, black 30%, transparent 70%);pointer-events:none;z-index:0" aria-hidden="true"></div>
   <div class="container">
-
     <div class="about__header" data-reveal>
-      <span class="section-label section-label--light"><span class="section-label__prefix" aria-hidden="true">//</span> WHAT IS UZOU</span>
-      <h2 class="section-title" id="about-title">
-        形あるものと、形なきものをつなぐ。
-      </h2>
+      <span class="section-tag"><span aria-hidden="true">//</span> WHAT IS UZOU</span>
+      <h2 class="section-heading" id="about-title">形あるものと、形なきものをつなぐ。</h2>
     </div>
 
-    <div class="about__body" data-reveal data-reveal-delay="0.1">
-      <p class="about__text">
-        UZOUという名前は「有象無象」から生まれた。<br>
+    <div class="about__grid">
+      <div class="about__text" data-reveal data-delay="100">
+        <p>UZOUという名前は「有象無象」から生まれた。<br>
         形あるもの（有象）——広告主、代理店、メディア。<br>
-        形なきもの（無象）——ユーザーの注意、コンテンツとの共鳴、信頼の積み重ね。<br><br>
-        その両方をつなぐことが、UZOUの仕事だ。
-      </p>
-      <p class="about__text">
-        デジタル広告市場において、広告主とメディアは直接出会えない。調整コスト、情報の非対称性、プラットフォーム依存。UZOUはその空白に独自の商流基盤を築いた。500以上のメディアとの直接接続。AIによるリアルタイムマッチング。これが、広告主の成果とメディアの収益を同時に動かす理由だ。
-      </p>
+        形なきもの（無象）——ユーザーの注意、コンテンツとの共鳴、信頼の積み重ね。</p>
+        <p class="about__highlight">その両方をつなぐことが、UZOUの仕事だ。</p>
+        <p>デジタル広告市場において、広告主とメディアは直接出会えない。調整コスト、情報の非対称性、プラットフォーム依存。UZOUはその空白に独自の商流基盤を築いた。500以上のメディアとの直接接続。AIによるリアルタイムマッチング。これが、広告主の成果とメディアの収益を同時に動かす理由だ。</p>
+      </div>
+
+      <!-- プラットフォーム接続図 -->
+      <div class="about__diagram" data-reveal data-delay="300">
+        <svg class="about__svg" viewBox="0 0 500 320" fill="none"
+             role="img" aria-label="広告主・UZOU・メディアの接続図">
+          <defs>
+            <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#34626F" stop-opacity="0.3"/>
+              <stop offset="50%" stop-color="#8BC0CA" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#34626F" stop-opacity="0.3"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 広告主ノード -->
+          <g class="about__node" data-node="adv">
+            <circle cx="70" cy="80" r="24" fill="rgba(43,73,84,0.12)" stroke="rgba(52,98,111,0.35)" stroke-width="1.5"/>
+            <text x="70" y="84" text-anchor="middle" fill="rgba(10,26,31,0.6)" font-size="8" font-family="Inter" font-weight="600">ADV</text>
+            <text x="70" y="118" text-anchor="middle" fill="rgba(10,26,31,0.4)" font-size="7" font-family="'Noto Sans JP'">代理店A</text>
+          </g>
+          <g class="about__node" data-node="adv">
+            <circle cx="55" cy="190" r="20" fill="rgba(43,73,84,0.08)" stroke="rgba(52,98,111,0.25)" stroke-width="1"/>
+            <text x="55" y="194" text-anchor="middle" fill="rgba(10,26,31,0.5)" font-size="7" font-family="Inter" font-weight="600">ADV</text>
+            <text x="55" y="224" text-anchor="middle" fill="rgba(10,26,31,0.35)" font-size="6.5" font-family="'Noto Sans JP'">広告主B</text>
+          </g>
+          <g class="about__node" data-node="adv">
+            <circle cx="85" cy="270" r="16" fill="rgba(43,73,84,0.06)" stroke="rgba(52,98,111,0.2)" stroke-width="1"/>
+            <text x="85" y="274" text-anchor="middle" fill="rgba(10,26,31,0.4)" font-size="6.5" font-family="Inter" font-weight="500">ADV</text>
+          </g>
+
+          <!-- 接続線 -->
+          <g class="about__lines">
+            <path class="about__line" d="M 94 80 Q 180 100 235 160" stroke="url(#line-grad)" stroke-width="1.2" stroke-dasharray="180" stroke-dashoffset="180"/>
+            <path class="about__line" d="M 75 190 Q 160 185 235 165" stroke="url(#line-grad)" stroke-width="1" stroke-dasharray="140" stroke-dashoffset="140"/>
+            <path class="about__line" d="M 101 265 Q 175 240 235 175" stroke="url(#line-grad)" stroke-width="0.8" stroke-dasharray="120" stroke-dashoffset="120" opacity="0.6"/>
+            <path class="about__line" d="M 265 155 Q 350 130 430 85" stroke="url(#line-grad)" stroke-width="1.2" stroke-dasharray="180" stroke-dashoffset="180"/>
+            <path class="about__line" d="M 265 170 Q 350 175 440 190" stroke="url(#line-grad)" stroke-width="1" stroke-dasharray="160" stroke-dashoffset="160"/>
+            <path class="about__line" d="M 265 180 Q 340 230 425 270" stroke="url(#line-grad)" stroke-width="0.8" stroke-dasharray="140" stroke-dashoffset="140" opacity="0.6"/>
+          </g>
+
+          <!-- UZOUコア -->
+          <g class="about__core">
+            <circle cx="250" cy="160" r="45" fill="rgba(52,98,111,0.06)" stroke="rgba(52,98,111,0.15)" stroke-width="0.8"/>
+            <circle cx="250" cy="160" r="32" fill="rgba(43,73,84,0.12)" stroke="rgba(139,192,202,0.3)" stroke-width="1.2"/>
+            <circle cx="250" cy="160" r="20" fill="rgba(52,98,111,0.2)" stroke="rgba(139,192,202,0.5)" stroke-width="1.5"/>
+            <text x="250" y="157" text-anchor="middle" fill="#34626F" font-size="9" font-family="Inter" font-weight="700">UZOU</text>
+            <text x="250" y="168" text-anchor="middle" fill="rgba(52,98,111,0.6)" font-size="6" font-family="Inter">PLATFORM</text>
+          </g>
+
+          <!-- メディアノード -->
+          <g class="about__node" data-node="media">
+            <circle cx="445" cy="80" r="22" fill="rgba(139,192,202,0.06)" stroke="rgba(139,192,202,0.3)" stroke-width="1.5"/>
+            <text x="445" y="84" text-anchor="middle" fill="rgba(10,26,31,0.5)" font-size="7.5" font-family="Inter" font-weight="600">MEDIA</text>
+            <text x="445" y="116" text-anchor="middle" fill="rgba(10,26,31,0.35)" font-size="6.5" font-family="'Noto Sans JP'">文春オンライン</text>
+          </g>
+          <g class="about__node" data-node="media">
+            <circle cx="455" cy="190" r="20" fill="rgba(139,192,202,0.05)" stroke="rgba(139,192,202,0.25)" stroke-width="1"/>
+            <text x="455" y="194" text-anchor="middle" fill="rgba(10,26,31,0.45)" font-size="7" font-family="Inter" font-weight="600">MEDIA</text>
+            <text x="455" y="224" text-anchor="middle" fill="rgba(10,26,31,0.3)" font-size="6.5" font-family="'Noto Sans JP'">livedoor NEWS</text>
+          </g>
+          <g class="about__node" data-node="media">
+            <circle cx="435" cy="270" r="16" fill="rgba(139,192,202,0.04)" stroke="rgba(139,192,202,0.2)" stroke-width="0.8"/>
+            <text x="435" y="274" text-anchor="middle" fill="rgba(10,26,31,0.4)" font-size="6.5" font-family="Inter" font-weight="500">MEDIA</text>
+          </g>
+          <text x="455" y="310" text-anchor="middle" fill="rgba(52,98,111,0.4)" font-size="8" font-family="Inter">500+ MEDIA</text>
+        </svg>
+      </div>
     </div>
-
-    <!-- Platform Diagram（インタラクティブSVG） -->
-    <div class="about__diagram" data-reveal data-reveal-delay="0.2">
-      <svg class="platform-svg" id="platform-diagram"
-           viewBox="0 0 900 400" fill="none"
-           role="img" aria-label="広告主・UZOU・メディアの接続図">
-
-        <defs>
-          <pattern id="diag-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none"
-                  stroke="rgba(10,26,31,0.06)" stroke-width="0.5"/>
-          </pattern>
-          <linearGradient id="line-grad-adv" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#34626F" stop-opacity="0.3"/>
-            <stop offset="100%" stop-color="#34626F" stop-opacity="0.8"/>
-          </linearGradient>
-          <linearGradient id="line-grad-media" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#34626F" stop-opacity="0.8"/>
-            <stop offset="100%" stop-color="#34626F" stop-opacity="0.3"/>
-          </linearGradient>
-        </defs>
-
-        <rect width="900" height="400" fill="url(#diag-grid)"/>
-
-        <!-- 広告主ノード群（左） -->
-        <g class="platform-adv-nodes">
-          <circle cx="100" cy="120" r="28" fill="rgba(43,73,84,0.15)"
-                  stroke="rgba(52,98,111,0.4)" stroke-width="1.5"/>
-          <text x="100" y="125" text-anchor="middle" fill="rgba(10,26,31,0.6)"
-                font-size="9" font-family="Inter" font-weight="600">ADV</text>
-          <text x="100" y="163" text-anchor="middle" fill="rgba(10,26,31,0.4)"
-                font-size="8" font-family="Inter">代理店A</text>
-
-          <circle cx="80" cy="240" r="22" fill="rgba(43,73,84,0.12)"
-                  stroke="rgba(52,98,111,0.35)" stroke-width="1.5"/>
-          <text x="80" y="245" text-anchor="middle" fill="rgba(10,26,31,0.55)"
-                font-size="8" font-family="Inter" font-weight="600">ADV</text>
-          <text x="80" y="276" text-anchor="middle" fill="rgba(10,26,31,0.35)"
-                font-size="7" font-family="Inter">広告主B</text>
-
-          <circle cx="130" cy="330" r="18" fill="rgba(43,73,84,0.10)"
-                  stroke="rgba(52,98,111,0.25)" stroke-width="1"/>
-          <text x="130" y="335" text-anchor="middle" fill="rgba(10,26,31,0.45)"
-                font-size="7" font-family="Inter" font-weight="500">ADV</text>
-        </g>
-
-        <!-- 接続線: 広告主→UZOU -->
-        <g class="platform-lines-adv">
-          <path class="platform-line" d="M 128 120 Q 300 140 430 200"
-                stroke="url(#line-grad-adv)" stroke-width="1.5"
-                stroke-dasharray="220" stroke-dashoffset="220"
-                stroke-linecap="round"/>
-          <path class="platform-line" d="M 102 240 Q 280 230 430 210"
-                stroke="url(#line-grad-adv)" stroke-width="1.5"
-                stroke-dasharray="180" stroke-dashoffset="180"
-                stroke-linecap="round"/>
-          <path class="platform-line" d="M 148 318 Q 310 290 430 230"
-                stroke="url(#line-grad-adv)" stroke-width="1"
-                stroke-dasharray="160" stroke-dashoffset="160"
-                stroke-linecap="round" opacity="0.7"/>
-        </g>
-
-        <!-- UZOUコアノード（中央） -->
-        <g class="platform-uzou-core">
-          <circle cx="450" cy="200" r="60" fill="rgba(52,98,111,0.08)"
-                  stroke="rgba(52,98,111,0.2)" stroke-width="1"/>
-          <circle cx="450" cy="200" r="42"
-                  fill="rgba(43,73,84,0.15)"
-                  stroke="rgba(139,192,202,0.4)" stroke-width="1.5"/>
-          <circle cx="450" cy="200" r="28"
-                  fill="rgba(52,98,111,0.25)"
-                  stroke="rgba(139,192,202,0.6)" stroke-width="1.5"/>
-          <text x="450" y="196" text-anchor="middle"
-                fill="#34626F" font-size="11"
-                font-family="Inter" font-weight="700">UZOU</text>
-          <text x="450" y="210" text-anchor="middle"
-                fill="rgba(52,98,111,0.7)" font-size="7"
-                font-family="Inter">PLATFORM</text>
-        </g>
-
-        <!-- 接続線: UZOU→メディア -->
-        <g class="platform-lines-media">
-          <path class="platform-line" d="M 470 185 Q 620 160 780 120"
-                stroke="url(#line-grad-media)" stroke-width="1.5"
-                stroke-dasharray="220" stroke-dashoffset="220"
-                stroke-linecap="round"/>
-          <path class="platform-line" d="M 474 205 Q 620 210 800 230"
-                stroke="url(#line-grad-media)" stroke-width="1.5"
-                stroke-dasharray="200" stroke-dashoffset="200"
-                stroke-linecap="round"/>
-          <path class="platform-line" d="M 468 220 Q 610 280 770 330"
-                stroke="url(#line-grad-media)" stroke-width="1"
-                stroke-dasharray="200" stroke-dashoffset="200"
-                stroke-linecap="round" opacity="0.7"/>
-        </g>
-
-        <!-- メディアノード群（右） -->
-        <g class="platform-media-nodes">
-          <circle cx="800" cy="120" r="26" fill="rgba(139,192,202,0.08)"
-                  stroke="rgba(139,192,202,0.35)" stroke-width="1.5"/>
-          <text x="800" y="125" text-anchor="middle" fill="rgba(10,26,31,0.55)"
-                font-size="9" font-family="Inter" font-weight="600">MEDIA</text>
-          <text x="800" y="162" text-anchor="middle" fill="rgba(10,26,31,0.35)"
-                font-size="8" font-family="Inter">文春オンライン</text>
-
-          <circle cx="820" cy="230" r="22" fill="rgba(139,192,202,0.06)"
-                  stroke="rgba(139,192,202,0.3)" stroke-width="1.5"/>
-          <text x="820" y="235" text-anchor="middle" fill="rgba(10,26,31,0.5)"
-                font-size="8" font-family="Inter" font-weight="600">MEDIA</text>
-          <text x="820" y="267" text-anchor="middle" fill="rgba(10,26,31,0.3)"
-                font-size="7" font-family="Inter">livedoor NEWS</text>
-
-          <circle cx="790" cy="330" r="18" fill="rgba(139,192,202,0.05)"
-                  stroke="rgba(139,192,202,0.2)" stroke-width="1"/>
-          <text x="790" y="335" text-anchor="middle" fill="rgba(10,26,31,0.45)"
-                font-size="7" font-family="Inter" font-weight="500">MEDIA</text>
-        </g>
-
-        <text x="820" y="380" text-anchor="middle" fill="rgba(52,98,111,0.5)"
-              font-size="9" font-family="Inter">500+ MEDIA</text>
-
-      </svg>
-    </div>
-
   </div>
 </section>
 
 <!-- ========================================
-  06. Features（7:5ベントグリッド + フル幅カード）
-  実装: bento-grid.css参照 + glass-card.css参照 + grid-lines.css参照
-        Feature-01バーチャート: v9継承強化
-        Feature-02ノード増殖SVG: 新規実装
-        Feature-03ステップハイライト: 新規実装
+  06. Features — 結晶の構造
 ======================================== -->
-<section class="features section-fade-top" id="features" data-section="features" aria-labelledby="features-title">
-
-  <!-- L1: 右上三角形SVG（ブランド指定 opacity 0.10） -->
-  <svg class="features__deco" aria-hidden="true" viewBox="0 0 150 150" fill="none"
-       style="position:absolute;top:5%;right:-40px;width:240px;height:240px;opacity:0.10;pointer-events:none">
-    <polygon points="75,5 145,140 5,140" stroke="rgba(52,98,111,0.8)" stroke-width="0.8" fill="none"/>
-    <polygon points="75,30 125,120 25,120" stroke="rgba(52,98,111,0.5)" stroke-width="0.4" fill="none"/>
+<section class="features" id="features" aria-labelledby="features-title">
+  <!-- 背景装飾 -->
+  <svg class="features__deco" aria-hidden="true" viewBox="0 0 200 200" fill="none">
+    <polygon points="100,10 190,60 190,140 100,190 10,140 10,60" stroke="rgba(52,98,111,0.06)" stroke-width="0.5" fill="none"/>
+    <polygon points="100,35 165,65 165,135 100,165 35,135 35,65" stroke="rgba(52,98,111,0.04)" stroke-width="0.3" fill="none"/>
   </svg>
-  <!-- L1: 左下ドットグリッド（ブランド指定 20px間隔 opacity 0.08） -->
-  <div style="position:absolute;bottom:0;left:0;width:30%;height:40%;background-image:radial-gradient(circle, rgba(52,98,111,0.08) 1px, transparent 1px);background-size:20px 20px;-webkit-mask-image:radial-gradient(ellipse 80% 80% at 20% 80%, black 20%, transparent 70%);mask-image:radial-gradient(ellipse 80% 80% at 20% 80%, black 20%, transparent 70%);pointer-events:none;z-index:0" aria-hidden="true"></div>
 
   <div class="container">
-
     <div class="features__header" data-reveal>
-      <span class="section-label section-label--light"><span class="section-label__prefix" aria-hidden="true">//</span> HOW IT WORKS</span>
-      <h2 class="section-title" id="features-title">接続を、精密に制御する。</h2>
+      <span class="section-tag"><span aria-hidden="true">//</span> HOW IT WORKS</span>
+      <h2 class="section-heading" id="features-title">接続を、精密に制御する。</h2>
     </div>
 
     <div class="features__grid">
-
-      <!-- Feature-01: AI配信マッチング（大カード） -->
-      <article class="features__card features__card--lg" data-reveal="slide-left">
-        <div class="features__card-bg-grid" aria-hidden="true"></div>
-        <div class="features__card-content">
-          <span class="features__card-num" aria-hidden="true">01</span>
+      <!-- Feature 01: 大カード -->
+      <article class="features__card features__card--lg glass-card" data-reveal="slide-left">
+        <div class="features__card-inner">
+          <span class="features__num" aria-hidden="true">01</span>
           <h3 class="features__card-title">最適解は、毎秒更新される。</h3>
-          <p class="features__card-desc">
-            リアルタイムAIが配信先を選定。CTRではなく、「接続の質」を最大化する。
-            独自AIがCTR・CVR・視認性を総合分析し、機械学習で精度を継続改善する。
-          </p>
+          <p class="features__card-desc">リアルタイムAIが配信先を選定。CTRではなく、「接続の質」を最大化する。独自AIがCTR・CVR・視認性を総合分析し、機械学習で精度を継続改善する。</p>
         </div>
-        <div class="features__barchart" role="img" aria-label="5つのメディアに対するリアルタイム最適化を示す棒グラフ。メディアBが最も高いスコアで選定されている。" id="feature-barchart">
-          <div class="features__bar-group">
-            <div class="features__bar-wrap">
-              <div class="features__bar" style="--h: 65%"></div>
-              <span class="features__bar-label">メディアA</span>
-            </div>
-            <div class="features__bar-wrap">
-              <div class="features__bar features__bar--active" style="--h: 88%"></div>
-              <span class="features__bar-label">メディアB</span>
-            </div>
-            <div class="features__bar-wrap">
-              <div class="features__bar" style="--h: 42%"></div>
-              <span class="features__bar-label">メディアC</span>
-            </div>
-            <div class="features__bar-wrap">
-              <div class="features__bar" style="--h: 76%"></div>
-              <span class="features__bar-label">メディアD</span>
-            </div>
-            <div class="features__bar-wrap">
-              <div class="features__bar" style="--h: 55%"></div>
-              <span class="features__bar-label">メディアE</span>
-            </div>
+        <div class="features__visual features__visual--chart" id="feature-chart" role="img"
+             aria-label="5つのメディアに対するリアルタイム最適化を示す棒グラフ">
+          <div class="features__bars">
+            <div class="features__bar" style="--h:65%"><span>メディアA</span></div>
+            <div class="features__bar features__bar--active" style="--h:88%"><span>メディアB</span></div>
+            <div class="features__bar" style="--h:42%"><span>メディアC</span></div>
+            <div class="features__bar" style="--h:76%"><span>メディアD</span></div>
+            <div class="features__bar" style="--h:55%"><span>メディアE</span></div>
           </div>
-          <div class="features__bar-legend">REALTIME OPTIMIZATION</div>
+          <p class="features__visual-label">REALTIME OPTIMIZATION</p>
         </div>
       </article>
 
-      <!-- Feature-02: メディアネットワーク（小カード） -->
-      <article class="features__card" data-reveal="slide-right" data-reveal-delay="0.1">
-        <div class="features__card-content">
-          <span class="features__card-num" aria-hidden="true">02</span>
+      <!-- Feature 02: 小カード -->
+      <article class="features__card glass-card" data-reveal="slide-right" data-delay="100">
+        <div class="features__card-inner">
+          <span class="features__num" aria-hidden="true">02</span>
           <h3 class="features__card-title">500の接点が、あなたのリーチになる。</h3>
-          <p class="features__card-desc">
-            厳選された優良メディアとの直接取引。中間コストを削り、価値を届ける。
-          </p>
+          <p class="features__card-desc">厳選された優良メディアとの直接取引。中間コストを削り、価値を届ける。</p>
         </div>
-        <div class="features__node-visual" aria-hidden="true">
-          <svg class="features__node-svg" id="node-growth-svg"
-               viewBox="0 0 240 180" fill="none">
-            <circle cx="120" cy="90" r="10"
-                    fill="rgba(139,192,202,0.2)"
-                    stroke="rgba(139,192,202,0.8)" stroke-width="1.5"/>
-            <text x="120" y="95" text-anchor="middle"
-                  fill="rgba(139,192,202,0.9)" font-size="7"
-                  font-family="Inter" font-weight="700">U</text>
+        <div class="features__visual features__visual--network" aria-hidden="true">
+          <svg viewBox="0 0 200 140" fill="none" id="node-svg">
+            <circle cx="100" cy="70" r="10" fill="rgba(139,192,202,0.2)" stroke="rgba(139,192,202,0.8)" stroke-width="1.5"/>
+            <text x="100" y="74" text-anchor="middle" fill="rgba(139,192,202,0.9)" font-size="7" font-family="Inter" font-weight="700">U</text>
           </svg>
-          <span class="features__node-count">
-            <span id="node-count-display">1</span> / 500+ MEDIA
-          </span>
+          <span class="features__node-count"><span id="node-count">1</span> / 500+ MEDIA</span>
         </div>
       </article>
 
-      <!-- Feature-03: ワンストップ（フル幅カード） -->
-      <article class="features__card features__card--full" data-reveal data-reveal-delay="0.2">
-        <div class="features__card-content features__card-content--horizontal">
-          <div class="features__card-text">
-            <span class="features__card-num" aria-hidden="true">03</span>
-            <h3 class="features__card-title">入口から出口まで、UZOUが設計する。</h3>
-            <p class="features__card-desc">
-              企画・配信・分析・改善。全工程を一つのプラットフォームで完結させる。
-              専任担当者の伴走サポート + リアルタイムダッシュボード。
-            </p>
+      <!-- Feature 03: フルカード -->
+      <article class="features__card features__card--full glass-card" data-reveal data-delay="200">
+        <div class="features__card-inner">
+          <span class="features__num" aria-hidden="true">03</span>
+          <h3 class="features__card-title">入口から出口まで、UZOUが設計する。</h3>
+          <p class="features__card-desc">企画・配信・分析・改善。全工程を一つのプラットフォームで完結させる。専任担当者の伴走サポート + リアルタイムダッシュボード。</p>
+        </div>
+        <div class="features__flow" aria-hidden="true" id="feature-flow">
+          <div class="features__flow-step" data-step="0">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>企画</span>
           </div>
-          <div class="features__flow" aria-hidden="true" id="feature-flow">
-            <div class="features__flow-step" data-step="0">
-              <span class="features__flow-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M6 10l3 3 5-5" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="features__flow-label">企画</span>
-            </div>
-            <div class="features__flow-arrow" aria-hidden="true">→</div>
-            <div class="features__flow-step" data-step="1">
-              <span class="features__flow-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="3" y="3" width="14" height="14" rx="2"
-                        stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M7 10h6M10 7v6" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round"/>
-                </svg>
-              </span>
-              <span class="features__flow-label">設定</span>
-            </div>
-            <div class="features__flow-arrow" aria-hidden="true">→</div>
-            <div class="features__flow-step" data-step="2">
-              <span class="features__flow-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M4 14l4-4 3 3 5-6" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              </span>
-              <span class="features__flow-label">配信</span>
-            </div>
-            <div class="features__flow-arrow" aria-hidden="true">→</div>
-            <div class="features__flow-step" data-step="3">
-              <span class="features__flow-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
-                  <path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round"/>
-                </svg>
-              </span>
-              <span class="features__flow-label">分析</span>
-            </div>
-            <div class="features__flow-arrow" aria-hidden="true">→</div>
-            <div class="features__flow-step" data-step="4">
-              <span class="features__flow-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M10 3v3M10 14v3M3 10h3M14 10h3"
-                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                  <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-              </span>
-              <span class="features__flow-label">改善</span>
-            </div>
+          <div class="features__flow-arrow" aria-hidden="true">→</div>
+          <div class="features__flow-step" data-step="1">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 10h6M10 7v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>設定</span>
+          </div>
+          <div class="features__flow-arrow" aria-hidden="true">→</div>
+          <div class="features__flow-step" data-step="2">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 14l4-4 3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>配信</span>
+          </div>
+          <div class="features__flow-arrow" aria-hidden="true">→</div>
+          <div class="features__flow-step" data-step="3">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span>分析</span>
+          </div>
+          <div class="features__flow-arrow" aria-hidden="true">→</div>
+          <div class="features__flow-step" data-step="4">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 3v3M10 14v3M3 10h3M14 10h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5"/></svg>
+            <span>改善</span>
           </div>
         </div>
       </article>
-
     </div>
   </div>
 </section>
 
 <!-- ========================================
-  07. Testimonials（中央フィーチャー + 左右サイドカード）
-  実装: glass-card.css参照（ライト版）+ フィーチャーレイアウト新規実装
+  07. Testimonials — 結晶の反響
 ======================================== -->
-<section class="testimonials section-fade-top" id="testimonials" data-section="testimonials"
-         aria-labelledby="testimonials-title">
-
-  <!-- L1: 左上ドットパターン（ブランド指定 20px radial-gradient opacity 0.10） -->
-  <div class="testimonials__dot-bg" aria-hidden="true"></div>
-
+<section class="voices" id="testimonials" aria-labelledby="voices-title">
   <div class="container">
-
-    <div class="testimonials__header" data-reveal>
-      <span class="section-label section-label--light"><span class="section-label__prefix" aria-hidden="true">//</span> TRUSTED BY</span>
-      <h2 class="section-title" id="testimonials-title">
-        500のメディアが、実証している。
-      </h2>
+    <div class="voices__header" data-reveal>
+      <span class="section-tag"><span aria-hidden="true">//</span> TRUSTED BY</span>
+      <h2 class="section-heading" id="voices-title">500のメディアが、実証している。</h2>
     </div>
+  </div>
 
-    <!-- 非対称グリッド -->
-    <div class="testimonials__grid">
-
-      <article class="testimonials__card" data-reveal="scale-up">
-        <div class="testimonials__card-metric">収益 <span>4倍</span></div>
-        <blockquote class="testimonials__quote">
-          UZOU導入後、ネット広告収益が約4倍に伸長。
-          3rd party cookie廃止後も収益が安定しています。
-        </blockquote>
-        <footer class="testimonials__source">
-          <cite class="testimonials__role">大手出版社系Webメディア</cite>
-          <span class="testimonials__position">広告担当</span>
+  <!-- 横スクロールカルーセル -->
+  <div class="voices__carousel" data-reveal>
+    <div class="voices__track">
+      <article class="voices__card glass-card">
+        <div class="voices__metric">収益 <span>4倍</span></div>
+        <blockquote>UZOU導入後、ネット広告収益が約4倍に伸長。3rd party cookie廃止後も収益が安定しています。</blockquote>
+        <footer>
+          <cite>大手出版社系Webメディア</cite>
+          <span>広告担当</span>
         </footer>
       </article>
 
-      <article class="testimonials__card testimonials__card--featured" data-reveal="scale-up" data-reveal-delay="0.08">
-        <div class="testimonials__card-metric">CPA <span>32%</span> 改善</div>
-        <blockquote class="testimonials__quote">
-          oCPC導入後、目標CPAに対して実績CPAが継続的に改善。
-          ウォールドガーデン以外のメディア開拓が一括で進み、
-          運用コストが大幅に下がりました。
-        </blockquote>
-        <footer class="testimonials__source">
-          <span class="testimonials__category">広告代理店</span>
-          <cite class="testimonials__role">メディアプランナー</cite>
-          <span class="testimonials__position">EC・健康食品領域</span>
+      <article class="voices__card voices__card--featured glass-card">
+        <div class="voices__metric">CPA <span>32%</span> 改善</div>
+        <blockquote>oCPC導入後、目標CPAに対して実績CPAが継続的に改善。ウォールドガーデン以外のメディア開拓が一括で進み、運用コストが大幅に下がりました。</blockquote>
+        <footer>
+          <span class="voices__category">広告代理店</span>
+          <cite>メディアプランナー</cite>
+          <span>EC・健康食品領域</span>
         </footer>
       </article>
 
-      <article class="testimonials__card" data-reveal="scale-up" data-reveal-delay="0.16">
-        <div class="testimonials__card-metric">導入 <span>1週間</span></div>
-        <blockquote class="testimonials__quote">
-          タグを設置するだけで配信が始まり、運用の手離れが良い。
-          法令遵守の配信姿勢が編集部からの信頼につながっています。
-        </blockquote>
-        <footer class="testimonials__source">
-          <cite class="testimonials__role">地方新聞社</cite>
-          <span class="testimonials__position">デジタル事業部</span>
+      <article class="voices__card glass-card">
+        <div class="voices__metric">導入 <span>1週間</span></div>
+        <blockquote>タグを設置するだけで配信が始まり、運用の手離れが良い。法令遵守の配信姿勢が編集部からの信頼につながっています。</blockquote>
+        <footer>
+          <cite>地方新聞社</cite>
+          <span>デジタル事業部</span>
         </footer>
       </article>
 
-      <article class="testimonials__card" data-reveal="scale-up" data-reveal-delay="0.24">
-        <div class="testimonials__card-metric">CTR <span>2.8倍</span></div>
-        <blockquote class="testimonials__quote">
-          配信先の自動最適化でクリック率が大幅に向上。
-          手動運用ではたどり着けなかったメディアへのリーチが実現しました。
-        </blockquote>
-        <footer class="testimonials__source">
-          <span class="testimonials__category">D2Cブランド</span>
-          <cite class="testimonials__role">マーケティング部</cite>
-          <span class="testimonials__position">コスメ・美容領域</span>
+      <article class="voices__card glass-card">
+        <div class="voices__metric">CTR <span>2.8倍</span></div>
+        <blockquote>配信先の自動最適化でクリック率が大幅に向上。手動運用ではたどり着けなかったメディアへのリーチが実現しました。</blockquote>
+        <footer>
+          <span class="voices__category">D2Cブランド</span>
+          <cite>マーケティング部</cite>
+          <span>コスメ・美容領域</span>
         </footer>
       </article>
 
-      <article class="testimonials__card" data-reveal="scale-up" data-reveal-delay="0.32">
-        <div class="testimonials__card-metric">工数 <span>60%</span> 削減</div>
-        <blockquote class="testimonials__quote">
-          複数媒体への個別交渉が不要になり、運用工数が大幅に削減。
-          空いたリソースをクリエイティブ改善に充てられるようになりました。
-        </blockquote>
-        <footer class="testimonials__source">
-          <cite class="testimonials__role">総合広告代理店</cite>
-          <span class="testimonials__position">デジタルメディア部</span>
+      <article class="voices__card glass-card">
+        <div class="voices__metric">工数 <span>60%</span> 削減</div>
+        <blockquote>複数媒体への個別交渉が不要になり、運用工数が大幅に削減。空いたリソースをクリエイティブ改善に充てられるようになりました。</blockquote>
+        <footer>
+          <cite>総合広告代理店</cite>
+          <span>デジタルメディア部</span>
         </footer>
       </article>
-
     </div>
   </div>
 </section>
 
 <!-- ========================================
-  08. CTA Strip（1主CTA集中型）
-  実装: glow-button.css参照 + ambient-glow.css参照 + 新規デザイン
+  08. CTA Strip — 結晶への招待（ダーク）
 ======================================== -->
-<section class="cta-strip section-fade-top section-fade-top--dark" id="download" data-section="cta-strip"
-         aria-labelledby="cta-strip-title">
-
-  <div class="cta-strip__glow" aria-hidden="true"></div>
-  <div class="cta-strip__grid" aria-hidden="true"></div>
-
-  <!-- フローティング三角形装飾 -->
-  <svg class="deco-float" aria-hidden="true" viewBox="0 0 80 80" fill="none"
-       style="position:absolute;top:15%;left:5%;width:60px;height:60px;opacity:0.12;pointer-events:none;z-index:2">
-    <polygon points="40,8 72,64 8,64" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" fill="none"/>
-  </svg>
-  <svg class="deco-float--alt" aria-hidden="true" viewBox="0 0 60 60" fill="none"
-       style="position:absolute;bottom:20%;right:8%;width:50px;height:50px;opacity:0.10;pointer-events:none;z-index:2">
-    <circle cx="30" cy="30" r="22" stroke="rgba(255,255,255,0.3)" stroke-width="0.6" fill="none" stroke-dasharray="4 6"/>
-  </svg>
+<section class="cta-mid" id="download" aria-labelledby="cta-mid-title">
+  <canvas class="cta-mid__canvas" id="cta-canvas" aria-hidden="true"></canvas>
 
   <div class="container">
-    <div class="cta-strip__inner">
-      <p class="cta-strip__sub" data-reveal>まず、接続してみることから始まる。</p>
-      <h2 class="cta-strip__title" id="cta-strip-title" data-reveal data-reveal-delay="0.08">
+    <div class="cta-mid__inner">
+      <p class="cta-mid__eyebrow" data-reveal>まず、接続してみることから始まる。</p>
+      <h2 class="cta-mid__title" id="cta-mid-title" data-reveal data-delay="80">
         資料を、今すぐ手に入れる。
       </h2>
-      <p class="cta-strip__desc" data-reveal data-reveal-delay="0.14">
+      <p class="cta-mid__desc" data-reveal data-delay="160">
         30分の会話で、あなたのメディア・広告に何が起きるかがわかる。
       </p>
-      <div class="cta-strip__actions" data-reveal data-reveal-delay="0.2">
-        <a href="#download" class="btn-cta-primary has-pulse">
-          資料ダウンロード（無料）
-        </a>
-        <a href="#contact" class="cta-strip__contact-link">
-          担当者に相談する →
-        </a>
+      <div class="cta-mid__actions" data-reveal data-delay="240">
+        <a href="#download" class="btn btn--primary btn--shimmer btn--lg">資料ダウンロード（無料）</a>
+        <a href="#contact" class="btn btn--ghost btn--ghost-light">担当者に相談する →</a>
       </div>
-      <ul class="cta-strip__trust" data-reveal data-reveal-delay="0.26" role="list">
+      <ul class="cta-mid__trust" data-reveal data-delay="320" role="list">
         <li>東証上場企業が運営</li>
         <li>500+メディア接続済</li>
         <li>最短1週間で開始</li>
@@ -969,316 +603,157 @@
 </section>
 
 <!-- ========================================
-  09. Flow（縦タイムライン）
-  実装: noise-texture.css（bg-noise）+ scroll-reveal.js参照
-        縦ラインscaleYアニメーション: v9継承
-        アコーディオン展開: 新規実装
+  09. Flow — 結晶の成長
 ======================================== -->
-<section class="flow section-fade-top" id="flow" data-section="flow" aria-labelledby="flow-title">
-
-  <!-- L1: 右サイド曲線SVG装飾（ブランド指定 opacity 0.06） -->
-  <svg aria-hidden="true" viewBox="0 0 400 600" fill="none"
-       style="position:absolute;right:0;top:0;width:300px;height:100%;opacity:0.06;pointer-events:none">
-    <path d="M400 0 Q200 150 350 300 Q100 450 400 600" stroke="rgba(52,98,111,0.8)" stroke-width="1" fill="none"/>
-    <path d="M380 0 Q180 180 330 330 Q80 480 380 600" stroke="rgba(139,192,202,0.6)" stroke-width="0.5" fill="none" stroke-dasharray="6 10"/>
-  </svg>
+<section class="flow" id="flow" aria-labelledby="flow-title">
   <div class="container">
-
     <div class="flow__layout">
-
-      <!-- 左固定見出し -->
       <div class="flow__header" data-reveal>
-        <span class="section-label section-label--light"><span class="section-label__prefix" aria-hidden="true">//</span> GET STARTED</span>
-        <h2 class="section-title" id="flow-title">
-          接続は、5つのステップで完成する。
-        </h2>
-        <p class="flow__header-note">最短1週間で、配信が始まる。</p>
+        <span class="section-tag"><span aria-hidden="true">//</span> GET STARTED</span>
+        <h2 class="section-heading" id="flow-title">接続は、5つのステップで完成する。</h2>
+        <p class="flow__note">最短1週間で、配信が始まる。</p>
       </div>
 
-      <!-- 右タイムライン -->
       <ol class="flow__timeline" aria-label="導入ステップ一覧">
-
         <li class="flow__step" data-reveal>
-          <div class="flow__step-indicator" aria-hidden="true">
-            <div class="flow__step-dot"></div>
-            <div class="flow__step-line"></div>
-          </div>
-          <div class="flow__step-body">
-            <button class="flow__step-header" aria-expanded="false"
-                    aria-controls="flow-step-1-detail">
+          <div class="flow__indicator" aria-hidden="true"><div class="flow__dot"></div><div class="flow__line"></div></div>
+          <div class="flow__body">
+            <button class="flow__toggle" aria-expanded="false" aria-controls="flow-1">
               <span class="flow__step-num">STEP 01</span>
               <span class="flow__step-title">接続の診断</span>
-              <span class="flow__step-chevron" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke="currentColor"
-                        stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </span>
+              <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
-            <div class="flow__step-detail" id="flow-step-1-detail" hidden>
-              現在の広告配信・収益構造の「見えない部分」をヒアリング。
-              課題と目標を丁寧にお伺いします。
-            </div>
+            <div class="flow__detail" id="flow-1" hidden>現在の広告配信・収益構造の「見えない部分」をヒアリング。課題と目標を丁寧にお伺いします。</div>
           </div>
         </li>
-
-        <li class="flow__step" data-reveal data-reveal-delay="0.08">
-          <div class="flow__step-indicator" aria-hidden="true">
-            <div class="flow__step-dot"></div>
-            <div class="flow__step-line"></div>
-          </div>
-          <div class="flow__step-body">
-            <button class="flow__step-header" aria-expanded="false"
-                    aria-controls="flow-step-2-detail">
+        <li class="flow__step" data-reveal data-delay="80">
+          <div class="flow__indicator" aria-hidden="true"><div class="flow__dot"></div><div class="flow__line"></div></div>
+          <div class="flow__body">
+            <button class="flow__toggle" aria-expanded="false" aria-controls="flow-2">
               <span class="flow__step-num">STEP 02</span>
               <span class="flow__step-title">接続の設計</span>
-              <span class="flow__step-chevron" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke="currentColor"
-                        stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </span>
+              <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
-            <div class="flow__step-detail" id="flow-step-2-detail" hidden>
-              あなたに最適なメディア・広告主のネットワークを提案。
-              ヒアリング内容をもとに最適な配信プランとメディア構成をご提示します。
-            </div>
+            <div class="flow__detail" id="flow-2" hidden>あなたに最適なメディア・広告主のネットワークを提案。ヒアリング内容をもとに最適な配信プランとメディア構成をご提示します。</div>
           </div>
         </li>
-
-        <li class="flow__step" data-reveal data-reveal-delay="0.16">
-          <div class="flow__step-indicator" aria-hidden="true">
-            <div class="flow__step-dot"></div>
-            <div class="flow__step-line"></div>
-          </div>
-          <div class="flow__step-body">
-            <button class="flow__step-header" aria-expanded="false"
-                    aria-controls="flow-step-3-detail">
+        <li class="flow__step" data-reveal data-delay="160">
+          <div class="flow__indicator" aria-hidden="true"><div class="flow__dot"></div><div class="flow__line"></div></div>
+          <div class="flow__body">
+            <button class="flow__toggle" aria-expanded="false" aria-controls="flow-3">
               <span class="flow__step-num">STEP 03</span>
               <span class="flow__step-title">接続の実装</span>
-              <span class="flow__step-chevron" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke="currentColor"
-                        stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </span>
+              <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
-            <div class="flow__step-detail" id="flow-step-3-detail" hidden>
-              タグ設置とアカウント設定。最短1週間で完了。
-              専任担当者が全工程をサポートするため、技術的な負担は最小限です。
-            </div>
+            <div class="flow__detail" id="flow-3" hidden>タグ設置とアカウント設定。最短1週間で完了。専任担当者が全工程をサポートするため、技術的な負担は最小限です。</div>
           </div>
         </li>
-
-        <li class="flow__step" data-reveal data-reveal-delay="0.24">
-          <div class="flow__step-indicator" aria-hidden="true">
-            <div class="flow__step-dot"></div>
-            <div class="flow__step-line"></div>
-          </div>
-          <div class="flow__step-body">
-            <button class="flow__step-header" aria-expanded="false"
-                    aria-controls="flow-step-4-detail">
+        <li class="flow__step" data-reveal data-delay="240">
+          <div class="flow__indicator" aria-hidden="true"><div class="flow__dot"></div><div class="flow__line"></div></div>
+          <div class="flow__body">
+            <button class="flow__toggle" aria-expanded="false" aria-controls="flow-4">
               <span class="flow__step-num">STEP 04</span>
               <span class="flow__step-title">接続の開始</span>
-              <span class="flow__step-chevron" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke="currentColor"
-                        stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </span>
+              <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
-            <div class="flow__step-detail" id="flow-step-4-detail" hidden>
-              AIが毎秒最適化。配信開始と同時に学習が始まる。
-              開始直後から成果の改善が始まります。
-            </div>
+            <div class="flow__detail" id="flow-4" hidden>AIが毎秒最適化。配信開始と同時に学習が始まる。開始直後から成果の改善が始まります。</div>
           </div>
         </li>
-
-        <li class="flow__step flow__step--last" data-reveal data-reveal-delay="0.32">
-          <div class="flow__step-indicator" aria-hidden="true">
-            <div class="flow__step-dot flow__step-dot--final"></div>
-          </div>
-          <div class="flow__step-body">
-            <button class="flow__step-header" aria-expanded="false"
-                    aria-controls="flow-step-5-detail">
+        <li class="flow__step flow__step--last" data-reveal data-delay="320">
+          <div class="flow__indicator" aria-hidden="true"><div class="flow__dot flow__dot--final"></div></div>
+          <div class="flow__body">
+            <button class="flow__toggle" aria-expanded="false" aria-controls="flow-5">
               <span class="flow__step-num">STEP 05</span>
               <span class="flow__step-title">接続の深化</span>
-              <span class="flow__step-chevron" aria-hidden="true">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M4 6l4 4 4-4" stroke="currentColor"
-                        stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-              </span>
+              <svg class="flow__chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             </button>
-            <div class="flow__step-detail" id="flow-step-5-detail" hidden>
-              定期レポートと改善提案。接続はさらに精密になっていく。
-              専任担当者が月次でレポートと改善提案を伴走します。
-            </div>
+            <div class="flow__detail" id="flow-5" hidden>定期レポートと改善提案。接続はさらに精密になっていく。専任担当者が月次でレポートと改善提案を伴走します。</div>
           </div>
         </li>
-
       </ol>
     </div>
   </div>
 </section>
 
 <!-- ========================================
-  10. FAQ（左固定見出し + 右アコーディオン）
-  実装: text-gradient.css参照（グラデーションテキスト）
-        FAQアコーディオン: details/summary（v9継承）
+  10. FAQ — 結晶の断面
 ======================================== -->
-<section class="faq section-fade-top" id="faq" data-section="faq" aria-labelledby="faq-heading">
-
+<section class="faq" id="faq" aria-labelledby="faq-title">
   <div class="container">
     <div class="faq__layout">
-
-      <!-- 左固定見出し -->
       <div class="faq__sidebar" data-reveal>
-        <div class="faq__sidebar-title" aria-hidden="true">
-          <span class="faq__sidebar-line">FREQUENTLY</span>
-          <span class="faq__sidebar-line faq__sidebar-line--gradient">ASKED</span>
-          <span class="faq__sidebar-line">QUESTIONS</span>
+        <div class="faq__sidebar-display" aria-hidden="true">
+          <span>FREQUENTLY</span>
+          <span class="faq__sidebar-gradient">ASKED</span>
+          <span>QUESTIONS</span>
         </div>
-        <h2 class="sr-only" id="faq-heading">よくあるご質問</h2>
+        <h2 class="sr-only" id="faq-title">よくあるご質問</h2>
         <p class="faq__sidebar-caption">接続する前に、よくある問いを。</p>
-        <a href="#contact" class="faq__sidebar-link">
-          他にご質問がある場合は →
-        </a>
+        <a href="#contact" class="faq__sidebar-link">他にご質問がある場合は →</a>
       </div>
 
-      <!-- 右アコーディオン -->
-      <div class="faq__list" data-reveal data-reveal-delay="0.1">
-
+      <div class="faq__list" data-reveal data-delay="100">
         <details class="faq__item">
           <summary class="faq__question">
             UZOUの導入にはどのくらい時間がかかりますか？
-            <span class="faq__icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M4.5 6.75L9 11.25l4.5-4.5"
-                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </span>
+            <svg class="faq__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4.5 6.75L9 11.25l4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </summary>
-          <div class="faq__answer">
-            最短1週間。タグ設置とアカウント設定のみで完了します。
-            専任担当者が全工程をサポートします。
-          </div>
+          <div class="faq__answer">最短1週間。タグ設置とアカウント設定のみで完了します。専任担当者が全工程をサポートします。</div>
         </details>
-
         <details class="faq__item">
           <summary class="faq__question">
             最低出稿金額はありますか？
-            <span class="faq__icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M4.5 6.75L9 11.25l4.5-4.5"
-                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </span>
+            <svg class="faq__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4.5 6.75L9 11.25l4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </summary>
-          <div class="faq__answer">
-            予算やニーズに合わせて柔軟に対応しています。まずはご相談ください。
-          </div>
+          <div class="faq__answer">予算やニーズに合わせて柔軟に対応しています。まずはご相談ください。</div>
         </details>
-
         <details class="faq__item">
           <summary class="faq__question">
             どのような業種に対応していますか？
-            <span class="faq__icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M4.5 6.75L9 11.25l4.5-4.5"
-                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </span>
+            <svg class="faq__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4.5 6.75L9 11.25l4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </summary>
-          <div class="faq__answer">
-            EC、金融、不動産、人材、教育など幅広い業種に対応。
-            500以上のメディアネットワークから各業種に最適な配信先を自動選定します。
-          </div>
+          <div class="faq__answer">EC、金融、不動産、人材、教育など幅広い業種に対応。500以上のメディアネットワークから各業種に最適な配信先を自動選定します。</div>
         </details>
-
         <details class="faq__item">
           <summary class="faq__question">
             レポートはどのくらいの頻度で共有されますか？
-            <span class="faq__icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M4.5 6.75L9 11.25l4.5-4.5"
-                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </span>
+            <svg class="faq__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4.5 6.75L9 11.25l4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </summary>
-          <div class="faq__answer">
-            リアルタイムダッシュボードでいつでも確認可能。
-            加えて月次の詳細レポートと改善提案を専任担当者からお届けします。
-          </div>
+          <div class="faq__answer">リアルタイムダッシュボードでいつでも確認可能。加えて月次の詳細レポートと改善提案を専任担当者からお届けします。</div>
         </details>
-
         <details class="faq__item">
           <summary class="faq__question">
             既存の広告運用と併用できますか？
-            <span class="faq__icon" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M4.5 6.75L9 11.25l4.5-4.5"
-                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-            </span>
+            <svg class="faq__icon" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M4.5 6.75L9 11.25l4.5-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </summary>
-          <div class="faq__answer">
-            可能です。既存チャネルを継続しながら、UZOUを追加の配信チャネルとしてご活用いただけます。
-          </div>
+          <div class="faq__answer">可能です。既存チャネルを継続しながら、UZOUを追加の配信チャネルとしてご活用いただけます。</div>
         </details>
-
       </div>
     </div>
   </div>
 </section>
 
 <!-- ========================================
-  11. Final CTA（ティールグラデーション + マウス追従パーティクル）
-  実装: noise-texture.css（bg-noise）+ glow-button.css参照
-        + ambient-glow.css参照
-        マウス追従パーティクル: 新規Canvas実装
+  11. Final CTA — 結晶の完成（ダーク）
 ======================================== -->
-<section class="final-cta bg-noise section-fade-top section-fade-top--dark" id="final-cta" data-section="final-cta"
-         aria-labelledby="final-cta-title">
-
-  <canvas class="final-cta__canvas" id="final-cta-canvas" aria-hidden="true"></canvas>
-  <div class="final-cta__glow" aria-hidden="true"></div>
+<section class="final-cta" id="final-cta" aria-labelledby="final-cta-title">
+  <canvas class="final-cta__canvas" id="final-canvas" aria-hidden="true"></canvas>
 
   <div class="container">
     <div class="final-cta__inner">
-
-      <p class="final-cta__eyebrow" data-reveal>
-        500社が証明した、広告の新しい選択肢
+      <p class="final-cta__eyebrow" data-reveal>500社が証明した、広告の新しい選択肢</p>
+      <h2 class="final-cta__title" id="final-cta-title" data-reveal data-delay="80">接続が、広告を変える。</h2>
+      <p class="final-cta__sub" data-reveal data-delay="160">
+        あなたのメディア・広告が、次の接続を待っている。<br>まずはお気軽にご連絡ください。
       </p>
-
-      <h2 class="final-cta__title" id="final-cta-title" data-reveal data-reveal-delay="0.08">
-        接続が、広告を変える。
-      </h2>
-
-      <p class="final-cta__sub" data-reveal data-reveal-delay="0.14">
-        あなたのメディア・広告が、次の接続を待っている。<br>
-        まずはお気軽にご連絡ください。
-      </p>
-
-      <div class="final-cta__actions" data-reveal data-reveal-delay="0.2">
-        <a href="#download" class="btn-cta-primary has-pulse">
-          今すぐ接続を始める
-        </a>
-        <a href="#contact" class="btn-ghost btn-ghost--white">
-          お問い合わせ
-        </a>
+      <div class="final-cta__actions" data-reveal data-delay="240">
+        <a href="#download" class="btn btn--primary btn--shimmer btn--lg">今すぐ接続を始める</a>
+        <a href="#contact" class="btn btn--ghost btn--ghost-light">お問い合わせ</a>
       </div>
-
-      <ul class="final-cta__trust" data-reveal data-reveal-delay="0.26" role="list">
-        <li>完全無料</li>
-        <li>30秒で完了</li>
-        <li>営業電話なし</li>
+      <ul class="final-cta__trust" data-reveal data-delay="320" role="list">
+        <li>完全無料</li><li>30秒で完了</li><li>営業電話なし</li>
       </ul>
-
-      <p class="final-cta__company" data-reveal data-reveal-delay="0.3">
-        株式会社Speee（東証スタンダード 4499）が運営
-      </p>
-
+      <p class="final-cta__company" data-reveal data-delay="400">株式会社Speee（東証スタンダード 4499）が運営</p>
     </div>
   </div>
 </section>
@@ -1286,52 +761,47 @@
 </main>
 
 <!-- ========================================
-  12. Footer + 固定CTAバー
-  実装: 新規実装
+  Footer
 ======================================== -->
-<footer class="site-footer section-fade-top" id="contact" role="contentinfo">
+<footer class="footer" id="contact" role="contentinfo">
   <div class="container">
     <h2 class="sr-only">サイト情報</h2>
     <div class="footer__inner">
-
       <div class="footer__brand">
         <a href="#hero" class="footer__logo" aria-label="UZOUトップへ">
-          <span class="nav__logo-mark" aria-hidden="true">U</span>
+          <span class="header__logo-mark" aria-hidden="true">U</span>
           <span>UZOU</span>
         </a>
         <p class="footer__company">株式会社Speee</p>
         <p class="footer__tagline">形あるものと、形なきものをつなぐ。</p>
       </div>
-
       <nav class="footer__nav" aria-label="フッターナビゲーション">
-        <div class="footer__nav-group">
-          <h3 class="footer__nav-title">サービス</h3>
+        <div class="footer__col">
+          <h3>サービス</h3>
           <ul role="list">
-            <li><a href="#features" class="footer__nav-link">特徴</a></li>
-            <li><a href="#results" class="footer__nav-link">実績</a></li>
-            <li><a href="#flow" class="footer__nav-link">導入の流れ</a></li>
+            <li><a href="#features">特徴</a></li>
+            <li><a href="#results">実績</a></li>
+            <li><a href="#flow">導入の流れ</a></li>
           </ul>
         </div>
-        <div class="footer__nav-group">
-          <h3 class="footer__nav-title">サポート</h3>
+        <div class="footer__col">
+          <h3>サポート</h3>
           <ul role="list">
-            <li><a href="#faq" class="footer__nav-link">FAQ</a></li>
-            <li><a href="#contact" class="footer__nav-link">お問い合わせ</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contact">お問い合わせ</a></li>
           </ul>
         </div>
-        <div class="footer__nav-group">
-          <h3 class="footer__nav-title">企業情報</h3>
+        <div class="footer__col">
+          <h3>企業情報</h3>
           <ul role="list">
-            <li><a href="https://speee.jp/company/" class="footer__nav-link" target="_blank" rel="noopener noreferrer">会社概要</a></li>
-            <li><a href="https://speee.jp/privacy/" class="footer__nav-link" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a></li>
+            <li><a href="https://speee.jp/company/" target="_blank" rel="noopener noreferrer">会社概要</a></li>
+            <li><a href="https://speee.jp/privacy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a></li>
           </ul>
         </div>
       </nav>
-
     </div>
-
     <div class="footer__bottom">
-      <p class="footer__copy">© 2026 Speee, Inc. All rights reserved.</p>
+      <p>© 2026 Speee, Inc. All rights reserved.</p>
     </div>
   </div>
 </footer>
