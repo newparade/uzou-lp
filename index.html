@@ -250,8 +250,23 @@
   02. Media Trust（2行マーキー）
   実装: marquee.css（ベース）+ UZOUカラー上書き
 ======================================== -->
-<section class="media-trust" id="media-trust" data-section="media-trust"
+<section class="media-trust bg-dots section-fade-top" id="media-trust" data-section="media-trust"
          aria-label="導入メディア実績">
+
+  <!-- 左下幾何学装飾 -->
+  <svg class="deco-float" aria-hidden="true" viewBox="0 0 120 120" fill="none"
+       style="position:absolute;bottom:15%;left:3%;width:100px;height:100px;opacity:0.12;pointer-events:none;z-index:0">
+    <rect x="10" y="10" width="100" height="100" rx="4" stroke="var(--c-primary)" stroke-width="0.8" fill="none"/>
+    <rect x="25" y="25" width="70" height="70" rx="2" stroke="var(--c-primary)" stroke-width="0.5" fill="none" stroke-dasharray="4 6"/>
+  </svg>
+  <!-- 右上クロス装飾 -->
+  <svg class="deco-float--alt" aria-hidden="true" viewBox="0 0 80 80" fill="none"
+       style="position:absolute;top:10%;right:5%;width:70px;height:70px;opacity:0.10;pointer-events:none;z-index:0">
+    <line x1="0" y1="40" x2="80" y2="40" stroke="var(--c-primary)" stroke-width="0.5"/>
+    <line x1="40" y1="0" x2="40" y2="80" stroke="var(--c-primary)" stroke-width="0.5"/>
+    <circle cx="40" cy="40" r="20" stroke="var(--c-light)" stroke-width="0.5" fill="none" stroke-dasharray="3 5"/>
+  </svg>
+
   <div class="media-trust__inner">
 
     <p class="media-trust__label">TRUSTED BY 500+ MEDIA</p>
@@ -319,10 +334,17 @@
   03. Solution（タブ切替: Advertisers / Publishers）
   実装: noise-texture.css（bg-noise）+ タブUI新規実装
 ======================================== -->
-<section class="solution bg-noise" id="solution" data-section="solution"
+<section class="solution bg-noise bg-dots bg-dots--dark section-fade-top section-fade-top--dark" id="solution" data-section="solution"
          aria-labelledby="solution-title">
 
   <div class="solution__glow" aria-hidden="true"></div>
+
+  <!-- 追加: 右下フローティング菱形 -->
+  <svg class="deco-float" aria-hidden="true" viewBox="0 0 100 100" fill="none"
+       style="position:absolute;bottom:5%;right:3%;width:140px;height:140px;opacity:0.10;pointer-events:none;z-index:0">
+    <polygon points="50,5 95,50 50,95 5,50" stroke="var(--c-light)" stroke-width="0.8" fill="none"/>
+    <polygon points="50,20 80,50 50,80 20,50" stroke="var(--c-light)" stroke-width="0.4" fill="none" stroke-dasharray="3 5"/>
+  </svg>
 
   <!-- 幾何学SVG装飾 -->
   <svg class="solution__deco" aria-hidden="true" viewBox="0 0 200 200" fill="none"
@@ -422,7 +444,19 @@
   実装: text-gradient.css参照 + 非対称数値レイアウト新規実装
         カウントアップ: 新規JS実装
 ======================================== -->
-<section class="results" id="results" data-section="results" aria-labelledby="results-title">
+<section class="results bg-dots section-fade-top" id="results" data-section="results" aria-labelledby="results-title">
+
+  <!-- アンビエントグロー -->
+  <div class="ambient-glow ambient-glow--tr" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow--bl" aria-hidden="true"></div>
+
+  <!-- 左下幾何学装飾 -->
+  <svg class="deco-float--alt" aria-hidden="true" viewBox="0 0 160 160" fill="none"
+       style="position:absolute;bottom:8%;left:2%;width:180px;height:180px;opacity:0.10;pointer-events:none;z-index:0">
+    <circle cx="80" cy="80" r="70" stroke="var(--c-primary)" stroke-width="0.6" fill="none"/>
+    <circle cx="80" cy="80" r="45" stroke="var(--c-light)" stroke-width="0.4" fill="none" stroke-dasharray="5 8"/>
+    <circle cx="80" cy="80" r="20" stroke="var(--c-primary)" stroke-width="0.3" fill="none"/>
+  </svg>
 
   <!-- SVGデータフロー装飾 -->
   <svg class="results__flow-svg" aria-hidden="true" viewBox="0 0 1200 500"
@@ -513,7 +547,20 @@
   実装: text-gradient.css参照 + Platform Diagram SVG新規実装
         スクロール連動ライン: stroke-dashoffset アニメーション
 ======================================== -->
-<section class="about" id="about" data-section="about" aria-labelledby="about-title">
+<section class="about bg-crosshatch section-fade-top" id="about" data-section="about" aria-labelledby="about-title">
+
+  <!-- アンビエントグロー -->
+  <div class="ambient-glow ambient-glow--tl" aria-hidden="true"></div>
+
+  <!-- 左下ダイヤモンドグリッド装飾 -->
+  <svg class="deco-float" aria-hidden="true" viewBox="0 0 200 200" fill="none"
+       style="position:absolute;bottom:5%;left:-3%;width:200px;height:200px;opacity:0.10;pointer-events:none;z-index:0">
+    <polygon points="100,10 190,100 100,190 10,100" stroke="var(--c-primary)" stroke-width="0.6" fill="none"/>
+    <polygon points="100,40 160,100 100,160 40,100" stroke="var(--c-light)" stroke-width="0.4" fill="none" stroke-dasharray="4 6"/>
+    <line x1="10" y1="100" x2="190" y2="100" stroke="var(--c-primary)" stroke-width="0.3" stroke-dasharray="2 6"/>
+    <line x1="100" y1="10" x2="100" y2="190" stroke="var(--c-primary)" stroke-width="0.3" stroke-dasharray="2 6"/>
+  </svg>
+
   <!-- 背景幾何学装飾 -->
   <svg aria-hidden="true" viewBox="0 0 300 300" fill="none"
        style="position:absolute;top:5%;right:0;width:280px;height:280px;opacity:0.12;pointer-events:none">
@@ -677,7 +724,10 @@
         Feature-02ノード増殖SVG: 新規実装
         Feature-03ステップハイライト: 新規実装
 ======================================== -->
-<section class="features" id="features" data-section="features" aria-labelledby="features-title">
+<section class="features bg-dots section-fade-top" id="features" data-section="features" aria-labelledby="features-title">
+
+  <!-- アンビエントグロー -->
+  <div class="ambient-glow ambient-glow--br" aria-hidden="true"></div>
 
   <!-- 右上三角形SVG装飾 -->
   <svg class="features__deco" aria-hidden="true" viewBox="0 0 150 150" fill="none"
@@ -846,8 +896,19 @@
   07. Testimonials（中央フィーチャー + 左右サイドカード）
   実装: glass-card.css参照（ライト版）+ フィーチャーレイアウト新規実装
 ======================================== -->
-<section class="testimonials" id="testimonials" data-section="testimonials"
+<section class="testimonials bg-crosshatch section-fade-top" id="testimonials" data-section="testimonials"
          aria-labelledby="testimonials-title">
+
+  <!-- アンビエントグロー -->
+  <div class="ambient-glow ambient-glow--tl" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow--br" aria-hidden="true"></div>
+
+  <!-- 右下フローティング六角形 -->
+  <svg class="deco-float" aria-hidden="true" viewBox="0 0 120 120" fill="none"
+       style="position:absolute;bottom:10%;right:3%;width:160px;height:160px;opacity:0.12;pointer-events:none;z-index:0">
+    <polygon points="60,5 110,30 110,80 60,105 10,80 10,30" stroke="var(--c-primary)" stroke-width="0.8" fill="none"/>
+    <polygon points="60,25 90,40 90,70 60,85 30,70 30,40" stroke="var(--c-light)" stroke-width="0.4" fill="none" stroke-dasharray="3 5"/>
+  </svg>
 
   <!-- ドットパターン装飾 -->
   <svg class="testimonials__deco" aria-hidden="true" viewBox="0 0 100 100" fill="none"
@@ -942,11 +1003,21 @@
   08. CTA Strip（1主CTA集中型）
   実装: glow-button.css参照 + ambient-glow.css参照 + 新規デザイン
 ======================================== -->
-<section class="cta-strip" id="download" data-section="cta-strip"
+<section class="cta-strip section-fade-top section-fade-top--dark" id="download" data-section="cta-strip"
          aria-labelledby="cta-strip-title">
 
   <div class="cta-strip__glow" aria-hidden="true"></div>
   <div class="cta-strip__grid" aria-hidden="true"></div>
+
+  <!-- フローティング三角形装飾 -->
+  <svg class="deco-float" aria-hidden="true" viewBox="0 0 80 80" fill="none"
+       style="position:absolute;top:15%;left:5%;width:60px;height:60px;opacity:0.12;pointer-events:none;z-index:2">
+    <polygon points="40,8 72,64 8,64" stroke="rgba(255,255,255,0.4)" stroke-width="0.8" fill="none"/>
+  </svg>
+  <svg class="deco-float--alt" aria-hidden="true" viewBox="0 0 60 60" fill="none"
+       style="position:absolute;bottom:20%;right:8%;width:50px;height:50px;opacity:0.10;pointer-events:none;z-index:2">
+    <circle cx="30" cy="30" r="22" stroke="rgba(255,255,255,0.3)" stroke-width="0.6" fill="none" stroke-dasharray="4 6"/>
+  </svg>
 
   <div class="container">
     <div class="cta-strip__inner">
@@ -980,7 +1051,18 @@
         縦ラインscaleYアニメーション: v9継承
         アコーディオン展開: 新規実装
 ======================================== -->
-<section class="flow" id="flow" data-section="flow" aria-labelledby="flow-title">
+<section class="flow bg-dots section-fade-top" id="flow" data-section="flow" aria-labelledby="flow-title">
+
+  <!-- アンビエントグロー -->
+  <div class="ambient-glow ambient-glow--tl" aria-hidden="true"></div>
+
+  <!-- 左側フローティング装飾 -->
+  <svg class="deco-float--alt" aria-hidden="true" viewBox="0 0 140 140" fill="none"
+       style="position:absolute;top:15%;left:-2%;width:160px;height:160px;opacity:0.10;pointer-events:none;z-index:0">
+    <rect x="10" y="10" width="120" height="120" rx="8" stroke="var(--c-primary)" stroke-width="0.6" fill="none" transform="rotate(12 70 70)"/>
+    <rect x="30" y="30" width="80" height="80" rx="4" stroke="var(--c-light)" stroke-width="0.4" fill="none" stroke-dasharray="4 6" transform="rotate(12 70 70)"/>
+  </svg>
+
   <!-- 接続線装飾 -->
   <svg aria-hidden="true" viewBox="0 0 400 600" fill="none"
        style="position:absolute;right:0;top:0;width:300px;height:100%;opacity:0.12;pointer-events:none">
@@ -1132,7 +1214,33 @@
   実装: text-gradient.css参照（グラデーションテキスト）
         FAQアコーディオン: details/summary（v9継承）
 ======================================== -->
-<section class="faq" id="faq" data-section="faq" aria-labelledby="faq-heading">
+<section class="faq bg-crosshatch section-fade-top" id="faq" data-section="faq" aria-labelledby="faq-heading">
+
+  <!-- アンビエントグロー -->
+  <div class="ambient-glow ambient-glow--tr" aria-hidden="true"></div>
+
+  <!-- 右下フローティング装飾 -->
+  <svg class="deco-float" aria-hidden="true" viewBox="0 0 100 100" fill="none"
+       style="position:absolute;bottom:10%;right:2%;width:120px;height:120px;opacity:0.10;pointer-events:none;z-index:0">
+    <circle cx="50" cy="50" r="40" stroke="var(--c-primary)" stroke-width="0.6" fill="none"/>
+    <circle cx="50" cy="50" r="25" stroke="var(--c-light)" stroke-width="0.4" fill="none" stroke-dasharray="3 5"/>
+    <circle cx="50" cy="50" r="10" stroke="var(--c-primary)" stroke-width="0.3" fill="none"/>
+  </svg>
+  <!-- 左上ドットクラスター -->
+  <svg class="deco-float--alt" aria-hidden="true" viewBox="0 0 80 80" fill="none"
+       style="position:absolute;top:8%;left:3%;width:80px;height:80px;opacity:0.12;pointer-events:none;z-index:0">
+    <circle cx="15" cy="15" r="2" fill="var(--c-primary)"/>
+    <circle cx="35" cy="10" r="1.5" fill="var(--c-primary)"/>
+    <circle cx="55" cy="18" r="2.5" fill="var(--c-primary)"/>
+    <circle cx="10" cy="38" r="1.5" fill="var(--c-primary)"/>
+    <circle cx="30" cy="35" r="2" fill="var(--c-primary)"/>
+    <circle cx="50" cy="40" r="1.5" fill="var(--c-primary)"/>
+    <circle cx="70" cy="32" r="2" fill="var(--c-primary)"/>
+    <circle cx="20" cy="58" r="2" fill="var(--c-primary)"/>
+    <circle cx="45" cy="62" r="1.5" fill="var(--c-primary)"/>
+    <circle cx="65" cy="55" r="2.5" fill="var(--c-primary)"/>
+  </svg>
+
   <div class="container">
     <div class="faq__layout">
 
@@ -1242,7 +1350,7 @@
         + ambient-glow.css参照
         マウス追従パーティクル: 新規Canvas実装
 ======================================== -->
-<section class="final-cta bg-noise" id="final-cta" data-section="final-cta"
+<section class="final-cta bg-noise section-fade-top section-fade-top--dark" id="final-cta" data-section="final-cta"
          aria-labelledby="final-cta-title">
 
   <canvas class="final-cta__canvas" id="final-cta-canvas" aria-hidden="true"></canvas>
@@ -1293,7 +1401,7 @@
   12. Footer + 固定CTAバー
   実装: 新規実装
 ======================================== -->
-<footer class="site-footer" id="contact" role="contentinfo">
+<footer class="site-footer bg-dots section-fade-top" id="contact" role="contentinfo">
   <div class="container">
     <h2 class="sr-only">サイト情報</h2>
     <div class="footer__inner">

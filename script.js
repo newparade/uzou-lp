@@ -1058,6 +1058,10 @@ function initSectionParallax() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   // 装飾要素ごとに速度を差別化（奥行き感）
+  // deco-float / deco-float--alt クラスの全SVGを自動収集（v11追加）
+  const floatingDecos = Array.from(document.querySelectorAll('.deco-float, .deco-float--alt'))
+    .map((el, i) => ({ el, speed: (i % 2 === 0 ? -0.02 : 0.03) + (i * 0.005) }));
+
   const parallaxEls = [
     // Hero
     { el: document.querySelector('.hero__glow-tl'), speed: 0.03 },
@@ -1065,13 +1069,19 @@ function initSectionParallax() {
     { el: document.querySelector('.hero__glow-tr'), speed: 0.04 },
     // Solution
     { el: document.querySelector('.solution__glow'), speed: 0.04 },
-    { el: document.querySelector('.solution__deco'), speed: -0.025 },   // 六角形: 中景
+    { el: document.querySelector('.solution__deco'), speed: -0.025 },
     // Results
-    { el: document.querySelector('.results__flow-svg'), speed: 0.02 },  // SVGライン: 後景
+    { el: document.querySelector('.results__flow-svg'), speed: 0.02 },
     // Features
-    { el: document.querySelector('.features__deco'), speed: -0.06 },    // 三角形: 前景
+    { el: document.querySelector('.features__deco'), speed: -0.06 },
     // Testimonials
-    { el: document.querySelector('.testimonials__deco'), speed: 0.02 }, // ドット: 後景
+    { el: document.querySelector('.testimonials__deco'), speed: 0.02 },
+    // アンビエントグロー（v11追加）
+    ...Array.from(document.querySelectorAll('.ambient-glow')).map((el, i) => ({
+      el, speed: (i % 2 === 0 ? 0.015 : -0.02)
+    })),
+    // フローティング装飾（v11追加）
+    ...floatingDecos,
   ].filter(p => p.el);
 
   if (!parallaxEls.length) return;
