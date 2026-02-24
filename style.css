@@ -337,8 +337,8 @@ details > summary { list-style: none; }
   border: 1px solid var(--glass-border);
   border-radius: var(--r-card);
   position: relative;
-  box-shadow: 0 4px 24px rgba(43, 73, 84, 0.10),
-              0 1px 2px rgba(43, 73, 84, 0.06),
+  box-shadow: 0 8px 40px rgba(43, 73, 84, 0.08),
+              0 1px 3px rgba(43, 73, 84, 0.05),
               inset 0 1px 0 rgba(255, 255, 255, 0.7),
               inset 0 -1px 0 rgba(139, 192, 202, 0.08);
   transition: transform var(--dur-normal) var(--ease-hover),
@@ -1233,6 +1233,19 @@ details > summary { list-style: none; }
   filter: blur(1.5px);
   box-shadow: 0 0 20px rgba(139,192,202,0.15);
 }
+/* Features下部: ダーク→ライト（Voices）遷移グロー */
+.features::before {
+  content: '';
+  position: absolute; bottom: 0; left: 5%; right: 5%;
+  height: 80px;
+  background: radial-gradient(ellipse 70% 100% at 50% 100%,
+    rgba(139,192,202,0.12) 0%,
+    rgba(139,192,202,0.04) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
 .features__decos { position: absolute; inset: 0; pointer-events: none; }
 .features__deco { position: absolute; }
 .features__deco--1 { bottom: -60px; right: -60px; width: 200px; opacity: 0.15; animation: crystal-float-gentle 18s ease-in-out infinite; }
@@ -1692,7 +1705,7 @@ details > summary { list-style: none; }
    ============================================= */
 .faq {
   padding: var(--section-pad-md) 0;
-  background: var(--bg-surface);
+  background: linear-gradient(180deg, #e8f1f3 0%, #edf5f7 100%);
   position: relative;
   overflow: hidden;
 }
