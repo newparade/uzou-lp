@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothAnchor();
   initFinalCanvas();
   initStickyCta();
+  initParallax();
 });
 
 /* =============================================
@@ -254,20 +255,37 @@ function initHeroTextSplit() {
 }
 
 /* =============================================
-   8. Hero マウスグロー追従
+   8. Hero マウスグロー追従 + 結晶3Dチルト
    ============================================= */
 function initMouseGlow() {
   const glow = document.querySelector('.hero__mouse-glow');
   const hero = document.querySelector('.hero');
-  if (!glow || !hero || prefersReducedMotion()) return;
+  const crystal = document.querySelector('.hero__crystal');
+  if (!hero || prefersReducedMotion()) return;
 
   hero.addEventListener('mousemove', e => {
-    glow.style.left = e.clientX + 'px';
-    glow.style.top = e.clientY + 'px';
-    glow.style.opacity = '1';
+    const rect = hero.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+
+    // マウスグロー
+    if (glow) {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+      glow.style.opacity = '1';
+    }
+
+    // 結晶画像3Dチルト
+    if (crystal) {
+      const tiltX = (y - 0.5) * -8;
+      const tiltY = (x - 0.5) * 8;
+      crystal.style.transform = `scale(1.05) perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    }
   });
+
   hero.addEventListener('mouseleave', () => {
-    glow.style.opacity = '0';
+    if (glow) glow.style.opacity = '0';
+    if (crystal) crystal.style.transform = 'scale(1.05)';
   });
 }
 
@@ -299,8 +317,8 @@ function initCrystalParticles() {
       y: Math.random() * h,
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3 - 0.15,
-      size: Math.random() * 8 + 3,
-      alpha: Math.random() * 0.12 + 0.03,
+      size: Math.random() * 10 + 3,
+      alpha: Math.random() * 0.18 + 0.05,
       rotation: Math.random() * Math.PI * 2,
       rotSpeed: (Math.random() - 0.5) * 0.008,
       sides: sides,
@@ -362,12 +380,12 @@ function initCrystalParticles() {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150) {
+        if (dist < 180) {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(139, 192, 202, ${0.06 * (1 - dist / 150)})`;
-          ctx.lineWidth = 0.5;
+          ctx.strokeStyle = `rgba(139, 192, 202, ${0.10 * (1 - dist / 180)})`;
+          ctx.lineWidth = 0.6;
           ctx.stroke();
         }
       }
@@ -905,7 +923,7 @@ function initFinalCanvas() {
   }
 
   function create() {
-    const count = Math.min(30, Math.floor(w / 50));
+    const count = Math.min(35, Math.floor(w / 45));
     particles = [];
     for (let i = 0; i < count; i++) {
       particles.push({
@@ -915,8 +933,8 @@ function initFinalCanvas() {
         targetY: h / 2 + (Math.random() - 0.5) * 150,
         vx: (Math.random() - 0.5) * 0.5,
         vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 6 + 2,
-        alpha: Math.random() * 0.08 + 0.02,
+        size: Math.random() * 8 + 3,
+        alpha: Math.random() * 0.12 + 0.03,
         sides: Math.random() > 0.4 ? 6 : 5,
         rotation: Math.random() * Math.PI * 2,
         rotSpeed: (Math.random() - 0.5) * 0.008,
@@ -1018,4 +1036,38 @@ function initStickyCta() {
 
   const hero = document.querySelector('.hero');
   if (hero) observer.observe(hero);
+}
+
+/* =============================================
+   23. スクロール連動パララックス
+   ============================================= */
+function initParallax() {
+  if (prefersReducedMotion()) return;
+
+  const parallaxElements = [
+    { el: document.querySelector('.about__crystal-frag'), speed: 0.15 },
+    { el: document.querySelector('.features__deco'), speed: -0.1 },
+    { el: document.querySelector('.problem__deco--tl'), speed: 0.08 },
+    { el: document.querySelector('.problem__deco--br'), speed: -0.06 },
+  ].filter(item => item.el);
+
+  if (!parallaxElements.length) return;
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const scrollY = window.scrollY;
+      parallaxElements.forEach(({ el, speed }) => {
+        const rect = el.parentElement.getBoundingClientRect();
+        const inView = rect.top < window.innerHeight && rect.bottom > 0;
+        if (inView) {
+          const offset = (scrollY - el.parentElement.offsetTop) * speed;
+          el.style.transform = `translateY(${offset}px) rotate(${offset * 0.05}deg)`;
+        }
+      });
+      ticking = false;
+    });
+  }, { passive: true });
 }
