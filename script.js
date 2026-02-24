@@ -240,7 +240,7 @@ function initHeader() {
   const header = document.getElementById('header');
   if (!header) return;
 
-  const darkSections = document.querySelectorAll('.problem, .cta-mid, .final-cta');
+  const darkSections = document.querySelectorAll('.problem, .features, .cta-mid, .final-cta');
   let ticking = false;
 
   function onScroll() {
