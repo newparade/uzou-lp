@@ -1394,6 +1394,30 @@ details > summary { list-style: none; }
 .voices__card footer span { font-size: 12px; color: var(--t3-light); }
 .voices__category { font-size: 11px; font-weight: 600; color: var(--c-primary); letter-spacing: 0.02em; }
 
+/* Voices ナビボタン */
+.voices__nav {
+  display: flex; gap: 8px; justify-content: flex-end;
+  max-width: min(100% - var(--gutter) * 2, var(--container));
+  margin: 0 auto; padding: 0 var(--gutter);
+  margin-bottom: 16px;
+}
+.voices__nav-btn {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: rgba(43, 73, 84, 0.06);
+  color: var(--c-primary);
+  transition: background var(--dur-fast), color var(--dur-fast);
+  cursor: pointer;
+}
+.voices__nav-btn:hover {
+  background: var(--c-primary); color: #fff;
+}
+.voices__nav-btn:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+}
+
 /* =============================================
    Part 16: CTA Mid（ダーク）
    ============================================= */
@@ -1608,9 +1632,12 @@ details > summary { list-style: none; }
   font-size: 14px; font-weight: 500;
   color: var(--c-primary);
   margin-top: 12px;
-  transition: color var(--dur-fast);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(52, 98, 111, 0.3);
+  transition: color var(--dur-fast), text-decoration-color var(--dur-fast);
 }
-.faq__sidebar-link:hover { color: var(--c-deep); }
+.faq__sidebar-link:hover { color: var(--c-deep); text-decoration-color: var(--c-deep); }
 
 .faq__list { display: flex; flex-direction: column; }
 .faq__item { border-bottom: 1px solid rgba(10,26,31,0.08); }
@@ -1722,7 +1749,7 @@ details > summary { list-style: none; }
 }
 .footer__col a {
   display: block; font-size: 13px; color: var(--t2-dark);
-  padding: 4px 0; transition: color var(--dur-fast);
+  padding: 8px 0; transition: color var(--dur-fast);
 }
 .footer__col a:hover { color: var(--t1-dark); }
 
@@ -1731,7 +1758,7 @@ details > summary { list-style: none; }
   border-top: 1px solid rgba(255,255,255,0.06);
   text-align: center;
 }
-.footer__bottom p { font-size: 12px; color: var(--t3-dark); opacity: 0.6; }
+.footer__bottom p { font-size: 12px; color: var(--t3-dark); opacity: 0.85; }
 
 /* =============================================
    Part 21: スクロールリビール

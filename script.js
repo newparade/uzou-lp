@@ -981,6 +981,23 @@ function initVoicesCarousel() {
   const carousel = document.querySelector('.voices__carousel');
   if (!carousel) return;
 
+  const track = carousel.querySelector('.voices__track');
+  const cards = carousel.querySelectorAll('.voices__card');
+  const prevBtn = carousel.querySelector('.voices__nav-btn--prev');
+  const nextBtn = carousel.querySelector('.voices__nav-btn--next');
+
+  // キーボードナビゲーションボタン
+  if (prevBtn && nextBtn && cards.length) {
+    const cardWidth = () => cards[0].offsetWidth + 24; // card width + gap
+
+    prevBtn.addEventListener('click', () => {
+      carousel.scrollBy({ left: -cardWidth(), behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', () => {
+      carousel.scrollBy({ left: cardWidth(), behavior: 'smooth' });
+    });
+  }
+
   let isDown = false;
   let startX, scrollLeft;
 

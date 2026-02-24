@@ -351,7 +351,7 @@
     <div class="problem__panel is-active" id="tab-adv" role="tabpanel"
          aria-labelledby="tab-btn-adv" tabindex="0">
       <p class="problem__lead">届くべき人に、届いていない。</p>
-      <ol class="problem__list" data-reveal="stagger">
+      <ol class="problem__list" role="list" data-reveal="stagger">
         <li><span aria-hidden="true">01</span><div>新規メディア開拓に時間と調整コストがかかりすぎる</div></li>
         <li><span aria-hidden="true">02</span><div>特定媒体への集中から抜け出せず、成果改善の打ち手が尽きている</div></li>
         <li><span aria-hidden="true">03</span><div>配信ロジックの説明責任を果たせず、クライアントへの報告が苦しい</div></li>
@@ -363,7 +363,7 @@
     <div class="problem__panel" id="tab-pub" role="tabpanel"
          aria-labelledby="tab-btn-pub" tabindex="0" hidden>
       <p class="problem__lead">収益の天井が、見えない。</p>
-      <ol class="problem__list" data-reveal="stagger">
+      <ol class="problem__list" role="list" data-reveal="stagger">
         <li><span aria-hidden="true">01</span><div>広告収益が頭打ち。次の成長策が見えない</div></li>
         <li><span aria-hidden="true">02</span><div>サードパーティCookie廃止後の収益構造が不安定になっている</div></li>
         <li><span aria-hidden="true">03</span><div>新施策を試したいが、検証できるリソースがない</div></li>
@@ -763,6 +763,14 @@
 
   <!-- 横スクロールカルーセル -->
   <div class="voices__carousel" data-reveal>
+    <div class="voices__nav" aria-label="カルーセル操作">
+      <button class="voices__nav-btn voices__nav-btn--prev" aria-label="前のカードを表示">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="voices__nav-btn voices__nav-btn--next" aria-label="次のカードを表示">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M8 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
     <div class="voices__track">
       <article class="voices__card glass-card">
         <div class="voices__metric">収益 <span>4倍</span></div>
@@ -878,7 +886,7 @@
         <p class="flow__note">最短1週間で、配信が始まる。</p>
       </div>
 
-      <ol class="flow__timeline" aria-label="導入ステップ一覧">
+      <ol class="flow__timeline" role="list" aria-label="導入ステップ一覧">
         <li class="flow__step" data-reveal>
           <div class="flow__indicator" aria-hidden="true">
             <div class="flow__dot"></div>
@@ -1110,8 +1118,8 @@
         <div class="footer__col">
           <h3>企業情報</h3>
           <ul role="list">
-            <li><a href="https://speee.jp/company/" target="_blank" rel="noopener noreferrer">会社概要</a></li>
-            <li><a href="https://speee.jp/privacy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a></li>
+            <li><a href="https://speee.jp/company/" target="_blank" rel="noopener noreferrer">会社概要<span class="sr-only">（新しいウィンドウで開く）</span></a></li>
+            <li><a href="https://speee.jp/privacy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー<span class="sr-only">（新しいウィンドウで開く）</span></a></li>
           </ul>
         </div>
       </nav>
