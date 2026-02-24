@@ -1,6 +1,6 @@
 /**
- * UZOU LP v10 — script.js
- * "Precision Network" concept
+ * UZOU LP v11 — script.js
+ * "Precision Lattice" concept
  * 白ファースト（75% light / 25% dark）
  *
  * 目次:
@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initMagneticButtons();
   initCardGlowFollow();
   initSectionParallax();
+  initCardTilt();
+  initFlowTimelineScroll();
+  initFaqSmoothAccordion();
   initHeroTextSplit();
   initSmoothAnchor();
   initHeaderDarkMode();
@@ -138,6 +141,11 @@ function initConnectionSpine() {
     const pulseY = progress * (window.innerHeight - 8);
     pulse.style.transform = `translateY(${pulseY}px)`;
 
+    // パルスサイズをスクロール中盤で最大化
+    const sizeFactor = 1 + Math.sin(progress * Math.PI) * 0.5;
+    pulse.style.width = `${8 * sizeFactor}px`;
+    pulse.style.height = `${8 * sizeFactor}px`;
+
     // Hero通過後にアクティブ化
     spine.classList.toggle('is-active', scrollY > 200);
 
@@ -223,7 +231,7 @@ function initConnectionVisualizer() {
     arr.push({
       id: 'uzou-core', type: 'uzou',
       x: w * 0.5, y: h * 0.5,
-      radius: 18,
+      radius: 22,
       vx: 0, vy: 0,
       baseX: w * 0.5, baseY: h * 0.5,
       pulsePhase: 0,
@@ -345,10 +353,16 @@ function initConnectionVisualizer() {
       drawHexagon(node.x, node.y, node.radius * pulseFactor + 14);
       ctx.stroke();
 
+      // 3層目リング（v11追加）
+      ctx.strokeStyle = 'rgba(52, 98, 111, 0.08)';
+      ctx.lineWidth = 0.3;
+      drawHexagon(node.x, node.y, node.radius * pulseFactor + 22);
+      ctx.stroke();
+
     } else if (node.type === 'adv') {
       // 広告主ノード: 白背景用に濃度up
       const idx = parseInt(node.id.split('-')[1], 10);
-      ctx.fillStyle = `rgba(52, 98, 111, ${0.25 + Math.sin(time * 0.001 + node.pulsePhase) * 0.1})`;
+      ctx.fillStyle = `rgba(52, 98, 111, ${0.30 + Math.sin(time * 0.001 + node.pulsePhase) * 0.1})`;
       if (idx % 2 === 0) {
         drawTriangle(node.x, node.y, node.radius);
       } else {
@@ -366,7 +380,7 @@ function initConnectionVisualizer() {
         ctx.shadowBlur = 10;
         ctx.shadowColor = 'rgba(52, 98, 111, 0.3)';
       }
-      ctx.fillStyle = `rgba(139, 192, 202, ${0.35 + Math.sin(time * 0.0015 + node.pulsePhase) * 0.15})`;
+      ctx.fillStyle = `rgba(139, 192, 202, ${0.40 + Math.sin(time * 0.0015 + node.pulsePhase) * 0.15})`;
       if (idx % 3 === 0) {
         drawHexagon(node.x, node.y, node.radius);
       } else if (idx % 3 === 1) {
@@ -417,9 +431,9 @@ function initConnectionVisualizer() {
       if (isActive) {
         const flowAlpha = 0.5 + Math.sin(time * 0.004) * 0.2;
         ctx.strokeStyle = `rgba(52, 98, 111, ${alpha * flowAlpha})`;
-        ctx.lineWidth = 1.5;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = 'rgba(52, 98, 111, 0.25)';
+        ctx.lineWidth = 2.0;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(52, 98, 111, 0.30)';
       } else {
         ctx.strokeStyle = `rgba(52, 98, 111, ${alpha * 0.25})`;
         ctx.lineWidth = 0.7;
@@ -905,7 +919,14 @@ function initFinalCtaParticles() {
     });
   }
 
-  function loop() {
+  let lastFrame = 0;
+  const frameInterval = 1000 / 30; // 30fps制限
+
+  function loop(now) {
+    requestAnimationFrame(loop);
+    if (now - lastFrame < frameInterval) return;
+    lastFrame = now;
+
     const rect = canvas.getBoundingClientRect();
     ctx.clearRect(0, 0, rect.width, rect.height);
 
@@ -943,8 +964,6 @@ function initFinalCtaParticles() {
         ctx.fill();
       }
     });
-
-    requestAnimationFrame(loop);
   }
 
   // マウスイベント
@@ -1038,11 +1057,21 @@ function initCardGlowFollow() {
 function initSectionParallax() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  // 装飾要素ごとに速度を差別化（奥行き感）
   const parallaxEls = [
+    // Hero
     { el: document.querySelector('.hero__glow-tl'), speed: 0.03 },
     { el: document.querySelector('.hero__glow-br'), speed: -0.02 },
+    { el: document.querySelector('.hero__glow-tr'), speed: 0.04 },
+    // Solution
     { el: document.querySelector('.solution__glow'), speed: 0.04 },
-    { el: document.querySelector('.results__flow-svg'), speed: 0.02 },
+    { el: document.querySelector('.solution__deco'), speed: -0.025 },   // 六角形: 中景
+    // Results
+    { el: document.querySelector('.results__flow-svg'), speed: 0.02 },  // SVGライン: 後景
+    // Features
+    { el: document.querySelector('.features__deco'), speed: -0.06 },    // 三角形: 前景
+    // Testimonials
+    { el: document.querySelector('.testimonials__deco'), speed: 0.02 }, // ドット: 後景
   ].filter(p => p.el);
 
   if (!parallaxEls.length) return;
@@ -1066,7 +1095,154 @@ function initSectionParallax() {
 }
 
 /* =============================================
-   14. Heroテキスト文字分割アニメーション
+   14. Features 3D Tilt（v11追加）
+   mousemove で perspective rotate
+   ============================================= */
+function initCardTilt() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if ('ontouchstart' in window) return;
+
+  const cards = document.querySelectorAll('.features__card');
+
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+      card.style.transform = `
+        perspective(1000px)
+        rotateY(${x * 6}deg)
+        rotateX(${-y * 6}deg)
+        translateY(-6px)
+        scale(1.01)
+      `;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'transform 0.5s var(--ease-reveal)';
+      setTimeout(() => { card.style.transition = ''; }, 500);
+    });
+  });
+}
+
+/* =============================================
+   15. Flow タイムライン スクロール連動（v11追加）
+   viewportCenter とコンテナ位置から progress を計算
+   ============================================= */
+function initFlowTimelineScroll() {
+  const timelineSteps = document.querySelectorAll('.flow__step');
+  const flowSection = document.querySelector('.flow');
+  if (!timelineSteps.length || !flowSection) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const updateTimeline = () => {
+    const containerRect = flowSection.getBoundingClientRect();
+    const viewportCenter = window.innerHeight * 0.6;
+
+    const sectionProgress = Math.max(0, Math.min(1,
+      (viewportCenter - containerRect.top) / containerRect.height
+    ));
+
+    timelineSteps.forEach((step, i) => {
+      const stepProgress = (i + 1) / timelineSteps.length;
+      const dot = step.querySelector('.flow__step-dot');
+      const line = step.querySelector('.flow__step-line');
+
+      if (sectionProgress >= stepProgress * 0.8) {
+        if (dot) {
+          dot.style.borderColor = 'var(--c-primary)';
+          dot.style.boxShadow = '0 0 12px rgba(var(--c-primary-rgb), 0.35)';
+          dot.style.transform = 'scale(1.2)';
+        }
+      } else {
+        if (dot) {
+          dot.style.borderColor = '';
+          dot.style.boxShadow = '';
+          dot.style.transform = '';
+        }
+      }
+
+      if (line) {
+        const lineProgress = Math.max(0, Math.min(1,
+          (sectionProgress - stepProgress * 0.6) / 0.3
+        ));
+        line.style.transform = `scaleY(${lineProgress})`;
+      }
+    });
+  };
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateTimeline();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  updateTimeline();
+}
+
+/* =============================================
+   16. FAQ アコーディオン スムーズ height 遷移（v11追加）
+   details のネイティブ開閉をJSでオーバーライド
+   ============================================= */
+function initFaqSmoothAccordion() {
+  const items = document.querySelectorAll('.faq__item');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  items.forEach(item => {
+    const summary = item.querySelector('.faq__question');
+    const answer = item.querySelector('.faq__answer');
+    if (!summary || !answer) return;
+
+    summary.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      if (item.open) {
+        const startHeight = answer.offsetHeight;
+        answer.style.maxHeight = startHeight + 'px';
+        answer.style.opacity = '1';
+
+        requestAnimationFrame(() => {
+          answer.style.maxHeight = '0';
+          answer.style.opacity = '0';
+          answer.style.paddingBottom = '0';
+        });
+
+        answer.addEventListener('transitionend', function handler() {
+          item.open = false;
+          answer.style.maxHeight = '';
+          answer.style.opacity = '';
+          answer.style.paddingBottom = '';
+          answer.removeEventListener('transitionend', handler);
+        }, { once: true });
+      } else {
+        item.open = true;
+        const targetHeight = answer.scrollHeight;
+        answer.style.maxHeight = '0';
+        answer.style.opacity = '0';
+
+        requestAnimationFrame(() => {
+          answer.style.maxHeight = targetHeight + 'px';
+          answer.style.opacity = '1';
+        });
+
+        answer.addEventListener('transitionend', function handler() {
+          answer.style.maxHeight = '';
+          answer.removeEventListener('transitionend', handler);
+        }, { once: true });
+      }
+    });
+  });
+}
+
+/* =============================================
+   17. Heroテキスト文字分割アニメーション
    H1の各文字を個別にフェードイン
    ============================================= */
 function initHeroTextSplit() {
