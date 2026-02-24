@@ -89,6 +89,20 @@
 }
 
 /* =============================================
+   Part 1.5: ノイズテクスチャ（有機的な質感）
+   ============================================= */
+.noise-overlay {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px;
+  mix-blend-mode: multiply;
+}
+
+/* =============================================
    Part 2: リセット & ベース
    ============================================= */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -277,7 +291,15 @@ details > summary { list-style: none; }
   content: '';
   position: absolute; top: 0; left: -100%;
   width: 100%; height: 100%;
-  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255,255,255,0.1) 35%,
+    rgba(255,255,255,0.4) 48%,
+    rgba(180,220,240,0.3) 52%,
+    rgba(255,255,255,0.1) 65%,
+    transparent 80%
+  );
   transition: left 0.6s var(--ease-out-expo);
 }
 .btn--shimmer:hover::before { left: 100%; }
@@ -316,7 +338,8 @@ details > summary { list-style: none; }
   position: relative;
   box-shadow: 0 4px 24px rgba(43, 73, 84, 0.06),
               0 1px 2px rgba(43, 73, 84, 0.03),
-              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+              inset 0 1px 0 rgba(255, 255, 255, 0.7),
+              inset 0 -1px 0 rgba(139, 192, 202, 0.04);
   transition: transform var(--dur-normal) var(--ease-hover),
               box-shadow var(--dur-normal) var(--ease-hover),
               border-color var(--dur-normal) var(--ease-hover);
@@ -335,6 +358,31 @@ details > summary { list-style: none; }
   filter: blur(0.5px);
   box-shadow: 0 0 8px rgba(139, 192, 202, 0.3);
   border-radius: 2px;
+}
+/* プリズム光の屈折エフェクト */
+.glass-card::after {
+  content: '';
+  position: absolute; top: -1px; right: 20%;
+  width: 60%; height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(139,192,202,0.0) 10%,
+    rgba(139,192,202,0.15) 25%,
+    rgba(180,220,230,0.25) 40%,
+    rgba(255,255,255,0.3) 50%,
+    rgba(180,220,230,0.25) 60%,
+    rgba(139,192,202,0.15) 75%,
+    rgba(139,192,202,0.0) 90%,
+    transparent 100%
+  );
+  filter: blur(1px);
+  pointer-events: none;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity var(--dur-normal) var(--ease-hover);
+}
+.glass-card:hover::after {
+  opacity: 1;
 }
 .glass-card:hover {
   transform: translateY(-6px);
@@ -502,6 +550,9 @@ details > summary { list-style: none; }
   padding: 80px 0 60px;
   overflow: hidden;
   background: var(--bg-white);
+  background-image:
+    radial-gradient(ellipse 50% 40% at 70% 30%, rgba(139,192,202,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(52,98,111,0.03) 0%, transparent 50%);
 }
 
 .hero__bg { position: absolute; inset: 0; pointer-events: none; }
@@ -672,6 +723,30 @@ details > summary { list-style: none; }
   33% { transform: scale(1.05) translateY(-12px) rotate(1deg); }
   66% { transform: scale(1.05) translateY(-6px) rotate(-0.5deg); }
 }
+/* 結晶プリズム光の屈折 */
+.hero__crystal-prism {
+  position: absolute;
+  width: 60%; height: 30%;
+  top: 20%; left: 25%;
+  background: linear-gradient(
+    135deg,
+    rgba(139,192,202,0.0) 0%,
+    rgba(139,192,202,0.08) 20%,
+    rgba(180,220,240,0.12) 35%,
+    rgba(255,255,255,0.15) 50%,
+    rgba(180,220,240,0.12) 65%,
+    rgba(139,192,202,0.08) 80%,
+    rgba(139,192,202,0.0) 100%
+  );
+  filter: blur(20px);
+  pointer-events: none;
+  animation: prism-shift 8s ease-in-out infinite;
+  transform: rotate(-15deg);
+}
+@keyframes prism-shift {
+  0%, 100% { opacity: 0.6; transform: rotate(-15deg) translateX(0); }
+  50% { opacity: 1; transform: rotate(-15deg) translateX(30px); }
+}
 .hero__crystal-glow {
   position: absolute;
   width: 90%; height: 90%;
@@ -798,7 +873,17 @@ details > summary { list-style: none; }
   background: var(--c-dark);
   color: var(--t1-dark);
   overflow: hidden;
-  box-shadow: inset 0 0 120px rgba(139, 192, 202, 0.04);
+  box-shadow: inset 0 0 120px rgba(139, 192, 202, 0.04),
+              inset 0 1px 0 rgba(139, 192, 202, 0.06);
+}
+/* ダーク→ライト遷移: 上部にクリスタルグロー光 */
+.problem::after {
+  content: '';
+  position: absolute; top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139,192,202,0.15) 30%, rgba(139,192,202,0.25) 50%, rgba(139,192,202,0.15) 70%, transparent);
+  pointer-events: none;
+  z-index: 1;
 }
 .problem::before {
   content: '';
@@ -920,6 +1005,7 @@ details > summary { list-style: none; }
   padding: var(--section-pad-lg) 0;
   background: var(--bg-white);
   overflow: hidden;
+  background-image: radial-gradient(ellipse 80% 50% at 20% 80%, rgba(139,192,202,0.03) 0%, transparent 60%);
 }
 .scale__flow {
   position: absolute; inset: 0;
@@ -951,17 +1037,18 @@ details > summary { list-style: none; }
   font-weight: 900;
   letter-spacing: -0.04em;
   line-height: 1;
-  background: linear-gradient(135deg, #34626F 0%, #8BC0CA 40%, #34626F 60%, #8BC0CA 100%);
-  background-size: 200% 100%;
+  background: linear-gradient(135deg, #2B4954 0%, #34626F 25%, #8BC0CA 45%, #b0dce6 50%, #8BC0CA 55%, #34626F 75%, #2B4954 100%);
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 8px;
-  animation: number-shimmer 4s ease-in-out infinite;
+  animation: number-shimmer 5s ease-in-out infinite;
 }
 @keyframes number-shimmer {
-  0%, 100% { background-position: 0% 50%; }
+  0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 .scale__number--accent {
   background: linear-gradient(135deg, #1a9b5f, #34d399);
@@ -1001,6 +1088,7 @@ details > summary { list-style: none; }
   padding: var(--section-pad-xl) 0;
   background: var(--bg-tint);
   overflow: hidden;
+  background-image: radial-gradient(ellipse 50% 50% at 75% 50%, rgba(139,192,202,0.04) 0%, transparent 60%);
 }
 .about__crystal-frag {
   position: absolute;
@@ -1095,6 +1183,7 @@ details > summary { list-style: none; }
   padding: var(--section-pad-lg) 0;
   background: var(--bg-white);
   overflow: hidden;
+  background-image: radial-gradient(ellipse 60% 40% at 80% 20%, rgba(139,192,202,0.025) 0%, transparent 60%);
 }
 .features__decos { position: absolute; inset: 0; pointer-events: none; }
 .features__deco { position: absolute; }
@@ -1262,6 +1351,10 @@ details > summary { list-style: none; }
 .voices__card--featured::before {
   background: linear-gradient(90deg, rgba(139,192,202,0.3), rgba(52,98,111,0.5), rgba(139,192,202,0.3));
 }
+/* featuredカードはglass-card::afterを上書き */
+.voices__card--featured.glass-card::after {
+  top: auto;
+}
 /* 結晶コーナーフレーム */
 .voices__card--featured::after {
   content: '';
@@ -1307,7 +1400,16 @@ details > summary { list-style: none; }
   color: var(--t1-dark);
   overflow: hidden;
   text-align: center;
-  box-shadow: inset 0 0 120px rgba(139, 192, 202, 0.05);
+  box-shadow: inset 0 0 120px rgba(139, 192, 202, 0.05),
+              inset 0 1px 0 rgba(139, 192, 202, 0.06);
+}
+.cta-mid::after {
+  content: '';
+  position: absolute; top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139,192,202,0.15) 30%, rgba(139,192,202,0.25) 50%, rgba(139,192,202,0.15) 70%, transparent);
+  pointer-events: none;
+  z-index: 1;
 }
 .cta-mid::before {
   content: '';
@@ -1367,6 +1469,7 @@ details > summary { list-style: none; }
   background: var(--bg-white);
   position: relative;
   overflow: hidden;
+  background-image: radial-gradient(ellipse 70% 50% at 30% 70%, rgba(139,192,202,0.02) 0%, transparent 60%);
 }
 .flow__decos { position: absolute; inset: 0; pointer-events: none; }
 .flow__deco { position: absolute; }
@@ -1782,6 +1885,7 @@ details > summary { list-style: none; }
   .features__wf-arrow { animation: none !important; }
   .about__data-dot { animation: none !important; }
   .about__pulse-ring { animation: none !important; }
+  .hero__crystal-prism { animation: none !important; }
 
   /* 装飾浮遊アニメ無効 */
   .trust__deco, .problem__deco, .scale__deco, .about__deco,
