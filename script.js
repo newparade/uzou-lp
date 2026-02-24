@@ -85,6 +85,9 @@ function initCustomCursor() {
   const ring = cursor.querySelector('.cursor__ring');
   if (!dot || !ring) return;
 
+  // JSが有効な環境のみカーソル非表示（a11yフォールバック）
+  document.body.classList.add('has-custom-cursor');
+
   let mouseX = 0, mouseY = 0;
   let ringX = 0, ringY = 0;
   let animId;
@@ -583,26 +586,57 @@ function initProblemTabs() {
   const panels = document.querySelectorAll('.problem__panel');
   if (!tabs.length) return;
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => {
-        t.classList.remove('is-active');
-        t.setAttribute('aria-selected', 'false');
-      });
-      panels.forEach(p => {
-        p.classList.remove('is-active');
-        p.hidden = true;
-      });
+  function activateTab(tab) {
+    tabs.forEach(t => {
+      t.classList.remove('is-active');
+      t.setAttribute('aria-selected', 'false');
+      t.setAttribute('tabindex', '-1');
+    });
+    panels.forEach(p => {
+      p.classList.remove('is-active');
+      p.hidden = true;
+    });
 
-      tab.classList.add('is-active');
-      tab.setAttribute('aria-selected', 'true');
-      const panel = document.getElementById(tab.getAttribute('aria-controls'));
-      if (panel) {
-        panel.classList.add('is-active');
-        panel.hidden = false;
+    tab.classList.add('is-active');
+    tab.setAttribute('aria-selected', 'true');
+    tab.setAttribute('tabindex', '0');
+    tab.focus();
+    const panel = document.getElementById(tab.getAttribute('aria-controls'));
+    if (panel) {
+      panel.classList.add('is-active');
+      panel.hidden = false;
+    }
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => activateTab(tab));
+  });
+
+  // 矢印キーナビゲーション（WAI-ARIA Tabs パターン）
+  const tabList = tabs[0]?.parentElement;
+  if (tabList) {
+    tabList.addEventListener('keydown', e => {
+      const tabArr = Array.from(tabs);
+      const idx = tabArr.indexOf(document.activeElement);
+      if (idx === -1) return;
+
+      let next = -1;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        next = (idx + 1) % tabArr.length;
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        next = (idx - 1 + tabArr.length) % tabArr.length;
+      } else if (e.key === 'Home') {
+        next = 0;
+      } else if (e.key === 'End') {
+        next = tabArr.length - 1;
+      }
+
+      if (next !== -1) {
+        e.preventDefault();
+        activateTab(tabArr[next]);
       }
     });
-  });
+  }
 }
 
 /* =============================================
