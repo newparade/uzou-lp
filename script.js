@@ -1,7 +1,7 @@
 /**
  * UZOU LP v10 — script.js
- * "接続の闇市場" concept by creative-director
- * 実装: asset-assembler
+ * "Precision Network" concept
+ * 白ファースト（75% light / 25% dark）
  *
  * 目次:
  * 1. 初期化エントリポイント
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSectionParallax();
   initHeroTextSplit();
   initSmoothAnchor();
-  initTestimonialsCarousel();
+  initHeaderDarkMode();
 });
 
 /* =============================================
@@ -311,13 +311,13 @@ function initConnectionVisualizer() {
     const pulseFactor = 1 + Math.sin(time * 0.002 + node.pulsePhase) * 0.15;
 
     if (node.type === 'uzou') {
-      // 外グロー（六角形）
+      // 外グロー（六角形）— 白背景用に濃度up
       const outerGlow = ctx.createRadialGradient(
         node.x, node.y, 0,
         node.x, node.y, node.radius * 3
       );
-      outerGlow.addColorStop(0, 'rgba(139, 192, 202, 0.15)');
-      outerGlow.addColorStop(1, 'rgba(139, 192, 202, 0)');
+      outerGlow.addColorStop(0, 'rgba(52, 98, 111, 0.12)');
+      outerGlow.addColorStop(1, 'rgba(52, 98, 111, 0)');
       ctx.fillStyle = outerGlow;
       drawHexagon(node.x, node.y, node.radius * 3);
       ctx.fill();
@@ -327,40 +327,46 @@ function initConnectionVisualizer() {
         node.x - 3, node.y - 3, 0,
         node.x, node.y, node.radius * pulseFactor
       );
-      coreGrad.addColorStop(0, 'rgba(139, 192, 202, 0.9)');
-      coreGrad.addColorStop(1, 'rgba(52, 98, 111, 0.7)');
+      coreGrad.addColorStop(0, 'rgba(52, 98, 111, 0.85)');
+      coreGrad.addColorStop(1, 'rgba(43, 73, 84, 0.65)');
       ctx.fillStyle = coreGrad;
       drawHexagon(node.x, node.y, node.radius * pulseFactor);
       ctx.fill();
 
       // リング（六角形）
-      ctx.strokeStyle = 'rgba(139, 192, 202, 0.5)';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(52, 98, 111, 0.4)';
+      ctx.lineWidth = 1.5;
       drawHexagon(node.x, node.y, node.radius * pulseFactor + 6);
       ctx.stroke();
 
+      // 外リング（追加装飾）
+      ctx.strokeStyle = 'rgba(139, 192, 202, 0.15)';
+      ctx.lineWidth = 0.5;
+      drawHexagon(node.x, node.y, node.radius * pulseFactor + 14);
+      ctx.stroke();
+
     } else if (node.type === 'adv') {
-      // 広告主ノード: 偶数=三角形、奇数=六角形
+      // 広告主ノード: 白背景用に濃度up
       const idx = parseInt(node.id.split('-')[1], 10);
-      ctx.fillStyle = `rgba(52, 98, 111, ${0.6 + Math.sin(time * 0.001 + node.pulsePhase) * 0.2})`;
+      ctx.fillStyle = `rgba(52, 98, 111, ${0.25 + Math.sin(time * 0.001 + node.pulsePhase) * 0.1})`;
       if (idx % 2 === 0) {
         drawTriangle(node.x, node.y, node.radius);
       } else {
         drawHexagon(node.x, node.y, node.radius);
       }
       ctx.fill();
-      ctx.strokeStyle = 'rgba(52, 98, 111, 0.8)';
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(52, 98, 111, 0.55)';
+      ctx.lineWidth = 1.2;
       ctx.stroke();
 
     } else if (node.type === 'media') {
-      // メディアノード: 0,3=六角形、1,4=三角形、2,5,6=円
+      // メディアノード: 白背景用に濃度up
       const idx = parseInt(node.id.split('-')[1], 10);
       if (activeConnections.has(node.id)) {
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = 'rgba(139, 192, 202, 0.5)';
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = 'rgba(52, 98, 111, 0.3)';
       }
-      ctx.fillStyle = `rgba(139, 192, 202, ${0.5 + Math.sin(time * 0.0015 + node.pulsePhase) * 0.15})`;
+      ctx.fillStyle = `rgba(139, 192, 202, ${0.35 + Math.sin(time * 0.0015 + node.pulsePhase) * 0.15})`;
       if (idx % 3 === 0) {
         drawHexagon(node.x, node.y, node.radius);
       } else if (idx % 3 === 1) {
@@ -370,7 +376,7 @@ function initConnectionVisualizer() {
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
       }
       ctx.fill();
-      ctx.strokeStyle = 'rgba(139, 192, 202, 0.6)';
+      ctx.strokeStyle = 'rgba(52, 98, 111, 0.4)';
       ctx.lineWidth = 1;
       ctx.stroke();
       ctx.shadowBlur = 0;
@@ -409,13 +415,13 @@ function initConnectionVisualizer() {
       ctx.quadraticCurveTo(cpx, cpy, coreNode.x, coreNode.y);
 
       if (isActive) {
-        const flowAlpha = 0.6 + Math.sin(time * 0.004) * 0.25;
-        ctx.strokeStyle = `rgba(139, 192, 202, ${alpha * flowAlpha})`;
+        const flowAlpha = 0.5 + Math.sin(time * 0.004) * 0.2;
+        ctx.strokeStyle = `rgba(52, 98, 111, ${alpha * flowAlpha})`;
         ctx.lineWidth = 1.5;
         ctx.shadowBlur = 6;
-        ctx.shadowColor = 'rgba(139, 192, 202, 0.4)';
+        ctx.shadowColor = 'rgba(52, 98, 111, 0.25)';
       } else {
-        ctx.strokeStyle = `rgba(43, 73, 84, ${alpha * 0.6})`;
+        ctx.strokeStyle = `rgba(52, 98, 111, ${alpha * 0.25})`;
         ctx.lineWidth = 0.7;
         ctx.shadowBlur = 0;
       }
@@ -921,10 +927,10 @@ function initFinalCtaParticles() {
       if (p.y < 0) p.y = 1;
       if (p.y > 1) p.y = 0;
 
-      // 幾何学形状描画
+      // 幾何学形状描画（ダークセクション用なのでlight colorを使用）
       const px = p.x * rect.width;
       const py = p.y * rect.height;
-      ctx.fillStyle = `rgba(139, 192, 202, ${p.alpha})`;
+      ctx.fillStyle = `rgba(139, 192, 202, ${p.alpha * 0.8})`;
       if (p.shape === 'triangle') {
         drawParticleTriangle(px, py, p.size * 1.3);
         ctx.fill();
@@ -1120,122 +1126,33 @@ function initSmoothAnchor() {
 }
 
 /* =============================================
-   16. テスティモニアル横スクロールカルーセル
-   ドラッグスクロール + ドット同期 + ボタン操作
+   16. Header ダークモード切替
+   ダークセクション（CTA Strip, Final CTA, Footer）上で
+   ヘッダーをダークテーマに切り替える
    ============================================= */
-function initTestimonialsCarousel() {
-  const track = document.querySelector('.testimonials__track');
-  if (!track) return;
+function initHeaderDarkMode() {
+  const header = document.getElementById('site-header');
+  if (!header) return;
 
-  const cards = track.querySelectorAll('.testimonials__card');
-  const dots = document.querySelectorAll('.testimonials__dot');
-  const prevBtn = document.querySelector('.testimonials__nav-btn--prev');
-  const nextBtn = document.querySelector('.testimonials__nav-btn--next');
+  // ダークセクション: CTA Strip, Final CTA, Footer
+  const darkSections = document.querySelectorAll('.cta-strip, .final-cta, .site-footer');
+  if (!darkSections.length) return;
 
-  if (cards.length === 0) return;
+  const checkDarkMode = () => {
+    const headerBottom = header.getBoundingClientRect().bottom;
+    let isDark = false;
 
-  // ドットの数をカード数に合わせる（HTMLで5個固定なので、JSで動的に調整不要）
-
-  // 現在のアクティブインデックスを算出
-  function getActiveIndex() {
-    const scrollLeft = track.scrollLeft;
-    let closest = 0;
-    let minDist = Infinity;
-    cards.forEach((card, i) => {
-      const dist = Math.abs(card.offsetLeft - track.offsetLeft - scrollLeft);
-      if (dist < minDist) {
-        minDist = dist;
-        closest = i;
+    darkSections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      // ヘッダーの下端がダークセクション内にある場合
+      if (rect.top < headerBottom && rect.bottom > 0) {
+        isDark = true;
       }
     });
-    return closest;
-  }
 
-  // ドット更新
-  function updateDots(index) {
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('is-active', i === index);
-      dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
-    });
-  }
-
-  // ボタン状態更新
-  function updateButtons(index) {
-    if (prevBtn) prevBtn.disabled = index === 0;
-    if (nextBtn) nextBtn.disabled = index === cards.length - 1;
-  }
-
-  // カードへスクロール
-  function scrollToCard(index) {
-    const card = cards[index];
-    if (!card) return;
-    track.scrollTo({
-      left: card.offsetLeft - track.offsetLeft,
-      behavior: 'smooth'
-    });
-  }
-
-  // スクロールイベントでドット同期
-  let scrollTimer;
-  track.addEventListener('scroll', () => {
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => {
-      const idx = getActiveIndex();
-      updateDots(idx);
-      updateButtons(idx);
-    }, 50);
-  }, { passive: true });
-
-  // ドットクリック
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => scrollToCard(i));
-  });
-
-  // 前後ボタン
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      const idx = Math.max(0, getActiveIndex() - 1);
-      scrollToCard(idx);
-    });
-  }
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      const idx = Math.min(cards.length - 1, getActiveIndex() + 1);
-      scrollToCard(idx);
-    });
-  }
-
-  // ドラッグスクロール（デスクトップ）
-  let isDragging = false;
-  let startX = 0;
-  let scrollStart = 0;
-
-  track.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.pageX;
-    scrollStart = track.scrollLeft;
-    track.style.scrollBehavior = 'auto';
-  });
-
-  track.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const dx = e.pageX - startX;
-    track.scrollLeft = scrollStart - dx;
-  });
-
-  const endDrag = () => {
-    if (!isDragging) return;
-    isDragging = false;
-    track.style.scrollBehavior = 'smooth';
-    // スナップ先へ自動吸着
-    const idx = getActiveIndex();
-    scrollToCard(idx);
+    header.classList.toggle('is-dark', isDark);
   };
-  track.addEventListener('mouseup', endDrag);
-  track.addEventListener('mouseleave', endDrag);
 
-  // 初期状態
-  updateDots(0);
-  updateButtons(0);
+  window.addEventListener('scroll', checkDarkMode, { passive: true });
+  checkDarkMode();
 }
