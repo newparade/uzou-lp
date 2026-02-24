@@ -1057,31 +1057,21 @@ function initCardGlowFollow() {
 function initSectionParallax() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  // 装飾要素ごとに速度を差別化（奥行き感）
-  // deco-float / deco-float--alt クラスの全SVGを自動収集（v11追加）
-  const floatingDecos = Array.from(document.querySelectorAll('.deco-float, .deco-float--alt'))
-    .map((el, i) => ({ el, speed: (i % 2 === 0 ? -0.02 : 0.03) + (i * 0.005) }));
-
+  // ブランド指定パララックス速度（セクション別に奥行き感を差別化）
   const parallaxEls = [
-    // Hero
+    // Hero — 後景: ゆっくり
     { el: document.querySelector('.hero__glow-tl'), speed: 0.03 },
     { el: document.querySelector('.hero__glow-br'), speed: -0.02 },
     { el: document.querySelector('.hero__glow-tr'), speed: 0.04 },
-    // Solution
+    // Solution — 中景: 六角形
     { el: document.querySelector('.solution__glow'), speed: 0.04 },
     { el: document.querySelector('.solution__deco'), speed: -0.025 },
-    // Results
+    // Results — 後景: データフロー
     { el: document.querySelector('.results__flow-svg'), speed: 0.02 },
-    // Features
+    // Features — 前景: 三角形
     { el: document.querySelector('.features__deco'), speed: -0.06 },
-    // Testimonials
-    { el: document.querySelector('.testimonials__deco'), speed: 0.02 },
-    // アンビエントグロー（v11追加）
-    ...Array.from(document.querySelectorAll('.ambient-glow')).map((el, i) => ({
-      el, speed: (i % 2 === 0 ? 0.015 : -0.02)
-    })),
-    // フローティング装飾（v11追加）
-    ...floatingDecos,
+    // Testimonials — 後景: ドットパターン
+    { el: document.querySelector('.testimonials__dot-bg'), speed: 0.02 },
   ].filter(p => p.el);
 
   if (!parallaxEls.length) return;

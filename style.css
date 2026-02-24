@@ -2159,6 +2159,21 @@ body {
   overflow: hidden;
 }
 
+/* L1: ドットパターン背景（ブランド指定 20px radial-gradient opacity 0.10） */
+.testimonials__dot-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 60%;
+  background-image: radial-gradient(circle, rgba(52,98,111,0.10) 1px, transparent 1px);
+  background-size: 20px 20px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 20% 20%, black 20%, transparent 70%);
+  mask-image: radial-gradient(ellipse 80% 80% at 20% 20%, black 20%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
 .testimonials__header {
   display: flex;
   flex-direction: column;
@@ -2312,16 +2327,11 @@ cite.testimonials__role,
   }
   /* SVG装飾の非表示（モバイルパフォーマンス） */
   .features__deco,
-  .testimonials__deco,
+  .testimonials__dot-bg,
   .deco-float,
   .deco-float--alt,
   .ambient-glow {
     display: none;
-  }
-  /* 背景パターンを軽量化 */
-  .bg-dots::before,
-  .bg-crosshatch::before {
-    opacity: 0.5;
   }
   /* Hero Grid密度下げ */
   .hero__grid {
