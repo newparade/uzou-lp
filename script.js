@@ -1018,6 +1018,8 @@ function initVoicesCarousel() {
     carousel.addEventListener('mouseleave', startAutoScroll);
     carousel.addEventListener('touchstart', stopAutoScroll, { passive: true });
     carousel.addEventListener('touchend', () => setTimeout(startAutoScroll, 3000));
+    carousel.addEventListener('focusin', stopAutoScroll);
+    carousel.addEventListener('focusout', () => setTimeout(startAutoScroll, 3000));
   }
 }
 
