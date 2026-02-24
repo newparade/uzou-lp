@@ -96,7 +96,8 @@
   width: 100%; height: 100%;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.025;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
   background: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   background-size: 256px;
   mix-blend-mode: multiply;
@@ -349,15 +350,20 @@ details > summary { list-style: none; }
   position: absolute; top: 0; left: 24px; right: 24px;
   height: 2px;
   background: linear-gradient(90deg,
-    transparent,
-    rgba(139, 192, 202, 0.5) 20%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(139, 192, 202, 0.5) 80%,
-    transparent
+    transparent 5%,
+    rgba(220, 180, 140, 0.15) 15%,
+    rgba(139, 192, 202, 0.5) 30%,
+    rgba(180, 160, 220, 0.2) 42%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(180, 160, 220, 0.2) 58%,
+    rgba(139, 192, 202, 0.5) 70%,
+    rgba(220, 180, 140, 0.15) 85%,
+    transparent 95%
   );
   filter: blur(0.5px);
   box-shadow: 0 0 16px rgba(139, 192, 202, 0.4),
-              0 2px 8px rgba(139, 192, 202, 0.2);
+              0 2px 8px rgba(139, 192, 202, 0.2),
+              0 0 4px rgba(255, 255, 255, 0.15);
   border-radius: 2px;
 }
 /* プリズム光の屈折エフェクト */
@@ -367,13 +373,13 @@ details > summary { list-style: none; }
   width: 60%; height: 2px;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(139,192,202,0.0) 10%,
-    rgba(139,192,202,0.25) 25%,
-    rgba(180,220,230,0.4) 40%,
-    rgba(255,255,255,0.5) 50%,
-    rgba(180,220,230,0.4) 60%,
-    rgba(139,192,202,0.25) 75%,
-    rgba(139,192,202,0.0) 90%,
+    rgba(220,180,140,0.1) 10%,
+    rgba(139,192,202,0.3) 25%,
+    rgba(180,160,220,0.35) 40%,
+    rgba(255,255,255,0.6) 50%,
+    rgba(180,160,220,0.35) 60%,
+    rgba(139,192,202,0.3) 75%,
+    rgba(220,180,140,0.1) 90%,
     transparent 100%
   );
   filter: blur(1px);
@@ -710,6 +716,25 @@ details > summary { list-style: none; }
   display: flex; align-items: center; justify-content: center;
   perspective: 1000px;
 }
+/* コースティクス（結晶の集光模様） */
+.hero__visual::after {
+  content: '';
+  position: absolute;
+  bottom: -30px; left: 10%; right: 10%;
+  height: 100px;
+  background:
+    radial-gradient(ellipse 30% 50% at 25% 50%, rgba(139,192,202,0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 40% at 55% 40%, rgba(180,160,220,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 20% 35% at 75% 60%, rgba(220,180,140,0.06) 0%, transparent 60%);
+  filter: blur(12px);
+  pointer-events: none;
+  animation: caustics-shift 10s ease-in-out infinite;
+  z-index: 1;
+}
+@keyframes caustics-shift {
+  0%, 100% { transform: translateX(0) scaleX(1); opacity: 0.7; }
+  50% { transform: translateX(15px) scaleX(1.05); opacity: 1; }
+}
 .hero__crystal {
   width: 100%; max-width: 720px;
   height: auto;
@@ -732,14 +757,16 @@ details > summary { list-style: none; }
   background: linear-gradient(
     135deg,
     rgba(139,192,202,0.0) 0%,
-    rgba(139,192,202,0.15) 20%,
-    rgba(180,220,240,0.25) 35%,
-    rgba(255,255,255,0.35) 50%,
-    rgba(180,220,240,0.25) 65%,
-    rgba(139,192,202,0.15) 80%,
+    rgba(220,180,140,0.1) 15%,
+    rgba(139,192,202,0.2) 25%,
+    rgba(180,160,220,0.2) 38%,
+    rgba(255,255,255,0.4) 50%,
+    rgba(180,160,220,0.2) 62%,
+    rgba(139,192,202,0.2) 75%,
+    rgba(220,180,140,0.1) 85%,
     rgba(139,192,202,0.0) 100%
   );
-  filter: blur(20px);
+  filter: blur(15px);
   pointer-events: none;
   animation: prism-shift 8s ease-in-out infinite;
   transform: rotate(-15deg);
@@ -1234,14 +1261,19 @@ details > summary { list-style: none; }
 }
 .features .glass-card::before {
   background: linear-gradient(90deg,
-    transparent,
-    rgba(139, 192, 202, 0.35) 20%,
-    rgba(139, 192, 202, 0.6) 50%,
-    rgba(139, 192, 202, 0.35) 80%,
-    transparent
+    transparent 5%,
+    rgba(220, 180, 140, 0.12) 15%,
+    rgba(139, 192, 202, 0.45) 30%,
+    rgba(180, 160, 220, 0.2) 42%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(180, 160, 220, 0.2) 58%,
+    rgba(139, 192, 202, 0.45) 70%,
+    rgba(220, 180, 140, 0.12) 85%,
+    transparent 95%
   );
   box-shadow: 0 0 20px rgba(139, 192, 202, 0.3),
-              0 2px 12px rgba(139, 192, 202, 0.15);
+              0 2px 12px rgba(139, 192, 202, 0.15),
+              0 0 6px rgba(255, 255, 255, 0.1);
 }
 .features__grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; }
 .features__card { padding: 40px; display: flex; flex-direction: column; }
@@ -1734,7 +1766,10 @@ details > summary { list-style: none; }
 .final-cta::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(52,98,111,0.25) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(52,98,111,0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 30% at 30% 40%, rgba(139,192,202,0.1) 0%, transparent 50%),
+    radial-gradient(ellipse 25% 25% at 70% 60%, rgba(180,160,220,0.06) 0%, transparent 50%);
   pointer-events: none;
 }
 .final-cta__canvas {
@@ -1977,6 +2012,7 @@ details > summary { list-style: none; }
   .about__data-dot { animation: none !important; }
   .about__pulse-ring { animation: none !important; }
   .hero__crystal-prism { animation: none !important; }
+  .hero__visual::after { animation: none !important; }
 
   /* 装飾浮遊アニメ無効 */
   .trust__deco, .problem__deco, .scale__deco, .about__deco,
