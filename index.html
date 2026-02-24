@@ -68,7 +68,7 @@
     <nav class="nav" aria-label="メインナビゲーション">
 
       <!-- ロゴ -->
-      <a href="#" class="nav__logo" aria-label="UZOUトップへ">
+      <a href="#hero" class="nav__logo" aria-label="UZOUトップへ">
         <span class="nav__logo-mark" aria-hidden="true">U</span>
         <span class="nav__logo-text">UZOU</span>
       </a>
@@ -832,49 +832,104 @@
       </h2>
     </div>
 
-    <div class="testimonials__grid">
+    <!-- 横スクロールカルーセル -->
+    <div class="testimonials__carousel" id="testimonials-carousel">
+      <div class="testimonials__track">
 
-      <!-- 左サイドカード -->
-      <article class="testimonials__card testimonials__card--side" data-reveal>
-        <div class="testimonials__card-metric">収益 <span>4倍</span></div>
-        <blockquote class="testimonials__quote" >
-          UZOU導入後、ネット広告収益が約4倍に伸長。
-          3rd party cookie廃止後も収益が安定しています。
-        </blockquote>
-        <footer class="testimonials__source">
-          <cite class="testimonials__role">大手出版社系Webメディア</cite>
-          <span class="testimonials__position">広告担当</span>
-        </footer>
-      </article>
+        <article class="testimonials__card" data-reveal>
+          <div class="testimonials__card-metric">収益 <span>4倍</span></div>
+          <blockquote class="testimonials__quote">
+            UZOU導入後、ネット広告収益が約4倍に伸長。
+            3rd party cookie廃止後も収益が安定しています。
+          </blockquote>
+          <footer class="testimonials__source">
+            <cite class="testimonials__role">大手出版社系Webメディア</cite>
+            <span class="testimonials__position">広告担当</span>
+          </footer>
+        </article>
 
-      <!-- 中央メインカード -->
-      <article class="testimonials__card testimonials__card--main" data-reveal data-reveal-delay="0.1">
-        <div class="testimonials__card-metric">CPA <span>32%</span> 改善</div>
-        <blockquote class="testimonials__quote testimonials__quote--main" >
-          oCPC導入後、目標CPAに対して実績CPAが継続的に改善。
-          ウォールドガーデン以外のメディア開拓が一括で進み、
-          運用コストが大幅に下がりました。
-        </blockquote>
-        <footer class="testimonials__source">
-          <span class="testimonials__category">広告代理店</span>
-          <cite class="testimonials__role">メディアプランナー</cite>
-          <span class="testimonials__position">EC・健康食品領域</span>
-        </footer>
-      </article>
+        <article class="testimonials__card testimonials__card--featured" data-reveal data-reveal-delay="0.08">
+          <div class="testimonials__card-metric">CPA <span>32%</span> 改善</div>
+          <blockquote class="testimonials__quote">
+            oCPC導入後、目標CPAに対して実績CPAが継続的に改善。
+            ウォールドガーデン以外のメディア開拓が一括で進み、
+            運用コストが大幅に下がりました。
+          </blockquote>
+          <footer class="testimonials__source">
+            <span class="testimonials__category">広告代理店</span>
+            <cite class="testimonials__role">メディアプランナー</cite>
+            <span class="testimonials__position">EC・健康食品領域</span>
+          </footer>
+        </article>
 
-      <!-- 右サイドカード -->
-      <article class="testimonials__card testimonials__card--side" data-reveal data-reveal-delay="0.2">
-        <div class="testimonials__card-metric">導入 <span>1週間</span></div>
-        <blockquote class="testimonials__quote" >
-          タグを設置するだけで配信が始まり、運用の手離れが良い。
-          法令遵守の配信姿勢が編集部からの信頼につながっています。
-        </blockquote>
-        <footer class="testimonials__source">
-          <cite class="testimonials__role">地方新聞社</cite>
-          <span class="testimonials__position">デジタル事業部</span>
-        </footer>
-      </article>
+        <article class="testimonials__card" data-reveal data-reveal-delay="0.16">
+          <div class="testimonials__card-metric">導入 <span>1週間</span></div>
+          <blockquote class="testimonials__quote">
+            タグを設置するだけで配信が始まり、運用の手離れが良い。
+            法令遵守の配信姿勢が編集部からの信頼につながっています。
+          </blockquote>
+          <footer class="testimonials__source">
+            <cite class="testimonials__role">地方新聞社</cite>
+            <span class="testimonials__position">デジタル事業部</span>
+          </footer>
+        </article>
 
+        <article class="testimonials__card" data-reveal data-reveal-delay="0.24">
+          <div class="testimonials__card-metric">CTR <span>2.8倍</span></div>
+          <blockquote class="testimonials__quote">
+            配信先の自動最適化でクリック率が大幅に向上。
+            手動運用ではたどり着けなかったメディアへのリーチが実現しました。
+          </blockquote>
+          <footer class="testimonials__source">
+            <span class="testimonials__category">D2Cブランド</span>
+            <cite class="testimonials__role">マーケティング部</cite>
+            <span class="testimonials__position">コスメ・美容領域</span>
+          </footer>
+        </article>
+
+        <article class="testimonials__card" data-reveal data-reveal-delay="0.32">
+          <div class="testimonials__card-metric">工数 <span>60%</span> 削減</div>
+          <blockquote class="testimonials__quote">
+            複数媒体への個別交渉が不要になり、運用工数が大幅に削減。
+            空いたリソースをクリエイティブ改善に充てられるようになりました。
+          </blockquote>
+          <footer class="testimonials__source">
+            <cite class="testimonials__role">総合広告代理店</cite>
+            <span class="testimonials__position">デジタルメディア部</span>
+          </footer>
+        </article>
+
+      </div>
+
+      <!-- カルーセルナビゲーション -->
+      <div class="testimonials__nav" aria-label="テスティモニアルナビゲーション">
+        <button class="testimonials__nav-btn testimonials__nav-btn--prev"
+                aria-label="前のテスティモニアル" type="button">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="testimonials__dots" role="tablist" aria-label="テスティモニアルページ">
+          <button class="testimonials__dot is-active" role="tab" aria-selected="true"
+                  aria-label="1ページ目" type="button"></button>
+          <button class="testimonials__dot" role="tab" aria-selected="false"
+                  aria-label="2ページ目" type="button"></button>
+          <button class="testimonials__dot" role="tab" aria-selected="false"
+                  aria-label="3ページ目" type="button"></button>
+          <button class="testimonials__dot" role="tab" aria-selected="false"
+                  aria-label="4ページ目" type="button"></button>
+          <button class="testimonials__dot" role="tab" aria-selected="false"
+                  aria-label="5ページ目" type="button"></button>
+        </div>
+        <button class="testimonials__nav-btn testimonials__nav-btn--next"
+                aria-label="次のテスティモニアル" type="button">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M8 4l6 6-6 6" stroke="currentColor" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -1233,7 +1288,7 @@
     <div class="footer__inner">
 
       <div class="footer__brand">
-        <a href="#" class="footer__logo" aria-label="UZOUトップへ">
+        <a href="#hero" class="footer__logo" aria-label="UZOUトップへ">
           <span class="nav__logo-mark" aria-hidden="true">U</span>
           <span>UZOU</span>
         </a>
@@ -1260,8 +1315,8 @@
         <div class="footer__nav-group">
           <h3 class="footer__nav-title">企業情報</h3>
           <ul role="list">
-            <li><a href="#" class="footer__nav-link">会社概要</a></li>
-            <li><a href="#" class="footer__nav-link">プライバシーポリシー</a></li>
+            <li><a href="https://speee.jp/company/" class="footer__nav-link" target="_blank" rel="noopener noreferrer">会社概要</a></li>
+            <li><a href="https://speee.jp/privacy/" class="footer__nav-link" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a></li>
           </ul>
         </div>
       </nav>
@@ -1269,7 +1324,7 @@
     </div>
 
     <div class="footer__bottom">
-      <p class="footer__copy">© 2025 Speee, Inc. All rights reserved.</p>
+      <p class="footer__copy">© 2026 Speee, Inc. All rights reserved.</p>
     </div>
   </div>
 </footer>

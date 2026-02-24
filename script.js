@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSectionParallax();
   initHeroTextSplit();
   initSmoothAnchor();
+  initTestimonialsCarousel();
 });
 
 /* =============================================
@@ -1116,4 +1117,125 @@ function initSmoothAnchor() {
       window.scrollTo({ top, behavior: 'smooth' });
     });
   });
+}
+
+/* =============================================
+   16. テスティモニアル横スクロールカルーセル
+   ドラッグスクロール + ドット同期 + ボタン操作
+   ============================================= */
+function initTestimonialsCarousel() {
+  const track = document.querySelector('.testimonials__track');
+  if (!track) return;
+
+  const cards = track.querySelectorAll('.testimonials__card');
+  const dots = document.querySelectorAll('.testimonials__dot');
+  const prevBtn = document.querySelector('.testimonials__nav-btn--prev');
+  const nextBtn = document.querySelector('.testimonials__nav-btn--next');
+
+  if (cards.length === 0) return;
+
+  // ドットの数をカード数に合わせる（HTMLで5個固定なので、JSで動的に調整不要）
+
+  // 現在のアクティブインデックスを算出
+  function getActiveIndex() {
+    const scrollLeft = track.scrollLeft;
+    let closest = 0;
+    let minDist = Infinity;
+    cards.forEach((card, i) => {
+      const dist = Math.abs(card.offsetLeft - track.offsetLeft - scrollLeft);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = i;
+      }
+    });
+    return closest;
+  }
+
+  // ドット更新
+  function updateDots(index) {
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('is-active', i === index);
+      dot.setAttribute('aria-selected', i === index ? 'true' : 'false');
+    });
+  }
+
+  // ボタン状態更新
+  function updateButtons(index) {
+    if (prevBtn) prevBtn.disabled = index === 0;
+    if (nextBtn) nextBtn.disabled = index === cards.length - 1;
+  }
+
+  // カードへスクロール
+  function scrollToCard(index) {
+    const card = cards[index];
+    if (!card) return;
+    track.scrollTo({
+      left: card.offsetLeft - track.offsetLeft,
+      behavior: 'smooth'
+    });
+  }
+
+  // スクロールイベントでドット同期
+  let scrollTimer;
+  track.addEventListener('scroll', () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const idx = getActiveIndex();
+      updateDots(idx);
+      updateButtons(idx);
+    }, 50);
+  }, { passive: true });
+
+  // ドットクリック
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => scrollToCard(i));
+  });
+
+  // 前後ボタン
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      const idx = Math.max(0, getActiveIndex() - 1);
+      scrollToCard(idx);
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      const idx = Math.min(cards.length - 1, getActiveIndex() + 1);
+      scrollToCard(idx);
+    });
+  }
+
+  // ドラッグスクロール（デスクトップ）
+  let isDragging = false;
+  let startX = 0;
+  let scrollStart = 0;
+
+  track.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.pageX;
+    scrollStart = track.scrollLeft;
+    track.style.scrollBehavior = 'auto';
+  });
+
+  track.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const dx = e.pageX - startX;
+    track.scrollLeft = scrollStart - dx;
+  });
+
+  const endDrag = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    track.style.scrollBehavior = 'smooth';
+    // スナップ先へ自動吸着
+    const idx = getActiveIndex();
+    scrollToCard(idx);
+  };
+  track.addEventListener('mouseup', endDrag);
+  track.addEventListener('mouseleave', endDrag);
+
+  // 初期状態
+  updateDots(0);
+  updateButtons(0);
 }

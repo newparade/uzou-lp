@@ -1770,12 +1770,24 @@ body {
   align-items: center;
 }
 
-.testimonials__grid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr 1fr;
-  gap: 20px;
-  align-items: start;
+/* カルーセルコンテナ */
+.testimonials__carousel {
+  position: relative;
 }
+
+.testimonials__track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 8px 0 32px;
+  cursor: grab;
+}
+.testimonials__track:active { cursor: grabbing; }
+.testimonials__track::-webkit-scrollbar { display: none; }
 
 /* カード基底（glass-card.css参照・ライト版） */
 .testimonials__card {
@@ -1784,18 +1796,31 @@ body {
   -webkit-backdrop-filter: blur(12px);
   border: var(--border-light);
   border-radius: var(--r-card);
-  padding: 32px;
+  padding: 36px 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  flex: 0 0 380px;
+  scroll-snap-align: start;
   transition:
     transform var(--dur-normal) var(--ease-hover-in),
-    box-shadow var(--dur-normal) var(--ease-hover-in);
+    box-shadow var(--dur-normal) var(--ease-hover-in),
+    border-color var(--dur-normal) var(--ease-hover-in);
 }
 .testimonials__card:hover {
-  transform: translateY(-8px) scale(1.01);
+  transform: translateY(-6px);
   box-shadow: 0 20px 60px rgba(10, 26, 31, 0.12);
 }
+
+/* フィーチャーカード: 強調スタイル */
+.testimonials__card--featured {
+  flex: 0 0 420px;
+  border-color: rgba(52,98,111,0.25);
+  background: rgba(255,255,255,0.88);
+  box-shadow: 0 8px 32px rgba(52,98,111,0.08);
+}
+.testimonials__card--featured .testimonials__card-metric { font-size: 36px; }
+.testimonials__card--featured .testimonials__card-metric span { font-size: 44px; }
 
 .testimonials__card-metric {
   font-family: var(--font-display);
@@ -1808,8 +1833,6 @@ body {
   color: var(--c-primary);
   font-weight: 900;
 }
-.testimonials__card--main .testimonials__card-metric { font-size: 40px; }
-.testimonials__card--main .testimonials__card-metric span { font-size: 52px; }
 
 .testimonials__quote {
   font-family: var(--font-body);
@@ -1818,7 +1841,7 @@ body {
   color: var(--t2-light);
   font-style: normal;
 }
-.testimonials__quote--main { font-size: 15px; }
+.testimonials__card--featured .testimonials__quote { font-size: 15px; }
 
 .testimonials__source {
   display: flex;
@@ -1850,17 +1873,73 @@ cite.testimonials__role,
   color: var(--t3-light);
 }
 
+/* カルーセルナビゲーション */
+.testimonials__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
 
-@media (max-width: 1024px) {
-  .testimonials__grid { grid-template-columns: 1fr 1fr; }
-  .testimonials__card--main {
-    grid-column: 1 / -1;
-    order: -1;
+.testimonials__nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(10,26,31,0.12);
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+  color: var(--t2-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--dur-fast);
+}
+.testimonials__nav-btn:hover {
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(52,98,111,0.3);
+  color: var(--c-primary);
+}
+.testimonials__nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.testimonials__dots {
+  display: flex;
+  gap: 8px;
+}
+.testimonials__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(10,26,31,0.15);
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--dur-fast);
+}
+.testimonials__dot.is-active {
+  background: var(--c-primary);
+  width: 24px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .testimonials__card {
+    flex: 0 0 calc(100vw - 80px);
+  }
+  .testimonials__card--featured {
+    flex: 0 0 calc(100vw - 80px);
   }
 }
-@media (max-width: 768px) {
-  .testimonials__grid { grid-template-columns: 1fr; }
-  .testimonials__card--main { order: 0; }
+@media (max-width: 480px) {
+  .testimonials__card,
+  .testimonials__card--featured {
+    flex: 0 0 calc(100vw - 48px);
+    padding: 28px 24px;
+  }
 }
 
 /* =============================================
