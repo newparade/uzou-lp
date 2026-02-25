@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFinalCanvas();
   initStickyCta();
   initParallax();
+  initDownloadModal();
 });
 
 /* =============================================
@@ -1445,4 +1446,161 @@ function initParallax() {
       ticking = false;
     });
   }, { passive: true });
+}
+
+/* =============================================
+   28. 資料ダウンロードモーダル
+   ============================================= */
+function initDownloadModal() {
+  const modal = document.getElementById('download-modal');
+  if (!modal) return;
+
+  const backdrop = modal.querySelector('.modal__backdrop');
+  const closeBtn = modal.querySelector('.modal__close');
+  const form = document.getElementById('download-form');
+  const successPanel = modal.querySelector('.modal__success');
+  const successCloseBtn = modal.querySelector('.modal__success-close');
+  let triggerElement = null;
+
+  // #download リンクをモーダルトリガーに変換
+  document.querySelectorAll('a[href="#download"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      triggerElement = link;
+      openModal();
+    });
+  });
+
+  function openModal() {
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+
+    // フォームリセット
+    form.reset();
+    form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+    form.querySelectorAll('.modal__error').forEach(el => el.textContent = '');
+    form.style.display = '';
+    successPanel.hidden = true;
+    successPanel.classList.remove('is-visible');
+    const submitBtn = form.querySelector('.modal__submit');
+    if (submitBtn) {
+      submitBtn.classList.remove('is-loading');
+      submitBtn.disabled = false;
+    }
+
+    // フォーカスを最初の入力欄へ
+    requestAnimationFrame(() => {
+      const firstInput = form.querySelector('input:not([type="hidden"])');
+      if (firstInput) firstInput.focus();
+    });
+
+    document.addEventListener('keydown', handleEsc);
+  }
+
+  function closeModal() {
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    document.removeEventListener('keydown', handleEsc);
+
+    if (triggerElement) {
+      triggerElement.focus();
+      triggerElement = null;
+    }
+  }
+
+  function handleEsc(e) {
+    if (e.key === 'Escape') closeModal();
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  if (successCloseBtn) successCloseBtn.addEventListener('click', closeModal);
+
+  // フォーカストラップ
+  modal.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+
+    const focusable = modal.querySelectorAll(
+      'button:not([disabled]):not([hidden]), input:not([disabled]):not([type="hidden"]), a[href], [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+
+  // フォームバリデーション & 送信
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    let isValid = true;
+    const fields = [
+      { id: 'dl-company', message: '会社名を入力してください' },
+      { id: 'dl-name', message: 'お名前を入力してください' },
+      { id: 'dl-email', message: 'メールアドレスを入力してください', type: 'email' },
+    ];
+
+    fields.forEach(({ id, message, type }) => {
+      const input = document.getElementById(id);
+      const error = input.closest('.modal__field').querySelector('.modal__error');
+      input.classList.remove('is-invalid');
+      error.textContent = '';
+
+      if (!input.value.trim()) {
+        input.classList.add('is-invalid');
+        error.textContent = message;
+        isValid = false;
+      } else if (type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+        input.classList.add('is-invalid');
+        error.textContent = '有効なメールアドレスを入力してください';
+        isValid = false;
+      }
+    });
+
+    const privacy = document.getElementById('dl-privacy');
+    const privacyError = privacy.closest('.modal__field').querySelector('.modal__error');
+    privacyError.textContent = '';
+    if (!privacy.checked) {
+      privacyError.textContent = 'プライバシーポリシーへの同意が必要です';
+      isValid = false;
+    }
+
+    if (!isValid) {
+      const firstError = form.querySelector('.is-invalid');
+      if (firstError) firstError.focus();
+      return;
+    }
+
+    // 送信シミュレーション
+    const submitBtn = form.querySelector('.modal__submit');
+    submitBtn.classList.add('is-loading');
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+      form.style.display = 'none';
+      successPanel.hidden = false;
+      requestAnimationFrame(() => {
+        successPanel.classList.add('is-visible');
+      });
+    }, 1200);
+  });
+
+  // blur時バリデーションクリア
+  form.querySelectorAll('.modal__input[required]').forEach(input => {
+    input.addEventListener('blur', () => {
+      if (input.classList.contains('is-invalid') && input.value.trim()) {
+        input.classList.remove('is-invalid');
+        const error = input.closest('.modal__field').querySelector('.modal__error');
+        if (error) error.textContent = '';
+      }
+    });
+  });
 }

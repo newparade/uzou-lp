@@ -1130,6 +1130,98 @@
   </div>
 </footer>
 
+<!-- ========================================
+  資料ダウンロードモーダル
+======================================== -->
+<div class="modal" id="download-modal" role="dialog" aria-modal="true"
+     aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal__backdrop"></div>
+  <div class="modal__container">
+    <div class="modal__card">
+      <button class="modal__close" aria-label="閉じる" type="button">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- 左パネル: ビジュアル -->
+      <div class="modal__visual">
+        <div class="modal__visual-bg" aria-hidden="true"></div>
+        <div class="modal__visual-content">
+          <span class="modal__badge">無料ダウンロード</span>
+          <h2 class="modal__visual-title">UZOU<br>サービス資料</h2>
+          <ul class="modal__visual-list" role="list">
+            <li>サービス概要と導入メリット</li>
+            <li>配信実績と導入事例</li>
+            <li>料金体系とプラン比較</li>
+            <li>導入ステップと技術仕様</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 右パネル: フォーム -->
+      <div class="modal__form-panel">
+        <h2 class="modal__title" id="modal-title">資料を受け取る</h2>
+        <p class="modal__desc">以下を入力いただくと、すぐにPDFをお送りします。</p>
+
+        <form class="modal__form" id="download-form" novalidate>
+          <div class="modal__field">
+            <label for="dl-company" class="modal__label">会社名 <span class="modal__required">必須</span></label>
+            <input type="text" id="dl-company" name="company" class="modal__input" required
+                   placeholder="例: 株式会社Speee" autocomplete="organization">
+            <span class="modal__error" aria-live="polite"></span>
+          </div>
+          <div class="modal__field">
+            <label for="dl-name" class="modal__label">お名前 <span class="modal__required">必須</span></label>
+            <input type="text" id="dl-name" name="name" class="modal__input" required
+                   placeholder="例: 山田 太郎" autocomplete="name">
+            <span class="modal__error" aria-live="polite"></span>
+          </div>
+          <div class="modal__field">
+            <label for="dl-email" class="modal__label">メールアドレス <span class="modal__required">必須</span></label>
+            <input type="email" id="dl-email" name="email" class="modal__input" required
+                   placeholder="例: yamada@example.com" autocomplete="email">
+            <span class="modal__error" aria-live="polite"></span>
+          </div>
+          <div class="modal__field">
+            <label for="dl-phone" class="modal__label">電話番号 <span class="modal__optional">任意</span></label>
+            <input type="tel" id="dl-phone" name="phone" class="modal__input"
+                   placeholder="例: 03-1234-5678" autocomplete="tel">
+          </div>
+          <div class="modal__field modal__field--checkbox">
+            <label class="modal__checkbox-label">
+              <input type="checkbox" id="dl-privacy" name="privacy" class="modal__checkbox" required>
+              <span class="modal__checkbox-custom" aria-hidden="true"></span>
+              <span><a href="https://speee.jp/privacy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意する <span class="modal__required">必須</span></span>
+            </label>
+            <span class="modal__error" aria-live="polite"></span>
+          </div>
+          <button type="submit" class="btn btn--primary btn--shimmer btn--lg modal__submit">
+            <span class="modal__submit-text">無料で資料を受け取る</span>
+            <span class="modal__submit-loading" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" stroke-dasharray="25 25" stroke-linecap="round"/></svg>
+            </span>
+          </button>
+          <p class="modal__note">30秒で完了 / 営業電話はしません</p>
+        </form>
+
+        <!-- 送信完了状態 -->
+        <div class="modal__success" hidden>
+          <div class="modal__success-icon" aria-hidden="true">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="22" stroke="var(--c-primary)" stroke-width="2"/>
+              <path d="M14 24l7 7 13-13" stroke="var(--c-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="modal__success-title">資料をお送りしました</h3>
+          <p class="modal__success-desc">ご入力いただいたメールアドレスに、<br>サービス資料のダウンロードリンクをお送りしました。</p>
+          <button type="button" class="btn btn--primary modal__success-close">閉じる</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- 全体ノイズテクスチャ（有機的な質感） -->
 <div class="noise-overlay" aria-hidden="true"></div>
 <script src="script.js"></script>
