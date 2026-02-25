@@ -76,3 +76,7 @@ v12 "Crystal Formation" コンセプトで全面再設計。
 - [x] OGP / FAQPage構造化データ
 - [x] :focus-visible フォーカスリング
 - [x] セマンティックHTML（main, header, footer, nav, section）
+- [x] 資料ダウンロードモーダルフォーム（バリデーション + 送信成功画面）
+- [x] お問い合わせセクション（2カラム: 情報 + フォーム）
+- [x] OG画像絶対URL修正
+- [x] テスティモニアル信頼性向上（具体的PV規模・役職・イニシャル追加）
