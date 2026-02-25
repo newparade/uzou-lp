@@ -1497,14 +1497,38 @@ details > summary { list-style: none; }
   -webkit-text-fill-color: transparent;
 }
 
-.voices__card blockquote { font-size: 14px; line-height: 1.8; color: var(--t2-light); flex: 1; }
-.voices__card footer {
-  display: flex; flex-direction: column; gap: 2px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(10,26,31,0.06);
+.voices__card blockquote {
+  font-size: 14px; line-height: 1.8; color: var(--t2-light); flex: 1;
+  position: relative; padding-top: 28px;
+}
+.voices__card blockquote::before {
+  content: '\201C';
+  position: absolute; top: -4px; left: 0;
+  font-family: var(--font-display);
+  font-size: 48px; font-weight: 800; line-height: 1;
+  background: var(--crystal-grad-text);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.3;
 }
 .voices__card cite { font-style: normal; font-size: 13px; font-weight: 600; color: var(--t1-light); }
 .voices__card footer span { font-size: 12px; color: var(--t3-light); }
+.voices__avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--crystal-grad);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 700;
+  color: #fff; letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+.voices__card footer {
+  display: flex; flex-direction: row; gap: 10px; align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(10,26,31,0.06);
+}
+.voices__card-meta { display: flex; flex-direction: column; gap: 2px; }
 .voices__category { font-size: 11px; font-weight: 600; color: var(--c-primary); letter-spacing: 0.02em; }
 
 /* Voices ナビボタン */
