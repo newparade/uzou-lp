@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initStickyCta();
   initParallax();
   initDownloadModal();
+  initContactForm();
 });
 
 /* =============================================
@@ -1599,6 +1600,85 @@ function initDownloadModal() {
       if (input.classList.contains('is-invalid') && input.value.trim()) {
         input.classList.remove('is-invalid');
         const error = input.closest('.modal__field').querySelector('.modal__error');
+        if (error) error.textContent = '';
+      }
+    });
+  });
+}
+
+/* =============================================
+   29. お問い合わせフォーム
+   ============================================= */
+function initContactForm() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  const successPanel = form.querySelector('.contact-section__success');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    let isValid = true;
+    const fields = [
+      { id: 'ct-company', message: '会社名を入力してください' },
+      { id: 'ct-name', message: 'お名前を入力してください' },
+      { id: 'ct-email', message: 'メールアドレスを入力してください', type: 'email' },
+      { id: 'ct-message', message: 'お問い合わせ内容を入力してください' },
+    ];
+
+    fields.forEach(({ id, message, type }) => {
+      const input = document.getElementById(id);
+      const error = input.closest('.contact-section__field').querySelector('.contact-section__error');
+      input.classList.remove('is-invalid');
+      if (error) error.textContent = '';
+
+      if (!input.value.trim()) {
+        input.classList.add('is-invalid');
+        if (error) error.textContent = message;
+        isValid = false;
+      } else if (type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+        input.classList.add('is-invalid');
+        if (error) error.textContent = '有効なメールアドレスを入力してください';
+        isValid = false;
+      }
+    });
+
+    const privacy = document.getElementById('ct-privacy');
+    const privacyField = privacy.closest('.contact-section__field');
+    const privacyError = privacyField ? privacyField.querySelector('.contact-section__error') : null;
+    if (privacyError) privacyError.textContent = '';
+    if (!privacy.checked) {
+      if (privacyError) privacyError.textContent = 'プライバシーポリシーへの同意が必要です';
+      isValid = false;
+    }
+
+    if (!isValid) {
+      const firstError = form.querySelector('.is-invalid');
+      if (firstError) firstError.focus();
+      return;
+    }
+
+    const submitBtn = form.querySelector('.contact-section__submit');
+    submitBtn.classList.add('is-loading');
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+      submitBtn.classList.remove('is-loading');
+      submitBtn.disabled = false;
+      submitBtn.style.display = 'none';
+      form.querySelectorAll('.contact-section__field, .contact-section__field-row, .contact-section__field--checkbox').forEach(el => {
+        el.style.display = 'none';
+      });
+      if (successPanel) successPanel.hidden = false;
+    }, 1200);
+  });
+
+  // blur時バリデーションクリア
+  form.querySelectorAll('.contact-section__input[required]').forEach(input => {
+    input.addEventListener('blur', () => {
+      if (input.classList.contains('is-invalid') && input.value.trim()) {
+        input.classList.remove('is-invalid');
+        const error = input.closest('.contact-section__field').querySelector('.contact-section__error');
         if (error) error.textContent = '';
       }
     });

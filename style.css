@@ -2416,6 +2416,10 @@ details > summary { list-style: none; }
   color: var(--t3-light);
 }
 
+.modal__success[hidden] {
+  display: none;
+}
+
 .modal__success {
   display: flex;
   flex-direction: column;
@@ -2498,5 +2502,210 @@ body.modal-open {
 
   .modal__form-panel {
     padding: 24px 20px;
+  }
+}
+
+/* =============================================
+   Part 25: お問い合わせセクション
+   ============================================= */
+.contact-section {
+  padding: var(--section-pad-lg) 0;
+  background: var(--bg-surface);
+  border-top: var(--border-light);
+}
+
+.contact-section__layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: start;
+}
+
+.contact-section__info {
+  position: sticky;
+  top: 120px;
+}
+
+.contact-section__desc {
+  font-size: 15px;
+  color: var(--t2-light);
+  line-height: var(--lh-body);
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.contact-section__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-section__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-section__meta-item dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t1-light);
+  letter-spacing: 0.02em;
+}
+
+.contact-section__meta-item dt svg {
+  color: var(--c-primary);
+}
+
+.contact-section__meta-item dd {
+  font-size: 14px;
+  color: var(--t2-light);
+  padding-left: 26px;
+}
+
+/* フォーム */
+.contact-section__form {
+  background: var(--c-base);
+  border-radius: var(--r-card);
+  padding: clamp(28px, 3vw, 40px);
+  border: var(--border-light);
+  box-shadow: 0 4px 24px rgba(10, 26, 31, 0.04);
+}
+
+.contact-section__field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.contact-section__field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+
+.contact-section__field-row .contact-section__field {
+  margin-bottom: 0;
+}
+
+.contact-section__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t1-light);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contact-section__input {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--t1-light);
+  background: var(--bg-surface);
+  border: 1px solid rgba(10, 26, 31, 0.1);
+  border-radius: var(--r-button);
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-hover),
+              box-shadow var(--dur-fast) var(--ease-hover);
+}
+
+.contact-section__input::placeholder {
+  color: var(--t3-light);
+  opacity: 0.5;
+}
+
+.contact-section__input:focus {
+  border-color: var(--c-primary);
+  box-shadow: 0 0 0 3px rgba(52, 98, 111, 0.1);
+}
+
+.contact-section__input.is-invalid {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.08);
+}
+
+.contact-section__textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.contact-section__error {
+  font-size: 12px;
+  color: #e74c3c;
+  min-height: 0;
+  line-height: 1.4;
+}
+
+.contact-section__field--checkbox {
+  margin-bottom: 20px;
+}
+
+.contact-section__submit {
+  width: 100%;
+  position: relative;
+}
+
+.contact-section__submit.is-loading .contact-section__submit-text { opacity: 0; }
+.contact-section__submit.is-loading .contact-section__submit-loading { opacity: 1; }
+
+.contact-section__submit-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--dur-fast);
+}
+
+.contact-section__submit-loading svg {
+  animation: modalSpin 0.8s linear infinite;
+}
+
+.contact-section__success[hidden] {
+  display: none;
+}
+
+.contact-section__success {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  margin-top: 16px;
+  background: rgba(52, 98, 111, 0.06);
+  border: 1px solid rgba(52, 98, 111, 0.12);
+  border-radius: var(--r-inner);
+}
+
+.contact-section__success p {
+  font-size: 14px;
+  color: var(--t1-light);
+  line-height: 1.6;
+}
+
+.contact-section__success svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .contact-section__layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .contact-section__info {
+    position: static;
+  }
+
+  .contact-section__field-row {
+    grid-template-columns: 1fr;
   }
 }
